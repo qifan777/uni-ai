@@ -1,0 +1,23 @@
+export io.qifan.server.ai.role.entity.AiRole
+
+input AiRoleCreateInput {
+    #allScalars(AiRole)
+    id(aiModel)
+}
+input AiRoleUpdateInput {
+    #allScalars(AiRole)
+    id!
+    id(aiModel)
+}
+
+specification AiRoleSpec {
+    #allScalars
+    like/i(name)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(aiModel)
+}

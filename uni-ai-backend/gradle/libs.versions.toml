@@ -1,0 +1,45 @@
+[versions]
+dependencyManagement = "1.1.4"
+springBoot = "3.2.4"
+jimmer = "0.8.130"
+mybatisPlus = "3.5.5"
+springAi = "1.0.0-SNAPSHOT"
+dynamicDatasource = "4.1.3"
+druid = "1.2.20"
+hutool = "5.8.26"
+sa-token = "1.37.0"
+reflections = '0.10.2'
+aliyun-sdk = "4.5.16"
+aliyun-sms = "2.0.24"
+tencent-ocr = "3.1.965"
+miniapp-sdk = "4.6.0"
+wxpay-sdk = "4.6.0"
+jaxb-runtime = "2.3.3"
+activation = "1.1.1"
+jaxb-api = "2.3.1"
+aliyun-oss = "3.15.1"
+aliyun-ocr = "2.0.7"
+easyexcel = "3.3.4"
+[libraries]
+spring-ai = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "springAi" }
+mybatis-plus = { group = "com.baomidou", name = "mybatis-plus-spring-boot3-starter", version.ref = "mybatisPlus" }
+mybatis-plus-generator = { group = "com.baomidou", name = "mybatis-plus-generator", version.ref = "mybatisPlus" }
+dynamic-datasource = { group = "com.baomidou", name = "dynamic-datasource-spring-boot3-starter", version.ref = "dynamicDatasource" }
+druid = { group = "com.alibaba", name = "druid-spring-boot-3-starter", version.ref = "druid" }
+hutool-all = { group = "cn.hutool", name = "hutool-all", version.ref = "hutool" }
+sa-token = { group = "cn.dev33", name = "sa-token-spring-boot3-starter", version.ref = "sa-token" }
+sa-token-redis = { group = "cn.dev33", name = "sa-token-redis-jackson", version.ref = "sa-token" }
+aliyun-sdk = { group = "com.aliyun", name = "aliyun-java-sdk-core", version.ref = "aliyun-sdk" }
+aliyun-sms = { group = "com.aliyun", name = "dysmsapi20170525", version.ref = "aliyun-sms" }
+reflections = { group = "org.reflections", name = "reflections", version.ref = "reflections" }
+tencent-ocr = { group = "com.tencentcloudapi", name = "tencentcloud-sdk-java-ocr", version.ref = "tencent-ocr" }
+miniapp-sdk = { group = "com.github.binarywang", name = "wx-java-miniapp-spring-boot-starter", version.ref = "miniapp-sdk" }
+wxpay-sdk = { group = "com.github.binarywang", name = "wx-java-pay-spring-boot-starter", version.ref = "wxpay-sdk" }
+jaxb-runtime = { group = "org.glassfish.jaxb", name = "jaxb-runtime", version.ref = "jaxb-runtime" }
+activation = { group = "javax.activation", name = "activation", version.ref = "activation" }
+jax-api = { group = "javax.xml.bind", name = "jaxb-api", version.ref = "jaxb-api" }
+aliyun-oss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version.ref = "aliyun-oss" }
+aliyun-ocr = { group = "com.aliyun", name = "ocr_api20210707", version.ref = "aliyun-ocr" }
+easyexcel = { group = "com.alibaba", name = "easyexcel", version.ref = "easyexcel" }
+[plugins]
+springBoot = { id = 'org.springframework.boot', version.ref = "springBoot" }

@@ -1,0 +1,26 @@
+export io.qifan.server.ai.message.entity.AiMessage
+
+input AiMessageCreateInput {
+    #allScalars(AiMessage)
+    id(aiSession)
+}
+input AiMessageUpdateInput {
+    #allScalars(AiMessage)
+    id!
+    id(aiSession)
+}
+//AiMessageView {
+//    content
+//    type
+//}
+
+specification AiMessageSpec {
+    #allScalars
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(aiSession)
+}

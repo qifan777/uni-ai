@@ -1,0 +1,44 @@
+plugins {
+    id('java-conventions')
+    id "tech.argonariod.gradle-plugin-jimmer" version "latest.release"
+}
+apply plugin: 'io.spring.dependency-management'
+jimmer {
+    version = libs.versions.jimmer
+}
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+configurations {
+    all*.exclude group: 'org.slf4j', module: 'slf4j-simple'
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+    implementation platform(libs.spring.ai)
+    implementation(libs.jaxb.runtime)
+    implementation(libs.hutool.all)
+    implementation(libs.miniapp.sdk)
+    implementation(libs.wxpay.sdk)
+    implementation(libs.sa.token.redis)
+    implementation(libs.sa.token)
+    implementation 'com.mysql:mysql-connector-j'
+    implementation 'org.apache.commons:commons-pool2'
+    implementation 'org.freemarker:freemarker'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework:spring-test'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    compileOnly(project(":generator-core"))
+    testImplementation(project(":generator-processor"))
+    implementation(project(":spring-ai-dashscope-spring-boot-starter"))
+    implementation(project(":spring-ai-qianfan-spring-boot-starter"))
+    implementation(project(":spring-ai-spark-spring-boot-starter"))
+    implementation(project(":common"))
+    implementation(project(":spring-boot-starter-security"))
+    implementation(project(":spring-boot-starter-oss"))
+    implementation(project(":spring-boot-starter-sms"))
+}

@@ -1,0 +1,26 @@
+export io.qifan.server.ai.session.entity.AiSession
+
+input AiSessionCreateInput {
+    #allScalars(AiSession)
+    id(aiRole)
+    id(aiModel)
+}
+input AiSessionUpdateInput {
+    #allScalars(AiSession)
+    id!
+    id(aiRole)
+    id(aiModel)
+}
+
+specification AiSessionSpec {
+    #allScalars
+    like/i(name)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(aiRole)
+    id(aiModel)
+}

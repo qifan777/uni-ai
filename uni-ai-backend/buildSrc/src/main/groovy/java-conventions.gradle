@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+}
+java {
+    sourceCompatibility = '17'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+tasks.named('test') {
+    useJUnitPlatform()
+}

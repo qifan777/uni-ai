@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="stdout">
+    <!-- encoder 默认配置为PatternLayoutEncoder -->
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="rfilebysize">
+    <encoder>
+      <charset>UTF-8</charset>
+      <pattern>%d{MM-dd HH:mm:ss.SSS} [%-5level] [%-40.40logger{40}:%-4.5line] [%-4.24thread] -
+        %msg%n
+      </pattern>
+    </encoder>
+    <file>log/${log.app.name}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <MaxIndex>5</MaxIndex>
+      <MinIndex>1</MinIndex>
+      <fileNamePattern>log/${log.app.name}.%i.log</fileNamePattern>
+    </rollingPolicy>
+
+    <!-- 触发条件: 满足大小时触发 -->
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>${log.max.size}</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+
+  <conversionRule conversionWord="clr"
+    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+  <property name="log.max.size" value="${max.size:-20MB}"/>
+
+  <property name="CONSOLE_LOG_PATTERN"
+    value="${CONSOLE_LOG_PATTERN:-%clr(%d{MM-dd HH:mm:ss.SSS}){faint} %clr([%-5level]) %clr([%-40.40logger{40}:%-4.5line]){cyan} %clr([%-24.24thread]){magenta} - %msg%n}"/>
+
+  <!-- 1. 按文件大小区分的滚动日志 -->
+  <root level="info">
+    <appender-ref ref="stdout"/>
+    <appender-ref ref="rfilebysize"/>
+  </root>
+
+
+  <springProperty defaultValue="app" name="log.app.name" scope="context"
+    source="spring.application.name"/>
+</included>

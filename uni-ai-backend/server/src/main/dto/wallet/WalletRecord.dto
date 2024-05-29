@@ -1,0 +1,25 @@
+export io.qifan.server.wallet.record.entity.WalletRecord
+
+input WalletRecordCreateInput {
+    #allScalars(WalletRecord)
+    id(wallet)
+    -balance
+}
+input WalletRecordUpdateInput {
+    #allScalars(WalletRecord)
+    id!
+    id(wallet)
+    -balance
+}
+
+specification WalletRecordSpec {
+    #allScalars
+    like/i(description)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(wallet)
+}

@@ -1,0 +1,22 @@
+export io.qifan.server.ai.model.entity.AiModel
+
+input AiModelCreateInput {
+    #allScalars(AiModel)
+    tagIds:Array<String>
+}
+input AiModelUpdateInput {
+    #allScalars(AiModel)
+    id!
+    tagIds:Array<String>
+}
+
+specification AiModelSpec {
+    #allScalars
+    like/i(name)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+}

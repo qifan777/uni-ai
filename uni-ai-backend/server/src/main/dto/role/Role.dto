@@ -1,0 +1,17 @@
+export io.qifan.server.role.entity.Role
+input RoleInput {
+    #allScalars(Role)
+    id?
+    menuIds: Array<String>
+}
+
+specification RoleSpec {
+    #allScalars
+    like/i(name)
+    like/i(id)
+    valueIn(id) as  ids
+    ge(editedTime)
+    le(editedTime)
+    ge(createdTime)
+    le(createdTime)
+}

@@ -1,0 +1,4 @@
+plugins {
+    id('java-conventions')
+}
+apply plugin: 'io.spring.dependency-management'

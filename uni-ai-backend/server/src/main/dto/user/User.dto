@@ -1,0 +1,41 @@
+export io.qifan.server.user.root.entity.User
+
+input UserCreateInput {
+    #allScalars(User)
+    roleIds: Array<String>
+}
+input UserUpdateInput {
+    #allScalars(User)
+    id!
+    roleIds: Array<String>
+}
+input UserInfoInput{
+    nickname
+    gender
+    avatar
+}
+input UserRegisterInput {
+    phone
+    password
+    code: String
+}
+input UserLoginInput {
+    password
+    phone
+}
+input UserResetPasswordInput {
+    password
+    phone
+    code: String
+}
+specification UserSpec {
+    #allScalars
+    like/i(id)
+    like/i(phone)
+    like/i(nickname)
+    like/i(password)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+}

@@ -1,0 +1,25 @@
+export io.qifan.server.wallet.order.entity.WalletOrder
+
+input WalletOrderCreateInput {
+    #allScalars(WalletOrder)
+    id?
+    id(user)
+}
+input WalletOrderUpdateInput {
+    #allScalars(WalletOrder)
+    id!
+    id(user)
+}
+
+specification WalletOrderSpec {
+    #allScalars
+    ge(payTime)
+    le(payTime)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(user)
+}

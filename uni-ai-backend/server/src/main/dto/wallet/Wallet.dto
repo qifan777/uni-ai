@@ -1,0 +1,27 @@
+export io.qifan.server.wallet.root.entity.Wallet
+
+input WalletCreateInput {
+    #allScalars(Wallet)
+    id?
+    id(user)
+}
+input WalletUpdateInput {
+    #allScalars(Wallet)
+    id!
+    id(user)
+}
+
+specification WalletSpec {
+    #allScalars
+    like/i(password)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    flat(user) {
+         id as userId
+         like/i(phone)
+    }
+}

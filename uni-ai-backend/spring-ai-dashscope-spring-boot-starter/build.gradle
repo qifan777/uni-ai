@@ -1,0 +1,18 @@
+plugins {
+    id('java-conventions')
+}
+apply plugin: 'io.spring.dependency-management'
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+dependencies {
+    implementation 'com.alibaba:dashscope-sdk-java:2.14.1'
+    implementation 'io.projectreactor:reactor-core'
+    implementation 'com.squareup.okhttp3:okhttp'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation platform(libs.spring.ai)
+    implementation 'org.springframework.ai:spring-ai-core'
+    compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+}

@@ -1,0 +1,20 @@
+export io.qifan.server.wallet.item.entity.WalletItem
+
+input WalletItemCreateInput {
+    #allScalars(WalletItem)
+}
+input WalletItemUpdateInput {
+    #allScalars(WalletItem)
+    id!
+}
+
+specification WalletItemSpec {
+    #allScalars
+    like/i(name)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+}

@@ -1,0 +1,18 @@
+export io.qifan.server.dict.entity.Dict
+input DictInput {
+    #allScalars(Dict)
+    id?
+}
+
+specification DictSpec {
+    #allScalars
+    like/i(dictEnName)
+    like/i(keyEnName)
+    like/i(keyName)
+    like/i(dictName)
+    like/i(id)
+    ge(editedTime)
+    le(editedTime)
+    ge(createdTime)
+    le(createdTime)
+}

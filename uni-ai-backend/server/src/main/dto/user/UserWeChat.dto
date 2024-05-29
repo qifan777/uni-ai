@@ -1,0 +1,17 @@
+export io.qifan.server.user.wechat.entity.UserWeChat
+input UserWeChatCreateInput {
+    #allScalars(UserWeChat)
+}
+input UserWeChatUpdateInput {
+    #allScalars(UserWeChat)
+    id!
+}
+specification UserWeChatSpec {
+    #allScalars
+    like/i(id)
+    like/i(openId)
+    ge(editedTime)
+    le(editedTime)
+    ge(createdTime)
+    le(createdTime)
+}

@@ -1,0 +1,12 @@
+rootProject.name = 'uni-ai-backend'
+include 'common'
+include 'generator-core'
+include 'generator-processor'
+include 'spring-boot-starter-sms'
+include 'spring-boot-starter-security'
+include 'spring-boot-starter-oss'
+include 'server'
+include 'spring-ai-spark-spring-boot-starter'
+include 'spring-ai-dashscope-spring-boot-starter'
+include 'spring-ai-qianfan-spring-boot-starter'
+
