@@ -10,13 +10,12 @@
 | 讯飞星火   | ✔    | ×    | 计划中  | 计划中        | 计划中  |
 | 智普清言   | 计划中  | 计划中  | 计划中  | 计划中        | 计划中  |
 
-<img src="uni-ai-admin/src/assets/qwenvl.png" width="500"/>
-
-<img src="uni-ai-admin/src/assets/qwen.png" width="500"/>
-
-<img src="uni-ai-admin/src/assets/spark.png" width="500"/>
-
-<img src="uni-ai-admin/src/assets/qianfan.png" width="500"/>
+<p float="left">
+<img src="uni-ai-admin/src/assets/qwenvl.png" width="200"/>
+<img src="uni-ai-admin/src/assets/qwen.png" width="200"/>
+<img src="uni-ai-admin/src/assets/spark.png" width="200"/>
+<img src="uni-ai-admin/src/assets/qianfan.png" width="200"/>
+</p>
 
 ## 项目结构
 
