@@ -41,8 +41,9 @@ public class QianFanAiChatModel implements ChatModel {
     }
 
     public ChatResponse toResponse(com.baidubce.qianfan.model.chat.ChatResponse response) {
+        Boolean end = response.getEnd();
         Generation generation = new Generation(response.getResult())
-                .withGenerationMetadata(ChatGenerationMetadata.from(response.getEnd() ? "STOP" : "", null));
+                .withGenerationMetadata(ChatGenerationMetadata.from(end != null && end ? "STOP" : "", null));
         ChatResponseMetadata chatResponseMetadata = new ChatResponseMetadata.DefaultChatResponseMetadata() {
             @Override
             public Usage getUsage() {

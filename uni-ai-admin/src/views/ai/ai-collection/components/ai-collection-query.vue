@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { toRefs } from 'vue'
-import { useAiDocumentStore } from '../store/ai-document-store'
+import { useAiCollectionStore } from '../store/ai-collection-store'
 import { storeToRefs } from 'pinia'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
+import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 
-const aiDocumentStore = useAiDocumentStore()
-const { queryData } = storeToRefs(aiDocumentStore)
+const aiCollectionStore = useAiCollectionStore()
+const { queryData } = storeToRefs(aiCollectionStore)
 const { query } = toRefs(queryData.value)
 </script>
 <template>
@@ -15,30 +15,26 @@ const { query } = toRefs(queryData.value)
       <el-form-item label="名称">
         <el-input v-model="query.name"></el-input>
       </el-form-item>
-
-      <el-form-item label="文档链接">
-        <el-input v-model="query.url"></el-input>
+      <el-form-item label="英文名称" prop="collectionName">
+        <el-input v-model="query.collectionName"></el-input>
       </el-form-item>
-      <el-form-item label="知识库" prop="aiCollectionId">
+      <el-form-item label="嵌入模型">
         <remote-select
           label-prop="name"
-          :query-options="aiCollectionQueryOptions"
-          v-model="query.aiCollectionId"
+          :query-options="(query, id) => aiModelQueryOptions(query, id, ['EMBEDDINGS'])"
+          v-model="query.embeddingModelId"
         ></remote-select>
-      </el-form-item>
-      <el-form-item label="总结">
-        <el-input v-model="query.summary"></el-input>
       </el-form-item>
       <el-form-item label=" ">
         <div class="btn-wrapper">
           <el-button
             type="primary"
             size="small"
-            @click="aiDocumentStore.reloadTableData({ query: query, likeMode: 'ANYWHERE' })"
+            @click="aiCollectionStore.reloadTableData({ query: query, likeMode: 'ANYWHERE' })"
           >
             查询
           </el-button>
-          <el-button type="warning" size="small" @click="aiDocumentStore.restQuery()">
+          <el-button type="warning" size="small" @click="aiCollectionStore.restQuery()">
             重置</el-button
           >
         </div>

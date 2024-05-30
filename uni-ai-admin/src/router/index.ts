@@ -70,6 +70,10 @@ const router = createRouter({
           component: () => import('@/views/ai/ai-document/ai-document-view.vue')
         },
         {
+          path: '/ai-collection',
+          component: () => import('@/views/ai/ai-collection/ai-collection-view.vue')
+        },
+        {
           path: '/ai-tag',
           component: () => import('@/views/ai/ai-tag/ai-tag-view.vue')
         },

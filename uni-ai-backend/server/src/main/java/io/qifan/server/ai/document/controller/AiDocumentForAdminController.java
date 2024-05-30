@@ -1,8 +1,8 @@
 package io.qifan.server.ai.document.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import io.milvus.client.MilvusServiceClient;
 import io.qifan.infrastructure.common.exception.BusinessException;
+import io.qifan.server.ai.collection.repository.AiCollectionRepository;
 import io.qifan.server.ai.document.entity.AiDocument;
 import io.qifan.server.ai.document.entity.AiDocumentDraft;
 import io.qifan.server.ai.document.entity.dto.AiDocumentCreateInput;
@@ -15,7 +15,7 @@ import io.qifan.server.ai.model.repository.AiModelRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
-import io.qifan.server.ai.uni.embedding.UniAiEmbeddingService;
+import io.qifan.server.ai.uni.vector.MilvusRepository;
 import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import lombok.AllArgsConstructor;
@@ -27,10 +27,8 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
-import org.springframework.ai.vectorstore.MilvusVectorStore;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,10 +49,10 @@ import java.util.Map;
 @Slf4j
 public class AiDocumentForAdminController {
     private final AiDocumentRepository aiDocumentRepository;
-    private final Map<String, UniAiEmbeddingService> embeddingServiceMap;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final AiModelRepository aiModelRepository;
-    private final MilvusServiceClient milvusServiceClient;
+    private final MilvusRepository milvusRepository;
+    private final AiCollectionRepository aiCollectionRepository;
 
     @GetMapping("{id}")
     public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiDocument findById(@PathVariable String id) {
@@ -72,28 +70,11 @@ public class AiDocumentForAdminController {
         TikaDocumentReader tikaDocumentReader = new TikaDocumentReader(new UrlResource(new URL(aiDocumentInput.getUrl())));
         List<Document> documents = tikaDocumentReader.get();
         List<Document> splitDocuments = new TokenTextSplitter().apply(documents);
-        MilvusVectorStore milvusVectorStore = milvusVectorStore(aiDocumentInput.getEmbeddingModelId(), aiModelRepository, milvusServiceClient, embeddingServiceMap);
-        milvusVectorStore.add(splitDocuments);
+        milvusRepository.embedding(splitDocuments, aiDocumentInput.getAiCollectionId());
         String summary = summary(String.join("", documents.stream().map(Document::getContent).toList()), aiDocumentInput.getSummaryModelId());
         return aiDocumentRepository.save(AiDocumentDraft.$.produce(aiDocumentInput.toEntity(), draft -> {
             draft.setSummary(summary);
         })).id();
-    }
-
-    public static MilvusVectorStore milvusVectorStore(String modelId, AiModelRepository aiModelRepository, MilvusServiceClient milvusServiceClient, Map<String, UniAiEmbeddingService> embeddingServiceMap) {
-        AiModel aiModel = aiModelRepository.findById(modelId, AiModelFetcher.$
-                        .allScalarFields()
-                        .tagsView(AiTagFetcher.$.allScalarFields())).
-                orElseThrow(() -> new BusinessException("模型不存在"));
-        AiTag aiTag = aiModel.tagsView().stream().filter(tag -> tag.name().equals(DictConstants.AiModelTag.EMBEDDINGS))
-                .findFirst()
-                .orElseThrow(() -> new BusinessException("模型未配置Embeddings标签"));
-        UniAiEmbeddingService uniAiEmbeddingService = embeddingServiceMap.get(StringUtils.uncapitalize(aiTag.springAiModel()));
-        if (uniAiEmbeddingService == null) {
-            throw new BusinessException("暂不支持该模型");
-        }
-        EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(aiModel.options());
-        return new MilvusVectorStore(milvusServiceClient, embeddingModel, true);
     }
 
     public String summary(String content, String modelId) {

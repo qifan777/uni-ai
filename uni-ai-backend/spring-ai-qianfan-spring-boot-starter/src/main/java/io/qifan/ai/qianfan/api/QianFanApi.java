@@ -3,6 +3,8 @@ package io.qifan.ai.qianfan.api;
 import com.baidubce.qianfan.Qianfan;
 import com.baidubce.qianfan.model.chat.ChatRequest;
 import com.baidubce.qianfan.model.chat.ChatResponse;
+import com.baidubce.qianfan.model.embedding.EmbeddingRequest;
+import com.baidubce.qianfan.model.embedding.EmbeddingResponse;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
@@ -37,5 +39,10 @@ public class QianFanApi {
                         }
                     }));
         });
+    }
+
+    public EmbeddingResponse embedding(EmbeddingRequest request) {
+        Qianfan qianfan = new Qianfan(accessKey, secretKey);
+        return qianfan.embedding(request);
     }
 }

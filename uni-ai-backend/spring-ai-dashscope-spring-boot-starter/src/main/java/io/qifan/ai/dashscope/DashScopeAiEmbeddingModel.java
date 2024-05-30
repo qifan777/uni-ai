@@ -10,31 +10,34 @@ import java.util.List;
 
 public class DashScopeAiEmbeddingModel implements EmbeddingModel {
     private final DashScopeAiApi dashScopeAiApi;
-    private final DashScopeAiEmbeddingOptions embeddingOptions;
     private final MetadataMode metadataMode;
+    private DashScopeAiEmbeddingOptions options;
 
-    public DashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi) {
+    public DashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi, DashScopeAiEmbeddingOptions options) {
         this.dashScopeAiApi = dashScopeAiApi;
-        embeddingOptions = new DashScopeAiEmbeddingOptions();
+        this.options = options;
         metadataMode = MetadataMode.EMBED;
     }
 
-    public DashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi, DashScopeAiEmbeddingOptions dashScopeAiEmbeddingOptions, MetadataMode metadataMode) {
+    public DashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi, MetadataMode metadataMode, DashScopeAiEmbeddingOptions options) {
         this.dashScopeAiApi = dashScopeAiApi;
-        this.embeddingOptions = dashScopeAiEmbeddingOptions;
         this.metadataMode = metadataMode;
+        this.options = options;
     }
 
     @Override
     public EmbeddingResponse call(EmbeddingRequest request) {
-        var embeddingParam = TextEmbeddingParam.builder().model(embeddingOptions.getModel())
+        EmbeddingOptions embeddingOptions = request.getOptions();
+        if (embeddingOptions instanceof DashScopeAiEmbeddingOptions) {
+            options = (DashScopeAiEmbeddingOptions) embeddingOptions;
+        }
+        var embeddingParam = TextEmbeddingParam.builder().model(options.getModel())
                 .texts(request.getInstructions()).build();
         var textEmbeddingResult = dashScopeAiApi.embedding(embeddingParam);
         List<Embedding> embeddings = textEmbeddingResult.getOutput().getEmbeddings().stream().map(e -> new Embedding(e.getEmbedding(), e.getTextIndex()))
                 .toList();
         var metadata = new EmbeddingResponseMetadata();
-        metadata.put("total-tokens", textEmbeddingResult.getUsage().getTotalTokens());
-        metadata.put("model", embeddingOptions.getModel());
+        metadata.put("totalTokens", textEmbeddingResult.getUsage().getTotalTokens());
         return new EmbeddingResponse(embeddings, metadata);
     }
 

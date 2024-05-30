@@ -5,6 +5,8 @@ import type { MessageWithOptions } from '@/views/ai/ai-chat/store/ai-chat-store'
 import ImageUpload from '@/components/image/image-upload.vue'
 import { ElMessage } from 'element-plus'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
+import RemoteSelect from '@/components/base/form/remote-select.vue'
+import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 
 // 发送消息消息事件
 const emit = defineEmits<{
@@ -14,7 +16,7 @@ const activeTag = inject<AiModelTag>('activeTag', 'AIGC')
 // 输入框内的消息
 const message = ref<MessageWithOptions>({
   content: [{ text: '' }, { image: '' }],
-  options: { knowledge: false }
+  options: { knowledge: false, collectionId: '' }
 })
 const sendMessage = () => {
   const msg = message.value.content.filter((item) => item.text || item.image)
@@ -33,6 +35,13 @@ const sendMessage = () => {
     <el-form class="tools" inline size="small">
       <el-form-item label="知识库">
         <el-switch v-model="message.options.knowledge"></el-switch>
+      </el-form-item>
+      <el-form-item label="嵌入模型" v-if="message.options.knowledge">
+        <remote-select
+          label-prop="name"
+          :query-options="aiCollectionQueryOptions"
+          v-model="message.options.collectionId"
+        ></remote-select>
       </el-form-item>
       <el-form-item label="图片" v-if="activeTag == 'VISION'">
         <image-upload

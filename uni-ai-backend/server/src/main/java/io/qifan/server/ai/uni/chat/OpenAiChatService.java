@@ -2,9 +2,8 @@ package io.qifan.server.ai.uni.chat;
 
 import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
-import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
+import org.springframework.ai.autoconfigure.openai.OpenAiConnectionProperties;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.StreamingChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -17,18 +16,25 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class OpenAiChatService implements UniAiChatService {
-    OpenAiChatProperties openAiChatProperties;
+    private OpenAiConnectionProperties openAiConnectionProperties;
 
     @Override
     public ChatModel getChatModel(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
+        String baseUrl = (String) options.get("baseUrl");
         if (!StringUtils.hasText(apiKey)) {
-            apiKey = openAiChatProperties.getApiKey();
+            apiKey = openAiConnectionProperties.getApiKey();
+        }
+        if (!StringUtils.hasText(baseUrl)) {
+            baseUrl = openAiConnectionProperties.getBaseUrl();
         }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");
         }
-        return new OpenAiChatModel(new OpenAiApi(apiKey));
+        if (!StringUtils.hasText(baseUrl)) {
+            throw new BusinessException("baseUrl不能为空");
+        }
+        return new OpenAiChatModel(new OpenAiApi(baseUrl, apiKey));
     }
 
     @Override

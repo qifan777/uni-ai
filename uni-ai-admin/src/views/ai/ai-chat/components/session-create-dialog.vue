@@ -31,7 +31,7 @@ const closeDialog = () => {
         <el-form-item label="模型">
           <remote-select
             label-prop="name"
-            :query-options="aiModelQueryOptions"
+            :query-options="(query, id) => aiModelQueryOptions(query, id, ['AIGC', 'VISION'])"
             v-model="createForm.aiModelId"
           ></remote-select>
         </el-form-item>

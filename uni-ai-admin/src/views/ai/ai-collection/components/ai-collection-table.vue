@@ -5,12 +5,12 @@ import { assertSuccess } from '@/utils/common'
 import { api } from '@/utils/api-instance'
 import { ElMessageBox } from 'element-plus'
 import type { Scope } from '@/typings'
-import { useAiDocumentStore } from '../store/ai-document-store'
-import type { AiDocumentDto } from '@/apis/__generated/model/dto'
+import { useAiCollectionStore } from '../store/ai-collection-store'
+import type { AiCollectionDto } from '@/apis/__generated/model/dto'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 
-type AiDocumentScope = Scope<AiDocumentDto['AiDocumentRepository/COMPLEX_FETCHER_FOR_ADMIN']>
-const aiDocumentStore = useAiDocumentStore()
+type AiCollectionScope = Scope<AiCollectionDto['AiCollectionRepository/COMPLEX_FETCHER_FOR_ADMIN']>
+const aiCollectionStore = useAiCollectionStore()
 const {
   loadTableData,
   reloadTableData,
@@ -18,9 +18,9 @@ const {
   handleSortChange,
   handleSelectChange,
   getTableSelectedRows
-} = aiDocumentStore
+} = aiCollectionStore
 const { pageData, loading, queryRequest, table, updateForm, createForm } =
-  storeToRefs(aiDocumentStore)
+  storeToRefs(aiCollectionStore)
 onMounted(() => {
   reloadTableData()
 })
@@ -30,7 +30,7 @@ const handleEdit = (row: { id: string }) => {
 }
 const handleCreate = () => {
   openDialog('CREATE')
-  createForm.value = { ...aiDocumentStore.initForm }
+  createForm.value = { ...aiCollectionStore.initForm }
 }
 const handleSingleDelete = (row: { id: string }) => {
   handleDelete([row.id])
@@ -48,7 +48,7 @@ const handleDelete = (ids: string[]) => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    api.aiDocumentForAdminController.delete({ body: ids }).then((res) => {
+    api.aiCollectionForAdminController.delete({ body: ids }).then((res) => {
       assertSuccess(res).then(() => reloadTableData())
     })
   })
@@ -79,53 +79,37 @@ const handleDelete = (ids: string[]) => {
       v-loading="loading"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="名称" prop="name" sortable="custom" show-overflow-tooltip width="120">
-        <template v-slot:default="{ row }: AiDocumentScope">
+      <el-table-column
+        label="中文名称"
+        prop="name"
+        sortable="custom"
+        show-overflow-tooltip
+        width="120"
+      >
+        <template v-slot:default="{ row }: AiCollectionScope">
           {{ row.name }}
         </template>
       </el-table-column>
       <el-table-column
-        label="文档链接"
-        prop="url"
+        label="英文名称"
+        prop="collectionName"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.url }}
+        <template v-slot:default="{ row }: AiCollectionScope">
+          {{ row.collectionName }}
         </template>
       </el-table-column>
       <el-table-column
-        label="总结模型"
-        prop="summaryModel.name"
+        label="嵌入模型"
+        prop="embeddingModelId"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.summaryModel.name }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="知识库"
-        prop="aiCollection.name"
-        sortable="custom"
-        show-overflow-tooltip
-        width="120"
-      >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.aiCollection.name }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="总结"
-        prop="summary"
-        sortable="custom"
-        show-overflow-tooltip
-        width="120"
-      >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.summary }}
+        <template v-slot:default="{ row }: AiCollectionScope">
+          {{ row.embeddingModel.name }}
         </template>
       </el-table-column>
       <el-table-column
@@ -135,7 +119,7 @@ const handleDelete = (ids: string[]) => {
         show-overflow-tooltip
         width="150"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
+        <template v-slot:default="{ row }: AiCollectionScope">
           {{ row.createdTime }}
         </template>
       </el-table-column>
@@ -146,7 +130,7 @@ const handleDelete = (ids: string[]) => {
         show-overflow-tooltip
         width="150"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
+        <template v-slot:default="{ row }: AiCollectionScope">
           {{ row.editedTime }}
         </template>
       </el-table-column>
@@ -157,7 +141,7 @@ const handleDelete = (ids: string[]) => {
         show-overflow-tooltip
         width="150"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
+        <template v-slot:default="{ row }: AiCollectionScope">
           {{ row.creator.nickname }}({{ row.creator.phone }})
         </template>
       </el-table-column>
@@ -168,7 +152,7 @@ const handleDelete = (ids: string[]) => {
         show-overflow-tooltip
         width="150"
       >
-        <template v-slot:default="{ row }: AiDocumentScope">
+        <template v-slot:default="{ row }: AiCollectionScope">
           {{ row.editor.nickname }}({{ row.editor.phone }})
         </template>
       </el-table-column>

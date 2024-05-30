@@ -9,10 +9,14 @@ import type {
 } from '@/apis/__generated/model/static'
 import { api } from '@/utils/api-instance'
 import { ref } from 'vue'
+import type { AiModelTag } from '@/apis/__generated/model/enums'
 
-export const aiModelQueryOptions = async (keyword: string, id: string) => {
-  return (await api.aiModelForAdminController.query({ body: { query: { name: keyword, id } } }))
-    .content
+export const aiModelQueryOptions = async (keyword: string, id: string, tagNames: AiModelTag[]) => {
+  return (
+    await api.aiModelForAdminController.query({
+      body: { query: { name: keyword, id, tagNames } }
+    })
+  ).content
 }
 export const useAiModelStore = defineStore('aiModel', () => {
   const initQuery: AiModelSpec = {}

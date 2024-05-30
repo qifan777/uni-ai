@@ -1,29 +1,27 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { reactive, ref, watch } from 'vue'
-import { useAiDocumentStore } from '../store/ai-document-store'
+import { useAiCollectionStore } from '../store/ai-collection-store'
 import { assertFormValidate, assertSuccess } from '@/utils/common'
 import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 
-const aiDocumentStore = useAiDocumentStore()
-const { closeDialog, reloadTableData } = aiDocumentStore
-const { updateForm, dialogData } = storeToRefs(aiDocumentStore)
+const aiCollectionStore = useAiCollectionStore()
+const { closeDialog, reloadTableData } = aiCollectionStore
+const { updateForm, dialogData } = storeToRefs(aiCollectionStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
-  name: [{ required: true, message: '请输入文档名称', trigger: 'blur' }],
-  url: [{ required: true, message: '请输入文档链接', trigger: 'blur' }],
-  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }],
-  summaryModelId: [{ required: true, message: '请选择总结模型)', trigger: 'change' }]
+  name: [{ required: true, message: '请输入中文名称', trigger: 'blur' }],
+  collectionName: [{ required: true, message: '请输入英文名称', trigger: 'blur' }],
+  embeddingModelId: [{ required: true, message: '请输入嵌入模型', trigger: 'blur' }]
 })
 const init = async () => {
   dialogData.value.title = '编辑'
   updateForm.value = {
-    ...(await api.aiDocumentForAdminController.findById({ id: updateForm.value.id || '' }))
+    ...(await api.aiCollectionForAdminController.findById({ id: updateForm.value.id || '' }))
   }
 }
 watch(
@@ -38,7 +36,7 @@ watch(
 const handleConfirm = () => {
   updateFormRef.value?.validate(
     assertFormValidate(() => {
-      api.aiDocumentForAdminController.update({ body: updateForm.value }).then(async (res) => {
+      api.aiCollectionForAdminController.update({ body: updateForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           closeDialog()
           reloadTableData()
@@ -54,28 +52,14 @@ const handleConfirm = () => {
       <el-form-item label="名称" prop="name">
         <el-input v-model="updateForm.name"></el-input>
       </el-form-item>
-      <el-form-item label="文档链接" prop="url">
-        <el-input v-model="updateForm.url"></el-input>
+      <el-form-item label="英文名称" prop="collectionName">
+        <el-input v-model="updateForm.collectionName"></el-input>
       </el-form-item>
-      <el-form-item label="总结" prop="summary">
-        <el-input v-model="updateForm.summary"></el-input>
-      </el-form-item>
-      <el-form-item label="知识库" prop="aiCollectionId">
+      <el-form-item label="嵌入模型" prop="embeddingModelId">
         <remote-select
           label-prop="name"
-          :query-options="aiCollectionQueryOptions"
-          v-model="updateForm.aiCollectionId"
-        ></remote-select>
-      </el-form-item>
-      <el-form-item label="总结模型" prop="summaryModelId">
-        <remote-select
-          label-prop="name"
-          :query-options="
-            (query, id) => {
-              return aiModelQueryOptions(query, id, ['AIGC'])
-            }
-          "
-          v-model="updateForm.summaryModelId"
+          :query-options="(query, id) => aiModelQueryOptions(query, id, ['EMBEDDINGS'])"
+          v-model="updateForm.embeddingModelId"
         ></remote-select>
       </el-form-item>
     </el-form>

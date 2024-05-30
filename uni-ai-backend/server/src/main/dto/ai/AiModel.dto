@@ -19,4 +19,9 @@ specification AiModelSpec {
     ge(editedTime)
     le(editedTime)
     id(creator)
+    flat(tags) {
+        flat(aiTag) {
+            valueIn(name) as tagNames
+        }
+    }
 }

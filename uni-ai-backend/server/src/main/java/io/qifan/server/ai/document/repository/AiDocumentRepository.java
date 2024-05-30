@@ -1,5 +1,6 @@
 package io.qifan.server.ai.document.repository;
 
+import io.qifan.server.ai.collection.entity.AiCollectionFetcher;
 import io.qifan.server.ai.document.entity.AiDocument;
 import io.qifan.server.ai.document.entity.AiDocumentFetcher;
 import io.qifan.server.ai.document.entity.AiDocumentTable;
@@ -17,8 +18,8 @@ import org.springframework.data.domain.Pageable;
 public interface AiDocumentRepository extends JRepository<AiDocument, String> {
     AiDocumentTable aiDocumentTable = AiDocumentTable.$;
     AiDocumentFetcher COMPLEX_FETCHER_FOR_ADMIN = AiDocumentFetcher.$.allScalarFields()
-            .embeddingModelId()
-            .embeddingModel(AiModelFetcher.$.allScalarFields())
+            .aiCollectionId()
+            .aiCollection(AiCollectionFetcher.$.allScalarFields())
             .summaryModelId()
             .summaryModel(AiModelFetcher.$.allScalarFields())
             .creator(UserFetcher.$.phone().nickname())

@@ -25,7 +25,7 @@ const handleLogout = () => {
         <div class="logo">
           <el-avatar :src="logo" :size="22"></el-avatar>
           <div class="separator"></div>
-          <span>Mall-Admin</span>
+          <span>UNI-AI</span>
         </div>
         <div class="flex-grow"></div>
         <div class="username-wrapper" v-if="userInfo">

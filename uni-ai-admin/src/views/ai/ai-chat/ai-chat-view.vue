@@ -98,7 +98,7 @@ const handleSendMessage = (message: MessageWithOptions) => {
   } satisfies AiMessageCreateInput & { createdTime: string }
   const queries = Object.keys(message.options || {})
     .map((key) => {
-      return key + '=' + _.get(message, [key])
+      return key + '=' + _.get(message.options, [key])
     })
     .join('&')
   const evtSource = new SSE(

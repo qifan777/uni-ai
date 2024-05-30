@@ -10,15 +10,18 @@ import type { Result } from '@/typings'
 import { Plus } from '@element-plus/icons-vue'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 const API_PREFIX = import.meta.env.VITE_API_PREFIX
-
+const loading = ref(false)
 const aiDocumentStore = useAiDocumentStore()
 const { closeDialog, reloadTableData } = aiDocumentStore
 const { createForm, dialogData } = storeToRefs(aiDocumentStore)
 const createFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof createForm>>({
+  name: [{ required: true, message: '请输入文档名称', trigger: 'blur' }],
   url: [{ required: true, message: '请输入文档链接', trigger: 'blur' }],
-  collection: [{ required: true, message: '请输入集合名称(表名)', trigger: 'blur' }]
+  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }],
+  summaryModelId: [{ required: true, message: '请选择总结模型)', trigger: 'change' }]
 })
 const init = async () => {
   dialogData.value.title = '创建'
@@ -35,14 +38,16 @@ watch(
 
 const handleConfirm = () => {
   createFormRef.value?.validate(
-    assertFormValidate(() =>
+    assertFormValidate(() => {
+      loading.value = true
       api.aiDocumentForAdminController.create({ body: createForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
+          loading.value = false
           closeDialog()
           reloadTableData()
         })
       })
-    )
+    })
   )
 }
 const onUploadSuccess = (res: Result<{ url: string }>) => {
@@ -52,6 +57,9 @@ const onUploadSuccess = (res: Result<{ url: string }>) => {
 <template>
   <div class="create-form">
     <el-form labelWidth="120" class="form" ref="createFormRef" :model="createForm" :rules="rules">
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="createForm.name"></el-input>
+      </el-form-item>
       <el-form-item label="文档链接" prop="url">
         <el-upload
           :action="`${API_PREFIX}/oss/upload`"
@@ -62,20 +70,21 @@ const onUploadSuccess = (res: Result<{ url: string }>) => {
           <el-icon> <plus></plus> </el-icon
         ></el-upload>
       </el-form-item>
-      <el-form-item label="集合名称(表名)" prop="collection">
-        <el-input v-model="createForm.collection"></el-input>
-      </el-form-item>
-      <el-form-item label="嵌入模型" prop="modelId">
+      <el-form-item label="知识库" prop="aiCollectionId">
         <remote-select
           label-prop="name"
-          :query-options="aiModelQueryOptions"
-          v-model="createForm.embeddingModelId"
+          :query-options="aiCollectionQueryOptions"
+          v-model="createForm.aiCollectionId"
         ></remote-select>
       </el-form-item>
-      <el-form-item label="总结模型" prop="modelId">
+      <el-form-item label="总结模型" prop="summaryModelId">
         <remote-select
           label-prop="name"
-          :query-options="aiModelQueryOptions"
+          :query-options="
+            (query, id) => {
+              return aiModelQueryOptions(query, id, ['AIGC'])
+            }
+          "
           v-model="createForm.summaryModelId"
         ></remote-select>
       </el-form-item>

@@ -1,6 +1,7 @@
 package io.qifan.ai.qianfan;
 
 import io.qifan.ai.qianfan.api.QianFanApi;
+import org.springframework.ai.document.MetadataMode;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,4 +27,9 @@ public class QianFanAiAutoConfiguration {
         return new QianFanApi(properties.getAccessKey(), properties.getSecretKey(), executor);
     }
 
+    @ConditionalOnProperty(prefix = QianFanAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
+    @Bean
+    public QifanAiEmbeddingModel qifanAiEmbeddingModel(QianFanApi qianFanApi) {
+        return new QifanAiEmbeddingModel(qianFanApi, MetadataMode.EMBED, new QifanAiEmbeddingOptions().setModel("Embedding-V1"));
+    }
 }

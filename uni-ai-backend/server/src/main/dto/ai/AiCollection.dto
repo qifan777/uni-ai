@@ -1,0 +1,24 @@
+export io.qifan.server.ai.collection.entity.AiCollection
+
+input AiCollectionCreateInput {
+    #allScalars(AiCollection)
+    id(embeddingModel)
+}
+input AiCollectionUpdateInput {
+    #allScalars(AiCollection)
+    id!
+    id(embeddingModel)
+}
+
+specification AiCollectionSpec {
+    #allScalars
+    like/i(name)
+    like/i(collectionName)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    id(embeddingModel)
+}

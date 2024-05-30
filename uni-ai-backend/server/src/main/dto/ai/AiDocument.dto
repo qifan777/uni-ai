@@ -4,19 +4,19 @@ input AiDocumentCreateInput {
     #allScalars(AiDocument)
     -summary
     id(summaryModel)
-    id(embeddingModel)
+    id(aiCollection)
 }
 input AiDocumentUpdateInput {
     #allScalars(AiDocument)
     id!
     id(summaryModel)
-    id(embeddingModel)
+    id(aiCollection)
 }
 
 specification AiDocumentSpec {
     #allScalars
+    like/i(name)
     like/i(url)
-    like/i(collection)
     like/i(summary)
     like/i(id)
     ge(editedTime)
@@ -25,5 +25,5 @@ specification AiDocumentSpec {
     le(createdTime)
     id(creator)
     id(summaryModel)
-    id(embeddingModel)
+    id(aiCollection)
 }
