@@ -20,6 +20,20 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
+  ai:
+    vectorstore:
+      milvus:
+        client:
+          host: "localhost"
+          port: 19530
+          username: "root"
+          password: "milvus"
+        databaseName: "default"
+        collectionName: "vector_store"
+        embeddingDimension: 1536
+        indexType: IVF_FLAT
+        metricType: COSINE
+
 security:
   enabled: true
 jimmer:

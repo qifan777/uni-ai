@@ -8,9 +8,10 @@ import io.reactivex.Flowable;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.model.StreamingChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DashScopeAiVLChatModel implements StreamingChatModel {
+public class DashScopeAiVLChatModel implements ChatModel {
     private final DashScopeAiApi dashScopeAiApi;
 
     public DashScopeAiVLChatModel(DashScopeAiApi dashScopeAiApi) {
@@ -27,10 +28,20 @@ public class DashScopeAiVLChatModel implements StreamingChatModel {
     }
 
     @Override
+    public ChatResponse call(Prompt prompt) {
+        return toResponse(dashScopeAiApi.vlChatCompletion(toParam(prompt)));
+    }
+
+    @Override
+    public ChatOptions getDefaultOptions() {
+        return null;
+    }
+
+    @Override
     public Flux<ChatResponse> stream(Prompt prompt) {
         MultiModalConversationParam params = toParam(prompt);
         params.setIncrementalOutput(true);
-        Flowable<MultiModalConversationResult> stream = dashScopeAiApi.vlStream(params);
+        Flowable<MultiModalConversationResult> stream = dashScopeAiApi.vlChatCompletionStream(params);
         return Flux.create(fluxSink -> {
             stream.subscribe(multiModalConversationResult -> {
                 ChatResponse chatResponse = toResponse(multiModalConversationResult);

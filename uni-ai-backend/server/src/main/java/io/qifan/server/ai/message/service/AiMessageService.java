@@ -9,7 +9,7 @@ import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.session.entity.AiSession;
 import io.qifan.server.ai.session.repository.AiSessionRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
-import io.qifan.server.ai.uni.UniAiChatService;
+import io.qifan.server.ai.uni.chat.UniAiChatService;
 import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.setting.SettingRepository;
 import io.qifan.server.wallet.record.entity.dto.WalletRecordCreateInput;

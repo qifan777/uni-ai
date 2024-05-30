@@ -8,10 +8,7 @@ import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import jakarta.validation.constraints.Null;
-import org.babyfish.jimmer.sql.Entity;
-import org.babyfish.jimmer.sql.ManyToManyView;
-import org.babyfish.jimmer.sql.OneToMany;
-import org.babyfish.jimmer.sql.Serialized;
+import org.babyfish.jimmer.sql.*;
 
 import java.util.List;
 import java.util.Map;

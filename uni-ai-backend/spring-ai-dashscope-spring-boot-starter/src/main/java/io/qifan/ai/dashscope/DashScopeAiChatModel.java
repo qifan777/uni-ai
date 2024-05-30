@@ -9,9 +9,10 @@ import lombok.val;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.model.StreamingChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
@@ -19,7 +20,7 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.Map;
 
-public class DashScopeAiChatModel implements StreamingChatModel {
+public class DashScopeAiChatModel implements ChatModel {
     private final DashScopeAiApi dashScopeAiApi;
 
     public DashScopeAiChatModel(DashScopeAiApi dashScopeAiApi) {
@@ -27,13 +28,24 @@ public class DashScopeAiChatModel implements StreamingChatModel {
     }
 
     @Override
+    public ChatResponse call(Prompt prompt) {
+
+        return toResponse(dashScopeAiApi.chatCompletion(toParam(prompt)));
+    }
+
+    @Override
+    public ChatOptions getDefaultOptions() {
+        return null;
+    }
+
+    @Override
     public Flux<ChatResponse> stream(Prompt prompt) {
-        GenerationParam params = createParams(prompt);
+        GenerationParam params = toParam(prompt);
         params.setIncrementalOutput(true);
-        Flowable<GenerationResult> stream = dashScopeAiApi.stream(params);
+        Flowable<GenerationResult> stream = dashScopeAiApi.chatCompletionStream(params);
         return Flux.create(fluxSink -> {
             stream.subscribe(multiModalConversationResult -> {
-                ChatResponse chatResponse = genResultToResponse(multiModalConversationResult);
+                ChatResponse chatResponse = toResponse(multiModalConversationResult);
                 String finishReason = chatResponse.getResult().getMetadata().getFinishReason();
                 fluxSink.next(chatResponse);
                 if (StringUtils.hasLength(finishReason) && finishReason.equals("stop")) {
@@ -44,7 +56,7 @@ public class DashScopeAiChatModel implements StreamingChatModel {
     }
 
 
-    public GenerationParam createParams(Prompt prompt) {
+    public GenerationParam toParam(Prompt prompt) {
         List<Message> list = prompt.getInstructions()
                 .stream()
                 .map(instruction -> {
@@ -81,8 +93,7 @@ public class DashScopeAiChatModel implements StreamingChatModel {
         return builder.build();
     }
 
-
-    public ChatResponse genResultToResponse(GenerationResult result) {
+    public ChatResponse toResponse(GenerationResult result) {
         List<Generation> generations = result.getOutput()
                 .getChoices()
                 .stream()

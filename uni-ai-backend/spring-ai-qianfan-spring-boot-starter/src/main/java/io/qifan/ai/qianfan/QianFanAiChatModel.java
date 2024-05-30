@@ -6,21 +6,32 @@ import io.qifan.ai.qianfan.api.QianFanApi;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.model.StreamingChatModel;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-public class QianFanAiChatModel implements StreamingChatModel {
+public class QianFanAiChatModel implements ChatModel {
     private final QianFanApi qianFanApi;
 
 
     public QianFanAiChatModel(QianFanApi qianFanApi) {
         this.qianFanApi = qianFanApi;
+    }
+
+    @Override
+    public ChatResponse call(Prompt prompt) {
+        return toResponse(qianFanApi.chatCompletion(toRequest(prompt)));
+    }
+
+    @Override
+    public ChatOptions getDefaultOptions() {
+        return null;
     }
 
     @Override

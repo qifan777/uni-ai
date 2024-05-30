@@ -7,7 +7,6 @@ import MenuView from '@/views/menu/menu-view.vue'
 import LayoutView from '@/layout/layout-view.vue'
 import { useHomeStore } from '@/stores/home-store'
 import RestPasswordView from '@/views/login/rest-password-view.vue'
-import { imageEmits } from 'element-plus'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +64,10 @@ const router = createRouter({
         {
           path: '/ai-model',
           component: () => import('@/views/ai/ai-model/ai-model-view.vue')
+        },
+        {
+          path: '/ai-document',
+          component: () => import('@/views/ai/ai-document/ai-document-view.vue')
         },
         {
           path: '/ai-tag',

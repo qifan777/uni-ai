@@ -1,0 +1,29 @@
+export io.qifan.server.ai.document.entity.AiDocument
+
+input AiDocumentCreateInput {
+    #allScalars(AiDocument)
+    -summary
+    id(summaryModel)
+    id(embeddingModel)
+}
+input AiDocumentUpdateInput {
+    #allScalars(AiDocument)
+    id!
+    id(summaryModel)
+    id(embeddingModel)
+}
+
+specification AiDocumentSpec {
+    #allScalars
+    like/i(url)
+    like/i(collection)
+    like/i(summary)
+    like/i(id)
+    ge(editedTime)
+    le(editedTime)
+    ge(createdTime)
+    le(createdTime)
+    id(creator)
+    id(summaryModel)
+    id(embeddingModel)
+}

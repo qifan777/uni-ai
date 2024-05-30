@@ -1,6 +1,9 @@
-package io.qifan.server.ai.uni;
+package io.qifan.server.ai.uni.chat;
 
 import io.qifan.infrastructure.common.exception.BusinessException;
+import lombok.AllArgsConstructor;
+import org.springframework.ai.autoconfigure.openai.OpenAiChatProperties;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.StreamingChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -12,11 +15,16 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class OpenAiChatService implements UniAiChatService {
+    OpenAiChatProperties openAiChatProperties;
 
     @Override
-    public StreamingChatModel getChatModel(Map<String, Object> options) {
+    public ChatModel getChatModel(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
+        if (!StringUtils.hasText(apiKey)) {
+            apiKey = openAiChatProperties.getApiKey();
+        }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");
         }

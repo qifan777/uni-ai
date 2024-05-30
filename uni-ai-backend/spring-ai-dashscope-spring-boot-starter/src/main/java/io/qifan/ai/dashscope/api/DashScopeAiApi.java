@@ -22,20 +22,26 @@ public class DashScopeAiApi {
     }
 
     @SneakyThrows
-    public GenerationResult chat(GenerationParam generationParam) {
+    public GenerationResult chatCompletion(GenerationParam generationParam) {
         Generation gen = new Generation();
         return gen.call(generationParam);
     }
 
     @SneakyThrows
-    public Flowable<GenerationResult> stream(GenerationParam generationParam) {
+    public Flowable<GenerationResult> chatCompletionStream(GenerationParam generationParam) {
         Generation gen = new Generation();
         return gen.streamCall(generationParam);
 
     }
 
     @SneakyThrows
-    public Flowable<MultiModalConversationResult> vlStream(MultiModalConversationParam param) {
+    public MultiModalConversationResult vlChatCompletion(MultiModalConversationParam param) {
+        MultiModalConversation conv = new MultiModalConversation();
+        return conv.call(param);
+    }
+
+    @SneakyThrows
+    public Flowable<MultiModalConversationResult> vlChatCompletionStream(MultiModalConversationParam param) {
         MultiModalConversation conv = new MultiModalConversation();
         return conv.streamCall(param);
     }

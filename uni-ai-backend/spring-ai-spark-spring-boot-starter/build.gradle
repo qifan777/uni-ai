@@ -8,6 +8,7 @@ repositories {
     maven { url 'https://repo.spring.io/snapshot' }
 }
 dependencies {
+    implementation project(":common")
     implementation 'io.projectreactor:reactor-core'
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'org.springframework.boot:spring-boot-starter-json'

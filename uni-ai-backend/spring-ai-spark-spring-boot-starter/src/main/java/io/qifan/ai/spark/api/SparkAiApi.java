@@ -3,6 +3,7 @@ package io.qifan.ai.spark.api;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
@@ -40,12 +41,16 @@ public class SparkAiApi {
         this.executor = executor;
     }
 
-    public Flux<SparkResponse> chat(SparkRequest sparkRequest) {
-        return Flux.create(fluxSink -> executor.execute(() -> chat(fluxSink, sparkRequest)));
+    public SparkResponse chatCompletion(SparkRequest sparkRequest) {
+        throw new BusinessException("该模型不支持非流水对话");
+    }
+
+    public Flux<SparkResponse> chatCompletionStream(SparkRequest sparkRequest) {
+        return Flux.create(fluxSink -> executor.execute(() -> chatCompletionStream(fluxSink, sparkRequest)));
     }
 
     @SneakyThrows
-    public void chat(FluxSink<SparkResponse> fluxSink, SparkRequest sparkRequest) {
+    public void chatCompletionStream(FluxSink<SparkResponse> fluxSink, SparkRequest sparkRequest) {
         sparkRequest.getHeader().setAppId(appId);
         String url = getAuthUrl(sparkRequest.getParameter().getChat().getBaseUrl(), apiKey, apiSecret).replaceAll("https://", "wss://");
         OkHttpClient client = new OkHttpClient.Builder().build();

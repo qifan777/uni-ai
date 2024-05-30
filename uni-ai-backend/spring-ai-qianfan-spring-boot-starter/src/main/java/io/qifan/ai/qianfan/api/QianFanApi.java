@@ -20,6 +20,11 @@ public class QianFanApi {
         this.executor = executor;
     }
 
+    public ChatResponse chatCompletion(ChatRequest request) {
+        Qianfan qianfan = new Qianfan(accessKey, secretKey);
+        return qianfan.chatCompletion(request);
+    }
+
     public Flux<ChatResponse> chatCompletionStream(ChatRequest request) {
         Qianfan qianfan = new Qianfan(accessKey, secretKey);
         return Flux.create(fluxSink -> {

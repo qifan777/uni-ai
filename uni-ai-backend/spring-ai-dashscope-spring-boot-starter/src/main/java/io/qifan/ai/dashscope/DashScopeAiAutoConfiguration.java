@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @AutoConfiguration
 @Configuration
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class DashScopeAiAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
+    @Primary
     public DashScopeAiEmbeddingModel dashScopeAiEmbeddingClient(DashScopeAiApi dashScopeAiApi) {
         return new DashScopeAiEmbeddingModel(dashScopeAiApi, new DashScopeAiEmbeddingOptions(), MetadataMode.EMBED);
     }

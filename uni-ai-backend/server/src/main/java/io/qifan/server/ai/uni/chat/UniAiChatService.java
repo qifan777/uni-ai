@@ -1,12 +1,12 @@
-package io.qifan.server.ai.uni;
+package io.qifan.server.ai.uni.chat;
 
-import org.springframework.ai.chat.model.StreamingChatModel;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 
 import java.util.Map;
 
 public interface UniAiChatService {
-    StreamingChatModel getChatModel(Map<String,Object> options);
+    ChatModel getChatModel(Map<String, Object> options);
 
     ChatOptions getChatOptions(Map<String, Object> options);
 }
