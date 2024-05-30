@@ -10,9 +10,11 @@ import io.qifan.server.ai.message.entity.AiMessage;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
 import io.qifan.server.ai.message.entity.dto.AiMessageSpec;
 import io.qifan.server.ai.message.entity.dto.AiMessageUpdateInput;
+import io.qifan.server.ai.message.entity.model.ChatParams;
 import io.qifan.server.ai.message.repository.AiMessageRepository;
 import io.qifan.server.ai.message.service.AiMessageService;
-import io.qifan.server.dict.model.DictConstants;
+import io.qifan.server.ai.model.repository.AiModelRepository;
+import io.qifan.server.ai.uni.embedding.UniAiEmbeddingService;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("front/ai-message")
@@ -80,11 +83,12 @@ public class AiMessageForFrontController {
 
     @PostMapping(value = "chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ApiIgnore
-    public Flux<ServerSentEvent<String>> chat(@RequestBody AiMessageCreateInput messageInput, @RequestParam DictConstants.AiModelTag tag) {
+    public Flux<ServerSentEvent<String>> chat(@RequestBody AiMessageCreateInput messageInput, @ModelAttribute ChatParams params) {
         return aiMessageService
-                .chat(messageInput,tag)
+                .chat(messageInput, params)
                 .map(this::apply);
     }
+
 
     @SneakyThrows
     private ServerSentEvent<String> apply(ChatResponse chatResponse) {

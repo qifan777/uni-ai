@@ -1,15 +1,20 @@
 package io.qifan.server.ai.message.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import io.milvus.client.MilvusServiceClient;
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
+import io.qifan.server.ai.document.controller.AiDocumentForAdminController;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
 import io.qifan.server.ai.message.entity.model.ChatMessage;
+import io.qifan.server.ai.message.entity.model.ChatParams;
 import io.qifan.server.ai.model.entity.AiModel;
+import io.qifan.server.ai.model.repository.AiModelRepository;
 import io.qifan.server.ai.session.entity.AiSession;
 import io.qifan.server.ai.session.repository.AiSessionRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
+import io.qifan.server.ai.uni.embedding.UniAiEmbeddingService;
 import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.setting.SettingRepository;
 import io.qifan.server.wallet.record.entity.dto.WalletRecordCreateInput;
@@ -22,6 +27,8 @@ import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.MilvusVectorStore;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -50,8 +57,11 @@ public class AiMessageService {
     private final AsyncTaskExecutor executor;
     private final WalletRecordService walletRecordService;
     private final SettingRepository settingRepository;
+    private final Map<String, UniAiEmbeddingService> embeddingServiceMap;
+    private final AiModelRepository aiModelRepository;
+    private final MilvusServiceClient milvusServiceClient;
 
-    public Flux<ChatResponse> chat(AiMessageCreateInput messageInput, DictConstants.AiModelTag modelTag) {
+    public Flux<ChatResponse> chat(AiMessageCreateInput messageInput, ChatParams params) {
         AiSession aiSession = aiSessionRepository.findById(messageInput.getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "会话不存在"));
         AiModel model = aiSession.aiModel();
@@ -61,13 +71,17 @@ public class AiMessageService {
         if (model.tagsView() == null) {
             throw new BusinessException("请配置模型标签");
         }
-        AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(modelTag))
+        AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(params.getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
-
         UniAiChatService aiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.springAiModel()));
         if (aiChatService == null) {
             throw new BusinessException("后端未配置模型服务");
+        }
+        if (params.getKnowledge()) {
+            MilvusVectorStore milvusVectorStore = AiDocumentForAdminController.milvusVectorStore(params.getEmbeddingModelId(), aiModelRepository, milvusServiceClient, embeddingServiceMap);
+            List<String> context = milvusVectorStore.similaritySearch(toMessage(DictConstants.AiMessageType.USER, messageInput.getContent()).getContent()).stream().map(Document::getContent).toList();
+
         }
         Prompt prompt = toPrompt(messageInput, aiSession, aiChatService.getChatOptions(model.options()));
         Flux<ChatResponse> stream = aiChatService.getChatModel(model.options()).stream(prompt);

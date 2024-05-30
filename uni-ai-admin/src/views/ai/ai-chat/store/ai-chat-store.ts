@@ -7,6 +7,8 @@ import type { AiSessionCreateInput } from '@/apis/__generated/model/static'
 type AiSession = AiSessionDto['AiSessionRepository/COMPLEX_FETCHER_FOR_FRONT'] & {
   checked: boolean
 }
+export type MessageWithOptions = { content: AiMessage['content']; options: { knowledge: boolean } }
+
 export type AiMessage = Pick<
   AiMessageDto['AiMessageRepository/COMPLEX_FETCHER_FOR_FRONT'],
   'type' | 'content' | 'createdTime'

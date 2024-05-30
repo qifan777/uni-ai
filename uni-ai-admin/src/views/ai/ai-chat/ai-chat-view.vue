@@ -12,9 +12,10 @@ import { api } from '@/utils/api-instance'
 import { useHomeStore } from '@/stores/home-store'
 import SessionCreateDialog from './components/session-create-dialog.vue'
 import { SSE } from 'sse.js'
-import { type AiMessage, useAiChatStore } from './store/ai-chat-store'
+import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store/ai-chat-store'
 import type { AiMessageCreateInput } from '@/apis/__generated/model/static'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
+import _ from 'lodash'
 
 type ChatResponse = {
   metadata: {
@@ -77,12 +78,12 @@ const responseMessage = ref<AiMessageCreateInput & { createdTime: string }>({
   // 因为回复的消息没有id，所以统一将创建时间+index当作key
   createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
 })
-const handleSendMessage = (message: AiMessage['content']) => {
+const handleSendMessage = (message: MessageWithOptions) => {
   if (!activeSession.value) return
   // 用户的提问
   const chatMessage = {
     aiSessionId: activeSession.value.id,
-    content: message,
+    content: message.content,
     type: 'USER',
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
   } satisfies AiMessageCreateInput & { createdTime: string }
@@ -95,8 +96,17 @@ const handleSendMessage = (message: AiMessage['content']) => {
     // 因为回复的消息没有id，所以统一将创建时间+index当作key
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
   } satisfies AiMessageCreateInput & { createdTime: string }
+  const queries = Object.keys(message.options || {})
+    .map((key) => {
+      return key + '=' + _.get(message, [key])
+    })
+    .join('&')
   const evtSource = new SSE(
-    import.meta.env.VITE_API_PREFIX + `/front/ai-message/chat?tag=` + activeTag.value,
+    import.meta.env.VITE_API_PREFIX +
+      `/front/ai-message/chat?tag=` +
+      activeTag.value +
+      '&' +
+      queries,
     {
       withCredentials: true,
       start: false,

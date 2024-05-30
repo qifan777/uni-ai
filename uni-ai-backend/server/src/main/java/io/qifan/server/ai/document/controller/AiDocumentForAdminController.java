@@ -2,7 +2,6 @@ package io.qifan.server.ai.document.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.milvus.client.MilvusServiceClient;
-import io.qifan.ai.dashscope.DashScopeAiChatModel;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.document.entity.AiDocument;
 import io.qifan.server.ai.document.entity.AiDocumentDraft;
@@ -56,7 +55,6 @@ public class AiDocumentForAdminController {
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final AiModelRepository aiModelRepository;
     private final MilvusServiceClient milvusServiceClient;
-    private final DashScopeAiChatModel chatModel;
 
     @GetMapping("{id}")
     public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiDocument findById(@PathVariable String id) {
@@ -71,7 +69,19 @@ public class AiDocumentForAdminController {
     @SneakyThrows
     @PostMapping
     public String create(@RequestBody @Validated AiDocumentCreateInput aiDocumentInput) {
-        AiModel aiModel = aiModelRepository.findById(aiDocumentInput.getEmbeddingModelId(), AiModelFetcher.$
+        TikaDocumentReader tikaDocumentReader = new TikaDocumentReader(new UrlResource(new URL(aiDocumentInput.getUrl())));
+        List<Document> documents = tikaDocumentReader.get();
+        List<Document> splitDocuments = new TokenTextSplitter().apply(documents);
+        MilvusVectorStore milvusVectorStore = milvusVectorStore(aiDocumentInput.getEmbeddingModelId(), aiModelRepository, milvusServiceClient, embeddingServiceMap);
+        milvusVectorStore.add(splitDocuments);
+        String summary = summary(String.join("", documents.stream().map(Document::getContent).toList()), aiDocumentInput.getSummaryModelId());
+        return aiDocumentRepository.save(AiDocumentDraft.$.produce(aiDocumentInput.toEntity(), draft -> {
+            draft.setSummary(summary);
+        })).id();
+    }
+
+    public static MilvusVectorStore milvusVectorStore(String modelId, AiModelRepository aiModelRepository, MilvusServiceClient milvusServiceClient, Map<String, UniAiEmbeddingService> embeddingServiceMap) {
+        AiModel aiModel = aiModelRepository.findById(modelId, AiModelFetcher.$
                         .allScalarFields()
                         .tagsView(AiTagFetcher.$.allScalarFields())).
                 orElseThrow(() -> new BusinessException("模型不存在"));
@@ -83,15 +93,7 @@ public class AiDocumentForAdminController {
             throw new BusinessException("暂不支持该模型");
         }
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(aiModel.options());
-        MilvusVectorStore milvusVectorStore = new MilvusVectorStore(milvusServiceClient, embeddingModel, true);
-        TikaDocumentReader tikaDocumentReader = new TikaDocumentReader(new UrlResource(new URL(aiDocumentInput.getUrl())));
-        List<Document> documents = tikaDocumentReader.get();
-        List<Document> splitDocuments = new TokenTextSplitter().apply(documents);
-        milvusVectorStore.add(splitDocuments);
-        String summary = summary(String.join("", documents.stream().map(Document::getContent).toList()), aiDocumentInput.getSummaryModelId());
-        return aiDocumentRepository.save(AiDocumentDraft.$.produce(aiDocumentInput.toEntity(), draft -> {
-            draft.setSummary(summary);
-        })).id();
+        return new MilvusVectorStore(milvusServiceClient, embeddingModel, true);
     }
 
     public String summary(String content, String modelId) {
