@@ -25,12 +25,9 @@ jimmer:
   dialect: org.babyfish.jimmer.sql.dialect.MySqlDialect
   show-sql: true
   pretty-sql: true
-  database-validation:
-    schema: ""
-    #    mode: error
-    catalog: "mall"
   trigger-type: transaction_only
+# 微信支付回调
 wx:
   pay:
-    notify-url: https://wechat.xinzheying.com/api
+    notify-url: https://www.jarcheng.top/test-api
 

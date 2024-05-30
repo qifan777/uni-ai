@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class DashScopeAiChatOptions implements ChatOptions {
+    private String apiKey;
     private String model;
     private Float temperature;
     private Integer maxTokens;

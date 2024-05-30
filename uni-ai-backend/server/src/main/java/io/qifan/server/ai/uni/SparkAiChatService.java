@@ -1,22 +1,33 @@
 package io.qifan.server.ai.uni;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qifan.ai.spark.SparkAiChatModel;
 import io.qifan.ai.spark.SparkAiChatOptions;
+import io.qifan.ai.spark.api.SparkAiApi;
 import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.model.StreamingChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 @Service
 @AllArgsConstructor
 public class SparkAiChatService implements UniAiChatService {
-    private final SparkAiChatModel sparkAiChatModel;
+    private final Executor executor;
+    private final ObjectMapper objectMapper;
 
     @Override
-    public StreamingChatModel getChatModel() {
-        return sparkAiChatModel;
+    public StreamingChatModel getChatModel(Map<String, Object> options) {
+        String apiKey = (String) options.get("apiKey");
+        String apiSecret = (String) options.get("apiSecret");
+        String appId = (String) options.get("appId");
+        if (!StringUtils.hasText(apiKey) || !StringUtils.hasText(apiSecret) || !StringUtils.hasText(appId)) {
+            throw new RuntimeException("apiKey, apiSecret, appId不能为空");
+        }
+        return new SparkAiChatModel(new SparkAiApi(apiKey, apiSecret, appId, objectMapper, executor));
     }
 
     @Override

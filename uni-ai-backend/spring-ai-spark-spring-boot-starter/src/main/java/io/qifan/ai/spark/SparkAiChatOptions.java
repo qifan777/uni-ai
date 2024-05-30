@@ -5,6 +5,9 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 
 @Data
 public class SparkAiChatOptions implements ChatOptions {
+    private String apiKey;
+    private String apiSecret;
+    private String appId;
     private String domain;
     private String baseUrl;
     private Float temperature = 0.5f;

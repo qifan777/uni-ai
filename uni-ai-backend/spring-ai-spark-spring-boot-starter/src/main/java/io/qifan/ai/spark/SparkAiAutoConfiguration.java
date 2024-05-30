@@ -17,8 +17,8 @@ public class SparkAiAutoConfiguration {
 
     @ConditionalOnProperty(prefix = SparkAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Bean
-    public SparkAiChatModel sparkAiChatModel(SparkAiApi sparkAiApi, SparkAiProperties sparkAiProperties) {
-        return new SparkAiChatModel(sparkAiApi, sparkAiProperties);
+    public SparkAiChatModel sparkAiChatModel(SparkAiApi sparkAiApi) {
+        return new SparkAiChatModel(sparkAiApi);
     }
 
     @ConditionalOnProperty(prefix = SparkAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
@@ -28,6 +28,7 @@ public class SparkAiAutoConfiguration {
         return new SparkAiApi(
                 sparkAiProperties.getApiKey(),
                 sparkAiProperties.getApiSecret(),
+                sparkAiProperties.getAppId(),
                 objectMapper,
                 executor);
     }

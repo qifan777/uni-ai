@@ -16,11 +16,9 @@ import java.util.UUID;
 
 public class SparkAiChatModel implements StreamingChatModel {
     private final SparkAiApi sparkAiApi;
-    private final SparkAiProperties sparkAiProperties;
 
-    public SparkAiChatModel(SparkAiApi sparkAiApi, SparkAiProperties sparkAiProperties) {
+    public SparkAiChatModel(SparkAiApi sparkAiApi) {
         this.sparkAiApi = sparkAiApi;
-        this.sparkAiProperties = sparkAiProperties;
     }
 
     @Override
@@ -82,8 +80,7 @@ public class SparkAiChatModel implements StreamingChatModel {
         }
         return new SparkAiApi.SparkRequest()
                 .setHeader(new SparkAiApi.SparkRequest.Header()
-                        .setUid(UUID.randomUUID().toString().substring(0, 10))
-                        .setAppId(sparkAiProperties.getAppid()))
+                        .setUid(UUID.randomUUID().toString().substring(0, 10)))
                 .setParameter(new SparkAiApi.SparkRequest.Parameter()
                         .setChat(chat))
                 .setPayload(new SparkAiApi.SparkRequest.Payload()

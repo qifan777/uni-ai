@@ -70,7 +70,7 @@ public class AiMessageService {
             throw new BusinessException("后端未配置模型服务");
         }
         Prompt prompt = toPrompt(messageInput, aiSession, aiChatService.getChatOptions(model.options()));
-        Flux<ChatResponse> stream = aiChatService.getChatModel().stream(prompt);
+        Flux<ChatResponse> stream = aiChatService.getChatModel(model.options()).stream(prompt);
         executor.submit(() -> {
             RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
             StpUtil.switchTo(aiSession.creator().id());

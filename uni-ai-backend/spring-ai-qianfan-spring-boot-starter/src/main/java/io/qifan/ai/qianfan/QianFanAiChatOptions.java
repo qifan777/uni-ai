@@ -5,6 +5,8 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 
 @Data
 public class QianFanAiChatOptions implements ChatOptions {
+    private String accessKey;
+    private String secretKey;
     private String model;
     private Float temperature;
     private Integer maxTokens;

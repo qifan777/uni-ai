@@ -20,32 +20,25 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @Data
 public class SparkAiApi {
     private final String apiKey;
     private final String apiSecret;
+    private final String appId;
     private final ObjectMapper objectMapper;
     private final Executor executor;
 
     public SparkAiApi(String apiKey, String apiSecret,
+                      String appId,
                       ObjectMapper objectMapper, Executor executor) {
         this.apiKey = apiKey;
         this.apiSecret = apiSecret;
+        this.appId = appId;
         this.objectMapper = objectMapper;
         this.executor = executor;
     }
-
-    public SparkAiApi(String apiKey, String apiSecret, ObjectMapper objectMapper) {
-        this(apiKey, apiSecret, objectMapper, Executors.newFixedThreadPool(5));
-    }
-
-    public SparkAiApi(String apiKey, String apiSecret) {
-        this(apiKey, apiSecret, new ObjectMapper(), Executors.newFixedThreadPool(5));
-    }
-
 
     public Flux<SparkResponse> chat(SparkRequest sparkRequest) {
         return Flux.create(fluxSink -> executor.execute(() -> chat(fluxSink, sparkRequest)));
@@ -53,6 +46,7 @@ public class SparkAiApi {
 
     @SneakyThrows
     public void chat(FluxSink<SparkResponse> fluxSink, SparkRequest sparkRequest) {
+        sparkRequest.getHeader().setAppId(appId);
         String url = getAuthUrl(sparkRequest.getParameter().getChat().getBaseUrl(), apiKey, apiSecret).replaceAll("https://", "wss://");
         OkHttpClient client = new OkHttpClient.Builder().build();
         Request request = new Request.Builder().url(url).build();
@@ -113,8 +107,8 @@ public class SparkAiApi {
         String date = format.format(new Date());
         // 拼接
         String preStr = "host: " + url.getHost() + "\n" +
-                "date: " + date + "\n" +
-                "GET " + url.getPath() + " HTTP/1.1";
+                        "date: " + date + "\n" +
+                        "GET " + url.getPath() + " HTTP/1.1";
         // System.err.println(preStr);
         // SHA256加密
         Mac mac = Mac.getInstance("hmacsha256");

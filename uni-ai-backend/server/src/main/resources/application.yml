@@ -4,19 +4,23 @@ spring:
   profiles:
     active: dev,private
   ai:
+    # 讯飞星火
     spark:
       chat:
         api-key: xxx
         api-secret: xxx
         appid: xxx
         enabled: true
+    # 阿里灵积
     dash-scope:
       api-key: xxx
       enabled: true
+    # 百度千帆
     qian-fan:
       access-key: xxx
       secret-key: xxx
       enabled: true
+    # openai
     openai:
       api-key: xxx
       base-url: xxx
@@ -54,6 +58,7 @@ wx:
     config-storage:
       http-client-type: HttpClient
       type: redistemplate
+  # 微信支付配置
   pay:
     app-id: xxxx
     mch-id: xxxx
@@ -61,10 +66,19 @@ wx:
     cert-serial-no: xxxx
     privateKeyPath: classpath:wechat/apiclient_key.pem
     privateCertPath: classpath:wechat/apiclient_cert.pem
+
 sms:
+  # 修改provider
   provider: none
+  # 阿里云短信配置
+  ali-yun:
+    access-key-id: xxx
+    access-key-secret: xxx
+    sign-name: xxx
+    template-code: xxx
 oss:
   provider: ali_yun
+  # 阿里云oss配置
   ali-yun:
     access-key-id: xxx
     access-key-secret: xxx

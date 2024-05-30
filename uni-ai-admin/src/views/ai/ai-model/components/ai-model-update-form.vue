@@ -11,7 +11,7 @@ import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import type { AiTagSpec } from '@/apis/__generated/model/static'
 import { recursiveOmit } from '@/components/base/table/table-helper'
-import ChatOption from '@/views/ai/ai-model/components/options/chat-option.vue'
+import ChatOptions from '@/views/ai/ai-model/components/options/chat-options.vue'
 
 const aiModelStore = useAiModelStore()
 const { closeDialog, reloadTableData } = aiModelStore
@@ -79,7 +79,7 @@ const aiTagQueryOptions = async (_keyword: string, ids: string[]) => {
           multiple
         ></remote-select>
       </el-form-item>
-      <chat-option :factory="updateForm.factory" v-model="updateForm.options"></chat-option>
+      <chat-options :factory="updateForm.factory" v-model="updateForm.options"></chat-options>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>
   </div>

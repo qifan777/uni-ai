@@ -2,21 +2,31 @@ package io.qifan.server.ai.uni;
 
 import io.qifan.ai.qianfan.QianFanAiChatModel;
 import io.qifan.ai.qianfan.QianFanAiChatOptions;
+import io.qifan.ai.qianfan.api.QianFanApi;
+import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.model.StreamingChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 @Service
 @AllArgsConstructor
+
 public class QianFanAiChatService implements UniAiChatService {
-    private final QianFanAiChatModel qianFanAiChatModel;
+    private final Executor executor;
 
     @Override
-    public StreamingChatModel getChatModel() {
-        return qianFanAiChatModel;
+    public StreamingChatModel getChatModel(Map<String, Object> options) {
+        String accessKey = (String) options.get("accessKey");
+        String secretKey = (String) options.get("secretKey");
+        if (!StringUtils.hasText(accessKey) || !StringUtils.hasText(secretKey)) {
+            throw new BusinessException("accessKey or secretKey 不能为空");
+        }
+        return new QianFanAiChatModel(new QianFanApi(accessKey, secretKey, executor));
     }
 
     @Override
