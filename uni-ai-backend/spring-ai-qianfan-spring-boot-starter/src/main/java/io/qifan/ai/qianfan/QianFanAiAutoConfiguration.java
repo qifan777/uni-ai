@@ -8,8 +8,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.Executor;
-
 @AutoConfiguration
 @Configuration
 @EnableConfigurationProperties(QianFanAiProperties.class)
@@ -23,8 +21,8 @@ public class QianFanAiAutoConfiguration {
 
     @ConditionalOnProperty(prefix = QianFanAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Bean
-    public QianFanApi qianFanApi(QianFanAiProperties properties, Executor executor) {
-        return new QianFanApi(properties.getAccessKey(), properties.getSecretKey(), executor);
+    public QianFanApi qianFanApi(QianFanAiProperties properties) {
+        return new QianFanApi(properties.getAccessKey(), properties.getSecretKey());
     }
 
     @ConditionalOnProperty(prefix = QianFanAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")

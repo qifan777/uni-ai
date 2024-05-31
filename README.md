@@ -60,7 +60,7 @@
 </div>
 </div>
 
-###   
+###     
 
 ## 项目结构
 
@@ -127,6 +127,7 @@
     - spring-ai-dashscope-spring-boot-stater 阿里灵积AI
     - spring-ai-qianfan-spring-boot-stater 百度千帆AI
     - spring-ai-spark-spring-boot-stater 讯飞星火AI
+    - spring-ai-kimi-spring-boot-stater kimi AI
     - spring-boot-starter-oss 阿里云oss，腾讯云oss，nginx静态文件服务
     - spring-boot-starter-sms 短信发送服务，阿里云短信，控制台短信测试
     - spring-boot-starter-security SaToken配置
@@ -176,12 +177,13 @@
 
 ### 服务端运行步骤
 
-1. 导入mysql，并修改配置文件的mysql密码。scripts/database.sql
+1. 导入mysql（8.0），并修改配置文件的mysql密码。scripts/database.sql
 2. 修改各个服务商的的key。application.yml
 3. 修改阿里云oss的key。application.yml
 4. 下载jdk17
 5. 下载redis，并启动
-6. 启动server/src/main/java/io/qifan/server/ServerApplication.java
+6. 安装milvus向量数据库
+7. 启动server/src/main/java/io/qifan/server/ServerApplication.java
 
 ### 管理端运行步骤
 

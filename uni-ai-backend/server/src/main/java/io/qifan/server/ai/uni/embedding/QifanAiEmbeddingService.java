@@ -12,13 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 @Service
 @AllArgsConstructor
 public class QifanAiEmbeddingService implements UniAiEmbeddingService {
     private final QianFanAiProperties qianFanAiProperties;
-    private final Executor executor;
 
     @Override
     public EmbeddingModel getEmbeddingModel(Map<String, Object> options) {
@@ -35,7 +33,7 @@ public class QifanAiEmbeddingService implements UniAiEmbeddingService {
         if (!StringUtils.hasText(model)) {
             throw new BusinessException("model不能为空");
         }
-        return new QifanAiEmbeddingModel(new QianFanApi(accessKey, secretKey, executor), MetadataMode.EMBED, new QifanAiEmbeddingOptions()
+        return new QifanAiEmbeddingModel(new QianFanApi(accessKey, secretKey), MetadataMode.EMBED, new QifanAiEmbeddingOptions()
                 .setModel(model));
     }
 }

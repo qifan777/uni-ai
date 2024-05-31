@@ -149,6 +149,7 @@ public class KimiAiApi {
             line = line.replace("data: ", "");
             if (line.equals("[DONE]") || !isValidJson(line)) {
                 fluxSink.complete();
+                return;
             }
             ChatResponse chatCompletionChunk = objectMapper.readValue(line, ChatResponse.class);
             fluxSink.next(chatCompletionChunk);
