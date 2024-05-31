@@ -9,4 +9,5 @@ include 'server'
 include 'spring-ai-spark-spring-boot-starter'
 include 'spring-ai-dashscope-spring-boot-starter'
 include 'spring-ai-qianfan-spring-boot-starter'
+include 'spring-ai-kimi-spring-boot-starter'
 

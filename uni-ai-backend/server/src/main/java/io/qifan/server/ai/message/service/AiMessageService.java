@@ -1,6 +1,5 @@
 package io.qifan.server.ai.message.service;
 
-import cn.dev33.satoken.stp.StpUtil;
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
@@ -13,9 +12,6 @@ import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
 import io.qifan.server.ai.uni.vector.MilvusRepository;
 import io.qifan.server.dict.model.DictConstants;
-import io.qifan.server.setting.SettingRepository;
-import io.qifan.server.wallet.record.entity.dto.WalletRecordCreateInput;
-import io.qifan.server.wallet.record.service.WalletRecordService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Media;
@@ -25,18 +21,12 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
-import org.springframework.core.task.AsyncTaskExecutor;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import reactor.core.publisher.Flux;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,9 +40,6 @@ import java.util.Map;
 public class AiMessageService {
     private final AiSessionRepository aiSessionRepository;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
-    private final AsyncTaskExecutor executor;
-    private final WalletRecordService walletRecordService;
-    private final SettingRepository settingRepository;
     private final MilvusRepository milvusRepository;
 
     public Flux<ChatResponse> chat(AiMessageCreateInput messageInput, ChatParams params) {
@@ -75,27 +62,7 @@ public class AiMessageService {
         List<Message> messages = historyMessageList(aiSession);
         messages.add(toUserMessage(messageInput, params));
         Prompt prompt = new Prompt(messages, aiChatService.getChatOptions(model.options()));
-        Flux<ChatResponse> stream = aiChatService.getChatModel(model.options()).stream(prompt);
-        executor.submit(() -> {
-            RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
-            StpUtil.switchTo(aiSession.creator().id());
-            Long totalTokens = stream.map(chatResponse -> chatResponse.getMetadata().getUsage().getTotalTokens())
-                    .reduce(0L, Long::sum)
-                    .block();
-            BigDecimal tokenPrice = settingRepository.get().getTokenPrice();
-            BigDecimal price = BigDecimal.valueOf(totalTokens).divide(BigDecimal.valueOf(1000), MathContext.DECIMAL64)
-                    .multiply(tokenPrice);
-            log.info("totalTokens:{},price:{}", totalTokens, price);
-            log.info("消费记录创建");
-            walletRecordService.create(new WalletRecordCreateInput.Builder()
-                    .walletId(aiSession.creator().id())
-                    .amount(BigDecimal.ZERO.subtract(price))
-                    .description(totalTokens.toString())
-                    .type(DictConstants.WalletRecordType.CHAT)
-                    .build());
-
-        });
-        return stream;
+        return aiChatService.getChatModel(model.options()).stream(prompt);
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {

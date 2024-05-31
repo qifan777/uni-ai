@@ -37,6 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly(project(":generator-core"))
     testImplementation(project(":generator-processor"))
+    implementation(project(":spring-ai-kimi-spring-boot-starter"))
     implementation(project(":spring-ai-dashscope-spring-boot-starter"))
     implementation(project(":spring-ai-qianfan-spring-boot-starter"))
     implementation(project(":spring-ai-spark-spring-boot-starter"))

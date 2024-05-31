@@ -30,7 +30,7 @@ const { query } = toRefs(queryData.value)
           >
             查询
           </el-button>
-          <el-button type="warning" size="small" @click="aiTagStore.restQuery()"> 重置</el-button>
+          <el-button type="warning" size="small" @click="aiTagStore.restQuery"> 重置</el-button>
         </div>
       </el-form-item>
     </el-form>

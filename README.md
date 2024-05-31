@@ -9,7 +9,8 @@
 | 百度千帆   | ✔    | ×    | 计划中  | ✔          | 计划中  |
 | 讯飞星火   | ✔    | ×    | 计划中  | ×          | 计划中  |
 | 智普清言   | 计划中  | 计划中  | 计划中  | 计划中        | 计划中  |
-| kimi   | 计划中  | 计划中  | 计划中  | 计划中        | 计划中  |
+| kimi   | ✔    | 计划中  | 计划中  | 计划中        | 计划中  |
+
 ### 知识库：
 
 <div style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
@@ -39,7 +40,6 @@
 </center>
 </div>
 
-
 ### 文本对话：
 
 <div style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
@@ -60,7 +60,8 @@
 </div>
 </div>
 
-###  
+###   
+
 ## 项目结构
 
 - uni-ai-admin 聊天界面+后台管理

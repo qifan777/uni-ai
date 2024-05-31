@@ -32,7 +32,7 @@ const { query } = toRefs(queryData.value)
           >
             查询
           </el-button>
-          <el-button type="warning" size="small" @click="walletItemStore.restQuery()">
+          <el-button type="warning" size="small" @click="walletItemStore.restQuery">
             重置</el-button
           >
         </div>
