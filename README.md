@@ -4,19 +4,63 @@
 
 | 厂家     | 文本对话 | 图片理解 | 图片生成 | 知识库（向量数据库） | 预置角色 |  
 |--------|------|------|------|------------|------|
-| OpenAI | ✔    | ✔    | 计划中  | 计划中        | 计划中  |
-| 阿里灵积   | ✔    | ✔    | 计划中  | 计划中        | 计划中  |
-| 百度千帆   | ✔    | ×    | 计划中  | 计划中        | 计划中  |
-| 讯飞星火   | ✔    | ×    | 计划中  | 计划中        | 计划中  |
+| OpenAI | ✔    | ✔    | 计划中  | ✔          | 计划中  |
+| 阿里灵积   | ✔    | ✔    | 计划中  | ✔          | 计划中  |
+| 百度千帆   | ✔    | ×    | 计划中  | ✔          | 计划中  |
+| 讯飞星火   | ✔    | ×    | 计划中  | ×          | 计划中  |
 | 智普清言   | 计划中  | 计划中  | 计划中  | 计划中        | 计划中  |
+| kimi   | 计划中  | 计划中  | 计划中  | 计划中        | 计划中  |
+### 知识库：
 
-<p float="left">
-<img src="uni-ai-admin/src/assets/qwenvl.png" width="200"/>
-<img src="uni-ai-admin/src/assets/qwen.png" width="200"/>
-<img src="uni-ai-admin/src/assets/spark.png" width="200"/>
-<img src="uni-ai-admin/src/assets/qianfan.png" width="200"/>
-</p>
+<div style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
 
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/qianfan-knowledge.png" width="300"/>
+<div>星火模型访问通义千问知识库</div>
+</div>
+
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/openai-knowledge.png" width="300"/>
+<div>千帆模型访问openai知识库</div>
+</div>
+
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/dashscope-knowledge.png" width="300"/>
+<div>千问模型访问千问知识库</div>
+</div>
+</div>
+
+### 图片理解：
+
+<div float="left">
+<center>
+    <img src="uni-ai-admin/src/assets/qwenvl.png" width="300"/>
+    <div>通义千问VL</div>
+</center>
+</div>
+
+
+### 文本对话：
+
+<div style="display: flex;align-items: center;justify-content: space-around;flex-wrap: wrap">
+
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/qwen.png" width="300"/>
+<div>通义千问</div>
+</div>
+
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/spark.png" width="300"/>
+<div>星火</div>
+</div>
+
+<div style="text-align: center;">
+<img src="uni-ai-admin/src/assets/qianfan.png" width="300"/>
+<div>千帆</div>
+</div>
+</div>
+
+###  
 ## 项目结构
 
 - uni-ai-admin 聊天界面+后台管理

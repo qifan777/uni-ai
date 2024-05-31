@@ -36,7 +36,7 @@ const sendMessage = () => {
       <el-form-item label="知识库">
         <el-switch v-model="message.options.knowledge"></el-switch>
       </el-form-item>
-      <el-form-item label="嵌入模型" v-if="message.options.knowledge">
+      <el-form-item v-if="message.options.knowledge">
         <remote-select
           label-prop="name"
           :query-options="aiCollectionQueryOptions"

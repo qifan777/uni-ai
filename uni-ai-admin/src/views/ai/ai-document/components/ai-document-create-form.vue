@@ -56,7 +56,14 @@ const onUploadSuccess = (res: Result<{ url: string }>) => {
 </script>
 <template>
   <div class="create-form">
-    <el-form labelWidth="120" class="form" ref="createFormRef" :model="createForm" :rules="rules">
+    <el-form
+      labelWidth="120"
+      class="form"
+      ref="createFormRef"
+      :model="createForm"
+      :rules="rules"
+      v-loading="loading"
+    >
       <el-form-item label="名称" prop="name">
         <el-input v-model="createForm.name"></el-input>
       </el-form-item>
