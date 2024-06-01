@@ -10,20 +10,25 @@ spring:
         api-key: xxx
         api-secret: xxx
         appid: xxx
-        enabled: true
     # 阿里灵积
     dash-scope:
       api-key: xxx
-      enabled: true
     # 百度千帆
     qian-fan:
       access-key: xxx
       secret-key: xxx
-      enabled: true
     # openai
     openai:
       api-key: xxx
       base-url: xxx
+    # 智谱
+    zhipuai:
+      api-key: xxx
+      embedding:
+        enabled: false
+    # kimi
+    kimi:
+      api-key: xxx
   servlet:
     multipart:
       max-file-size: 20MB

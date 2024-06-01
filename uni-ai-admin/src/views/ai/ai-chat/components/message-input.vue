@@ -8,6 +8,7 @@ import type { AiModelTag } from '@/apis/__generated/model/enums'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 import { assertFormValidate } from '@/utils/common'
+
 const rules = reactive<FormRules<MessageWithOptions['options']>>({
   collectionId: [{ required: true, message: '请选择知识库', trigger: 'change' }]
 })

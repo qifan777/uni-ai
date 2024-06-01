@@ -4,11 +4,12 @@ import io.qifan.infrastructure.generator.core.GenEntity;
 import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.ai.message.entity.dto.AiMessageView;
-import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import jakarta.annotation.Nullable;
-import org.babyfish.jimmer.sql.*;
-import org.springframework.ai.chat.prompt.ChatOptions;
+import org.babyfish.jimmer.sql.Entity;
+import org.babyfish.jimmer.sql.Key;
+import org.babyfish.jimmer.sql.Serialized;
+import org.babyfish.jimmer.sql.Table;
 
 import java.util.List;
 
@@ -26,6 +27,12 @@ public interface AiRole extends BaseEntity {
     String name();
 
     /**
+     * 描述
+     */
+    @GenField(value = "描述", order = 1)
+    String description();
+
+    /**
      * 图标
      */
     @Nullable
@@ -39,9 +46,4 @@ public interface AiRole extends BaseEntity {
     @Serialized
     List<AiMessageView> prompts();
 
-    @IdView
-    String aiModelId();
-
-    @ManyToOne
-    AiModel aiModel();
 }

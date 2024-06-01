@@ -8,10 +8,7 @@ import ImageUpload from '@/components/image/image-upload.vue'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
-import { Close } from '@element-plus/icons-vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 
 const aiRoleStore = useAiRoleStore()
 const { closeDialog, reloadTableData } = aiRoleStore
@@ -19,6 +16,8 @@ const { updateForm, dialogData } = storeToRefs(aiRoleStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
   name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+  description: [{ required: true, message: '请输入描述', trigger: 'blur' }],
+  icon: [{ required: true, message: '请输入图标', trigger: 'blur' }],
   prompts: [{ required: true, message: '请输入预置提示词', trigger: 'blur' }]
 })
 const init = async () => {
@@ -58,15 +57,11 @@ const handleAddPrompt = () => {
       <el-form-item label="角色名称" prop="name">
         <el-input v-model="updateForm.name"></el-input>
       </el-form-item>
+      <el-form-item label="描述" prop="description">
+        <el-input v-model="updateForm.description"></el-input>
+      </el-form-item>
       <el-form-item label="图标" prop="icon">
         <image-upload v-model="updateForm.icon"></image-upload>
-      </el-form-item>
-      <el-form-item label="模型" prop="aiModelId">
-        <remote-select
-          label-prop="name"
-          :query-options="aiModelQueryOptions"
-          v-model="updateForm.aiModelId"
-        ></remote-select>
       </el-form-item>
       <el-form-item label="预置提示词" prop="prompts">
         <div class="prompts">

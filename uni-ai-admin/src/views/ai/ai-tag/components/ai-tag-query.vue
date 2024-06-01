@@ -4,6 +4,8 @@ import { useAiTagStore } from '../store/ai-tag-store'
 import { storeToRefs } from 'pinia'
 import DictSelect from '@/components/dict/dict-select.vue'
 import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import RemoteSelect from '@/components/base/form/remote-select.vue'
+import { aiFactoryQueryOptions } from '@/views/ai/ai-factory/store/ai-factory-store'
 
 const aiTagStore = useAiTagStore()
 const { queryData } = storeToRefs(aiTagStore)
@@ -16,10 +18,14 @@ const { query } = toRefs(queryData.value)
         <dict-select :dict-id="DictConstants.AI_MODEL_TAG" v-model="query.name"></dict-select>
       </el-form-item>
       <el-form-item label="厂家">
-        <dict-select :dict-id="DictConstants.AI_FACTORY_TYPE" v-model="query.factory"></dict-select>
+        <remote-select
+          label-prop="name"
+          :query-options="aiFactoryQueryOptions"
+          v-model="query.aiFactoryId"
+        ></remote-select>
       </el-form-item>
-      <el-form-item label="SpringAIModel">
-        <el-input v-model="query.springAiModel"></el-input>
+      <el-form-item label="service">
+        <el-input v-model="query.service"></el-input>
       </el-form-item>
       <el-form-item label=" ">
         <div class="btn-wrapper">

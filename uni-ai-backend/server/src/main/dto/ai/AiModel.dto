@@ -3,11 +3,13 @@ export io.qifan.server.ai.model.entity.AiModel
 input AiModelCreateInput {
     #allScalars(AiModel)
     tagIds:Array<String>
+    id(aiFactory)
 }
 input AiModelUpdateInput {
     #allScalars(AiModel)
     id!
     tagIds:Array<String>
+    id(aiFactory)
 }
 
 specification AiModelSpec {
@@ -24,4 +26,5 @@ specification AiModelSpec {
             valueIn(name) as tagNames
         }
     }
+    id(aiFactory)
 }

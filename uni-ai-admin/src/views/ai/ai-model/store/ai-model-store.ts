@@ -21,10 +21,9 @@ export const aiModelQueryOptions = async (keyword: string, id: string, tagNames:
 export const useAiModelStore = defineStore('aiModel', () => {
   const initQuery: AiModelSpec = {}
   const initForm: AiModelCreateInput & AiModelUpdateInput = {
-    factory: 'OPEN_AI',
+    aiFactoryId: '',
     id: '',
     name: '',
-    options: {},
     tagIds: []
   }
   const tableHelper = useTableHelper(

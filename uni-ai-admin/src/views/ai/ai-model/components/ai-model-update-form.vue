@@ -5,23 +5,21 @@ import { useAiModelStore } from '../store/ai-model-store'
 import { assertFormValidate, assertSuccess } from '@/utils/common'
 import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import DictSelect from '@/components/dict/dict-select.vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
+import EmbeddingOptions from '@/views/ai/ai-model/components/embedding-options/embedding-options.vue'
+import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
+import type { AiFactoryDto, AiTagDto } from '@/apis/__generated/model/dto'
 import type { AiTagSpec } from '@/apis/__generated/model/static'
 import { recursiveOmit } from '@/components/base/table/table-helper'
-import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
-import type { AiTagDto } from '@/apis/__generated/model/dto'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
-import EmbeddingOptions from '@/views/ai/ai-model/components/embedding-options/embedding-options.vue'
 
 const aiModelStore = useAiModelStore()
 const { closeDialog, reloadTableData } = aiModelStore
 const { updateForm, dialogData } = storeToRefs(aiModelStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
-  factory: [{ required: true, message: '请输入厂家', trigger: 'change' }],
+  aiFactoryId: [{ required: true, message: '请输入厂家', trigger: 'blur' }],
   name: [{ required: true, message: '请输入模型', trigger: 'blur' }]
 })
 const init = async () => {
@@ -54,37 +52,46 @@ const handleConfirm = () => {
     })
   )
 }
-const hasTag = (tagName: AiModelTag) => {
-  return tags.value.filter((tag) => tag.name === tagName).length > 0
-}
 const tags = ref<AiTagDto['AiTagRepository/COMPLEX_FETCHER_FOR_ADMIN'][]>([])
 const aiTagQueryOptions = async (_keyword: string, ids: string[]) => {
-  const query: AiTagSpec = { ids, factory: updateForm.value.factory }
+  const query: AiTagSpec = { ids, aiFactoryId: updateForm.value.aiFactoryId }
   const values = (
     await api.aiTagForAdminController.query({ body: { query: recursiveOmit(query) as AiTagSpec } })
   ).content
 
-  if (ids.length > 0) {
+  if (ids && ids.length > 0) {
     tags.value = values
   }
   return values
+}
+const hasTag = (tagName: AiModelTag) => {
+  return tags.value.filter((tag) => tag.name === tagName).length > 0
+}
+const factory = ref<AiFactoryDto['AiFactoryRepository/COMPLEX_FETCHER_FOR_ADMIN']>()
+const aiFactoryQueryOptions = async (_keyword: string, id: string) => {
+  const res = (await api.aiFactoryForAdminController.query({ body: { query: { id } } })).content
+  if (id && res.length > 0) {
+    factory.value = res[0]
+  }
+  return res
 }
 </script>
 <template>
   <div class="update-form">
     <el-form labelWidth="120" class="form" ref="updateFormRef" :model="updateForm" :rules="rules">
-      <el-form-item label="厂家" prop="factory">
-        <dict-select
-          :dict-id="DictConstants.AI_FACTORY_TYPE"
-          v-model="updateForm.factory"
-        ></dict-select>
+      <el-form-item label="厂家" prop="aiFactoryId">
+        <remote-select
+          label-prop="name"
+          :query-options="aiFactoryQueryOptions"
+          v-model="updateForm.aiFactoryId"
+        ></remote-select>
       </el-form-item>
       <el-form-item label="模型" prop="name">
         <el-input v-model="updateForm.name"></el-input>
       </el-form-item>
       <el-form-item label="标签">
         <remote-select
-          :key="updateForm.factory"
+          :key="updateForm.aiFactoryId"
           label-prop="name"
           :query-options="aiTagQueryOptions"
           v-model="updateForm.tagIds"
@@ -92,14 +99,14 @@ const aiTagQueryOptions = async (_keyword: string, ids: string[]) => {
         ></remote-select>
       </el-form-item>
       <chat-options
-        :factory="updateForm.factory"
+        :factory="factory.name"
         v-model="updateForm.options"
-        v-if="hasTag('AIGC')"
+        v-if="hasTag('AIGC') && factory"
       ></chat-options>
       <embedding-options
-        :factory="updateForm.factory"
+        :factory="factory.name"
         v-model="updateForm.options"
-        v-if="hasTag('EMBEDDINGS')"
+        v-if="hasTag('EMBEDDINGS') && factory"
       ></embedding-options>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>

@@ -11,6 +11,7 @@ import { Plus } from '@element-plus/icons-vue'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
+
 const API_PREFIX = import.meta.env.VITE_API_PREFIX
 const loading = ref(false)
 const aiDocumentStore = useAiDocumentStore()

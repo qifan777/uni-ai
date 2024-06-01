@@ -6,6 +6,7 @@ import type { AiSessionCreateInput } from '@/apis/__generated/model/static'
 import { useAiChatStore } from '@/views/ai/ai-chat/store/ai-chat-store'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import { aiRoleQueryOptions } from '@/views/ai/ai-role/store/ai-role-store'
 
 const createForm = ref<AiSessionCreateInput>({ name: '' })
 const visible = ref(false)
@@ -27,6 +28,13 @@ const closeDialog = () => {
       <el-form size="small">
         <el-form-item label="会话名称">
           <el-input v-model="createForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="角色">
+          <remote-select
+            label-prop="name"
+            :query-options="aiRoleQueryOptions"
+            v-model="createForm.aiRoleId"
+          ></remote-select>
         </el-form-item>
         <el-form-item label="模型">
           <remote-select

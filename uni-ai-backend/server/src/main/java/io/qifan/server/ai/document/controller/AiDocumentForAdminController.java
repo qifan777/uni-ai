@@ -2,13 +2,13 @@ package io.qifan.server.ai.document.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.qifan.infrastructure.common.exception.BusinessException;
-import io.qifan.server.ai.collection.repository.AiCollectionRepository;
 import io.qifan.server.ai.document.entity.AiDocument;
 import io.qifan.server.ai.document.entity.AiDocumentDraft;
 import io.qifan.server.ai.document.entity.dto.AiDocumentCreateInput;
 import io.qifan.server.ai.document.entity.dto.AiDocumentSpec;
 import io.qifan.server.ai.document.entity.dto.AiDocumentUpdateInput;
 import io.qifan.server.ai.document.repository.AiDocumentRepository;
+import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.ai.model.repository.AiModelRepository;
@@ -52,7 +52,6 @@ public class AiDocumentForAdminController {
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final AiModelRepository aiModelRepository;
     private final MilvusRepository milvusRepository;
-    private final AiCollectionRepository aiCollectionRepository;
 
     @GetMapping("{id}")
     public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiDocument findById(@PathVariable String id) {
@@ -80,6 +79,7 @@ public class AiDocumentForAdminController {
     public String summary(String content, String modelId) {
         AiModel aiModel = aiModelRepository.findById(modelId, AiModelFetcher.$
                         .allScalarFields()
+                        .aiFactory(AiFactoryFetcher.$.allScalarFields())
                         .tagsView(AiTagFetcher.$.allScalarFields())).
                 orElseThrow(() -> new BusinessException("模型不存在"));
         AiTag aiTag = aiModel.tagsView().stream().filter(tag -> tag.name().equals(DictConstants.AiModelTag.AIGC))
@@ -88,11 +88,11 @@ public class AiDocumentForAdminController {
         Message prompt = new PromptTemplate("请你总结下面的内容：{context}")
                 .createMessage(Map.of("context", content));
         log.info("内容：{}", String.join("", content));
-        UniAiChatService uniAiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.springAiModel()));
+        UniAiChatService uniAiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.service()));
         if (uniAiChatService == null) {
             throw new BusinessException("暂不支持该模型");
         }
-        String summary = uniAiChatService.getChatModel(aiModel.options())
+        String summary = uniAiChatService.getChatModel(aiModel.aiFactory().options())
                 .call(new Prompt(prompt, uniAiChatService.getChatOptions(aiModel.options()))).getResult().getOutput().getContent();
         log.info("总结内容：{}", summary);
         return summary;

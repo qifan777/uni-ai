@@ -2,8 +2,6 @@
 import { toRefs } from 'vue'
 import { useAiRoleStore } from '../store/ai-role-store'
 import { storeToRefs } from 'pinia'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
 
 const aiRoleStore = useAiRoleStore()
 const { queryData } = storeToRefs(aiRoleStore)
@@ -15,12 +13,11 @@ const { query } = toRefs(queryData.value)
       <el-form-item label="角色名称">
         <el-input v-model="query.name"></el-input>
       </el-form-item>
-      <el-form-item label="模型">
-        <remote-select
-          label-prop="name"
-          :query-options="aiModelQueryOptions"
-          v-model="query.aiModelId"
-        ></remote-select>
+      <el-form-item label="描述">
+        <el-input v-model="query.description"></el-input>
+      </el-form-item>
+      <el-form-item label="预置提示词">
+        <el-input-number v-model="query.prompts" controls-position="right"></el-input-number>
       </el-form-item>
       <el-form-item label=" ">
         <div class="btn-wrapper">

@@ -1,5 +1,6 @@
 package io.qifan.server.ai.session.repository;
 
+import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.message.entity.AiMessageFetcher;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.ai.role.entity.AiRoleFetcher;
@@ -25,10 +26,11 @@ public interface AiSessionRepository extends JRepository<AiSession, String> {
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiModelFetcher aiModelFetcher = AiModelFetcher.$.allScalarFields()
+            .aiFactory(AiFactoryFetcher.$.allScalarFields())
             .tagsView(AiTagFetcher.$.allScalarFields());
     AiSessionFetcher COMPLEX_FETCHER_FOR_FRONT = AiSessionFetcher.$
             .allScalarFields()
-            .aiRole(AiRoleFetcher.$.allScalarFields().aiModel(aiModelFetcher))
+            .aiRole(AiRoleFetcher.$.allScalarFields())
             .aiModel(aiModelFetcher)
             .aiRoleId()
             .aiModelId()

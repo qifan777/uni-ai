@@ -1,6 +1,5 @@
 package io.qifan.server.ai.role.repository;
 
-import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.ai.role.entity.AiRole;
 import io.qifan.server.ai.role.entity.AiRoleFetcher;
 import io.qifan.server.ai.role.entity.AiRoleTable;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 public interface AiRoleRepository extends JRepository<AiRole, String> {
     AiRoleTable aiRoleTable = AiRoleTable.$;
     AiRoleFetcher COMPLEX_FETCHER_FOR_ADMIN = AiRoleFetcher.$.allScalarFields()
-            .aiModel(AiModelFetcher.$.allScalarFields())
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiRoleFetcher COMPLEX_FETCHER_FOR_FRONT = AiRoleFetcher.$.allScalarFields()

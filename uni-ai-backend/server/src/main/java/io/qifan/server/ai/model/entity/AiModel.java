@@ -3,9 +3,9 @@ package io.qifan.server.ai.model.entity;
 import io.qifan.infrastructure.generator.core.GenEntity;
 import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.infrastructure.generator.core.ItemType;
+import io.qifan.server.ai.factory.entity.AiFactory;
 import io.qifan.server.ai.tag.model.entity.AiModelTagRel;
 import io.qifan.server.ai.tag.root.entity.AiTag;
-import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import jakarta.validation.constraints.Null;
 import org.babyfish.jimmer.sql.*;
@@ -19,18 +19,21 @@ import java.util.Map;
 @GenEntity
 @Entity
 public interface AiModel extends BaseEntity {
-
-    /**
-     * 厂家
-     */
-    @GenField(value = "厂家", type = ItemType.SELECTABLE, dictEnName = DictConstants.AI_FACTORY_TYPE, order = 0)
-    DictConstants.AiFactoryType factory();
-
     /**
      * 模型
      */
     @GenField(value = "模型", order = 1)
     String name();
+
+    @GenField(value = "厂家", type = ItemType.ASSOCIATION_SELECT, order = 0)
+    @IdView
+    String aiFactoryId();
+
+    /**
+     * 厂家
+     */
+    @ManyToOne
+    AiFactory aiFactory();
 
     @OneToMany(mappedBy = "aiModel")
     List<AiModelTagRel> tags();

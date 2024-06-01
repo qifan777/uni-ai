@@ -8,6 +8,8 @@ import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import RemoteSelect from '@/components/base/form/remote-select.vue'
+import { aiFactoryQueryOptions } from '@/views/ai/ai-factory/store/ai-factory-store'
 
 const aiTagStore = useAiTagStore()
 const { closeDialog, reloadTableData } = aiTagStore
@@ -15,8 +17,8 @@ const { updateForm, dialogData } = storeToRefs(aiTagStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
   name: [{ required: true, message: '请输入标签', trigger: 'change' }],
-  factory: [{ required: true, message: '请输入厂家', trigger: 'change' }],
-  springAiModel: [{ required: true, message: '请输入SpringAIModel', trigger: 'blur' }]
+  aiFactoryId: [{ required: true, message: '请输入厂家', trigger: 'blur' }],
+  service: [{ required: true, message: '请输入service', trigger: 'blur' }]
 })
 const init = async () => {
   dialogData.value.title = '编辑'
@@ -52,14 +54,15 @@ const handleConfirm = () => {
       <el-form-item label="标签" prop="name">
         <dict-select :dict-id="DictConstants.AI_MODEL_TAG" v-model="updateForm.name"></dict-select>
       </el-form-item>
-      <el-form-item label="厂家" prop="factory">
-        <dict-select
-          :dict-id="DictConstants.AI_FACTORY_TYPE"
-          v-model="updateForm.factory"
-        ></dict-select>
+      <el-form-item label="厂家" prop="aiFactoryId">
+        <remote-select
+          label-prop="name"
+          :query-options="aiFactoryQueryOptions"
+          v-model="updateForm.aiFactoryId"
+        ></remote-select>
       </el-form-item>
-      <el-form-item label="SpringAIModel" prop="springAiModel">
-        <el-input v-model="updateForm.springAiModel"></el-input>
+      <el-form-item label="service" prop="service">
+        <el-input v-model="updateForm.service"></el-input>
       </el-form-item>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>

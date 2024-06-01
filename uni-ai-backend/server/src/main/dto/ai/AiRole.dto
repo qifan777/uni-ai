@@ -2,12 +2,10 @@ export io.qifan.server.ai.role.entity.AiRole
 
 input AiRoleCreateInput {
     #allScalars(AiRole)
-    id(aiModel)
 }
 input AiRoleUpdateInput {
     #allScalars(AiRole)
     id!
-    id(aiModel)
 }
 
 specification AiRoleSpec {
@@ -19,5 +17,4 @@ specification AiRoleSpec {
     ge(editedTime)
     le(editedTime)
     id(creator)
-    id(aiModel)
 }

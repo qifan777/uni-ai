@@ -55,14 +55,14 @@ public class AiMessageService {
         AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(params.getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
-        UniAiChatService aiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.springAiModel()));
+        UniAiChatService aiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.service()));
         if (aiChatService == null) {
             throw new BusinessException("后端未配置模型服务");
         }
         List<Message> messages = historyMessageList(aiSession);
         messages.add(toUserMessage(messageInput, params));
         Prompt prompt = new Prompt(messages, aiChatService.getChatOptions(model.options()));
-        return aiChatService.getChatModel(model.options()).stream(prompt);
+        return aiChatService.getChatModel(model.aiFactory().options()).stream(prompt);
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {

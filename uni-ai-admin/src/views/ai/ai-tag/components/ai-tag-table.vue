@@ -87,24 +87,24 @@ const handleDelete = (ids: string[]) => {
       </el-table-column>
       <el-table-column
         label="厂家"
-        prop="factory"
+        prop="aiFactoryId"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
         <template v-slot:default="{ row }: AiTagScope">
-          <dict-column :dict-id="DictConstants.AI_FACTORY_TYPE" :value="row.factory"></dict-column>
+          {{ row.aiFactory.name }}
         </template>
       </el-table-column>
       <el-table-column
-        label="SpringAIModel"
-        prop="springAiModel"
+        label="service"
+        prop="service"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
         <template v-slot:default="{ row }: AiTagScope">
-          {{ row.springAiModel }}
+          {{ row.service }}
         </template>
       </el-table-column>
       <el-table-column

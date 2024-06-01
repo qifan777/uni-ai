@@ -8,8 +8,6 @@ import type { Scope } from '@/typings'
 import { useAiModelStore } from '../store/ai-model-store'
 import type { AiModelDto } from '@/apis/__generated/model/dto'
 import { Delete, Edit, Plus } from '@element-plus/icons-vue'
-import DictColumn from '@/components/dict/dict-column.vue'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 
 type AiModelScope = Scope<AiModelDto['AiModelRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiModelStore = useAiModelStore()
@@ -82,13 +80,13 @@ const handleDelete = (ids: string[]) => {
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column
         label="厂家"
-        prop="factory"
+        prop="aiFactoryId"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
         <template v-slot:default="{ row }: AiModelScope">
-          <dict-column :dict-id="DictConstants.AI_FACTORY_TYPE" :value="row.factory"></dict-column>
+          {{ row.aiFactory.name }}
         </template>
       </el-table-column>
       <el-table-column label="模型" prop="name" sortable="custom" show-overflow-tooltip width="120">

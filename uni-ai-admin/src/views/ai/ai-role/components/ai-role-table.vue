@@ -89,20 +89,20 @@ const handleDelete = (ids: string[]) => {
           {{ row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="图标" prop="icon" sortable="custom" show-overflow-tooltip width="120">
-        <template v-slot:default="{ row }: AiRoleScope">
-          <el-avatar :src="row.icon" alt=""></el-avatar>
-        </template>
-      </el-table-column>
       <el-table-column
-        label="模型"
-        prop="aiModelId"
+        label="描述"
+        prop="description"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
         <template v-slot:default="{ row }: AiRoleScope">
-          {{ row.name }}
+          {{ row.description }}
+        </template>
+      </el-table-column>
+      <el-table-column label="图标" prop="icon" sortable="custom" show-overflow-tooltip width="120">
+        <template v-slot:default="{ row }: AiRoleScope">
+          <el-avatar :src="row.icon" alt=""></el-avatar>
         </template>
       </el-table-column>
       <el-table-column

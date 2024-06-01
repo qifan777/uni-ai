@@ -1,0 +1,20 @@
+export io.qifan.server.ai.factory.entity.AiFactory
+
+input AiFactoryCreateInput {
+    #allScalars(AiFactory)
+}
+input AiFactoryUpdateInput {
+    #allScalars(AiFactory)
+    id!
+}
+
+specification AiFactorySpec {
+    #allScalars
+    like/i(description)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+}

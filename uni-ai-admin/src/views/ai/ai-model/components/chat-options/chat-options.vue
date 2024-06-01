@@ -2,9 +2,10 @@
 import type { AiFactoryType } from '@/apis/__generated/model/enums'
 import { computed } from 'vue'
 import SparkAiChatOptions from './spark-ai-chat-options.vue'
-import DashScopeAiOptions from './dash-scope-ai-options.vue'
-import OpenAiOptions from './open-ai-options.vue'
-import QianFanAiOptions from './qian-fan-ai-options.vue'
+import DashScopeAiOptions from './dash-scope-ai-chat-options.vue'
+import OpenAiOptions from './open-ai-chat-options.vue'
+import QianFanAiOptions from './qian-fan-ai-chat-options.vue'
+
 const props = defineProps<{ factory: AiFactoryType }>()
 const model = defineModel<any>({ default: {} })
 const optionsComponent = computed(() => {

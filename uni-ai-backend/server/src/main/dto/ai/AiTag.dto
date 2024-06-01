@@ -2,15 +2,17 @@ export io.qifan.server.ai.tag.root.entity.AiTag
 
 input AiTagCreateInput {
     #allScalars(AiTag)
+    id(aiFactory)
 }
 input AiTagUpdateInput {
     #allScalars(AiTag)
     id!
+    id(aiFactory)
 }
 
 specification AiTagSpec {
     #allScalars
-    like/i(springAiModel)
+    like/i(service)
     like/i(id)
     ge(editedTime)
     le(editedTime)
@@ -18,4 +20,5 @@ specification AiTagSpec {
     le(createdTime)
     id(creator)
     valueIn(id) as  ids
+    id(aiFactory)
 }

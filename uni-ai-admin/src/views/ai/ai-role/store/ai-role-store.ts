@@ -16,7 +16,12 @@ export const aiRoleQueryOptions = async (keyword: string, id: string) => {
 }
 export const useAiRoleStore = defineStore('aiRole', () => {
   const initQuery: AiRoleSpec = {}
-  const initForm: AiRoleCreateInput & AiRoleUpdateInput = { id: '', name: '', prompts: [] }
+  const initForm: AiRoleCreateInput & AiRoleUpdateInput = {
+    description: '',
+    id: '',
+    name: '',
+    prompts: []
+  }
   const tableHelper = useTableHelper(
     api.aiRoleForAdminController.query,
     api.aiRoleForAdminController,

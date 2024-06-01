@@ -11,12 +11,10 @@ import { ElIcon } from 'element-plus'
 import { api } from '@/utils/api-instance'
 import { useHomeStore } from '@/stores/home-store'
 import SessionCreateDialog from './components/session-create-dialog.vue'
-import { SSE } from 'sse.js'
+import { SSE, type SSEvent } from 'sse.js'
 import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store/ai-chat-store'
-import type { AiMessageCreateInput } from '@/apis/__generated/model/static'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
 import _ from 'lodash'
-import type { AiSessionDto } from '@/apis/__generated/model/dto'
 
 type ChatResponse = {
   metadata: {
@@ -125,6 +123,9 @@ const handleSendMessage = (message: MessageWithOptions) => {
     const finishReason = response.result.metadata.finishReason
     if (response.result.output.content) {
       responseMessage.value.content[0].text += response.result.output.content
+      nextTick(() => {
+        messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
+      })
     }
     if (finishReason && finishReason.toLowerCase() == 'stop') {
       evtSource.close()
@@ -133,6 +134,9 @@ const handleSendMessage = (message: MessageWithOptions) => {
     }
   })
   evtSource.stream()
+  evtSource.onerror = (error: SSEvent) => {
+    console.log(error)
+  }
 
   // 将两条消息显示在页面中
   activeSession.value.messages.push(...[chatMessage, responseMessage.value])
@@ -212,9 +216,9 @@ const handleDelete = () => {
           </div>
         </div>
         <el-divider :border-style="'solid'" />
-        <div ref="messageListRef" class="message-list" v-if="activeSession">
+        <div ref="messageListRef" class="message-list">
           <!-- 过渡效果 -->
-          <transition-group name="list">
+          <transition-group name="list" v-if="activeSession">
             <message-row
               v-for="(message, index) in activeSession.messages"
               :key="message.createdTime + index"

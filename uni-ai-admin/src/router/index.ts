@@ -62,6 +62,14 @@ const router = createRouter({
           component: () => import('@/views/ai/ai-role/ai-role-view.vue')
         },
         {
+          path: '/ai-factory',
+          component: () => import('@/views/ai/ai-factory/ai-factory-view.vue')
+        },
+        {
+          path: '/ai-tag',
+          component: () => import('@/views/ai/ai-tag/ai-tag-view.vue')
+        },
+        {
           path: '/ai-model',
           component: () => import('@/views/ai/ai-model/ai-model-view.vue')
         },
@@ -72,10 +80,6 @@ const router = createRouter({
         {
           path: '/ai-collection',
           component: () => import('@/views/ai/ai-collection/ai-collection-view.vue')
-        },
-        {
-          path: '/ai-tag',
-          component: () => import('@/views/ai/ai-tag/ai-tag-view.vue')
         },
         {
           path: '/setting',
