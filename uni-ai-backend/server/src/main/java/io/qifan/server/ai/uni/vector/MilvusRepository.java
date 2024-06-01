@@ -56,10 +56,12 @@ public class MilvusRepository {
         if (uniAiEmbeddingService == null) {
             throw new BusinessException("暂不支持该模型");
         }
-        EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(aiCollection.embeddingModel().options());
+        Map<String, Object> options = aiCollection.embeddingModel().options();
+        EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
 
         return new MilvusVectorStore(milvusServiceClient, embeddingModel, MilvusVectorStore.MilvusVectorStoreConfig.builder()
                 .withCollectionName(aiCollection.collectionName())
+                .withEmbeddingDimension(options.containsKey("dimension") ? (int) options.get("dimension") : MilvusVectorStore.OPENAI_EMBEDDING_DIMENSION_SIZE)
                 .build(), true);
     }
 }

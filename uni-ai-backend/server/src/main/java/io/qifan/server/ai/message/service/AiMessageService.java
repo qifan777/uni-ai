@@ -72,6 +72,7 @@ public class AiMessageService {
                     .stream()
                     .map(Document::getContent)
                     .toList();
+            log.info("context:{}", context);
             return new PromptTemplate("""
                     请你根据以下内容：{context}回答用户的提问。
                     如果提供的内容无法回答用户提问，请用自己的知识回答用户的提问，并告知用户知识库数据不足。

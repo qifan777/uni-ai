@@ -16,6 +16,7 @@ import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store
 import type { AiMessageCreateInput } from '@/apis/__generated/model/static'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
 import _ from 'lodash'
+import type { AiSessionDto } from '@/apis/__generated/model/dto'
 
 type ChatResponse = {
   metadata: {
@@ -36,8 +37,8 @@ type ChatResponse = {
 
 const homeStore = useHomeStore()
 const chatStore = useAiChatStore()
-const { handleSessionSwitch, handleDeleteSession, handleUpdateSession } = chatStore
-const { activeSession, messageList, sessionList, isEdit } = storeToRefs(chatStore)
+const { handleDeleteSession, handleUpdateSession } = chatStore
+const { activeSession, sessionList, isEdit } = storeToRefs(chatStore)
 const messageListRef = ref<InstanceType<typeof HTMLDivElement>>()
 const loading = ref(true)
 const activeTag = computed<AiModelTag>(() => {
@@ -64,14 +65,15 @@ onMounted(async () => {
       })
       // 默认选中的聊天会话是第一个
       if (sessionList.value.length > 0) {
-        handleSessionSwitch(sessionList.value[0])
+        activeSession.value = sessionList.value[0]
       }
       loading.value = false
     })
 })
 
 // ChatGPT的回复
-const responseMessage = ref<AiMessageCreateInput & { createdTime: string }>({
+const responseMessage = ref<AiMessage>({
+  id: '',
   type: 'ASSISTANT',
   content: [],
   aiSessionId: '',
@@ -82,20 +84,22 @@ const handleSendMessage = (message: MessageWithOptions) => {
   if (!activeSession.value) return
   // 用户的提问
   const chatMessage = {
+    id: '',
     aiSessionId: activeSession.value.id,
     content: message.content,
     type: 'USER',
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
-  } satisfies AiMessageCreateInput & { createdTime: string }
+  } satisfies AiMessage
 
   // 新建一个ChatGPT回复对象，不能重复使用同一个对象。
   responseMessage.value = {
+    id: '',
     type: 'ASSISTANT',
     content: [{ text: '' }],
     aiSessionId: activeSession.value.id,
     // 因为回复的消息没有id，所以统一将创建时间+index当作key
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
-  } satisfies AiMessageCreateInput & { createdTime: string }
+  }
   const queries = Object.keys(message.options || {})
     .map((key) => {
       return key + '=' + _.get(message.options, [key])
@@ -131,7 +135,7 @@ const handleSendMessage = (message: MessageWithOptions) => {
   evtSource.stream()
 
   // 将两条消息显示在页面中
-  messageList.value.push(...[chatMessage, responseMessage.value])
+  activeSession.value.messages.push(...[chatMessage, responseMessage.value])
   nextTick(() => {
     messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
   })
@@ -172,7 +176,7 @@ const handleDelete = () => {
             :active="session.id === activeSession.id"
             v-model:session="sessionList[index]"
             class="session"
-            @click="handleSessionSwitch(session)"
+            @click="activeSession = session"
             @delete="handleDeleteSession"
           ></session-item>
         </div>
@@ -226,6 +230,9 @@ const handleDelete = () => {
 </template>
 <style lang="scss" scoped>
 @mixin chat-style($height, $width) {
+  .session-list {
+    height: calc($height + 200px);
+  }
   .message-panel {
     width: $width;
   }
@@ -295,10 +302,14 @@ const handleDelete = () => {
 
       .session-list {
         overflow-y: scroll;
-
+        max-height: 70vh;
+        margin-top: 20px;
         .session {
           /* 每个会话之间留一些间距 */
           margin-top: 20px;
+        }
+        .session:first-child {
+          margin-top: 0;
         }
       }
 

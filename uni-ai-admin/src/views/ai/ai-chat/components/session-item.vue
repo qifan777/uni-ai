@@ -1,12 +1,8 @@
 <script lang="ts" setup>
 import { CircleClose } from '@element-plus/icons-vue'
 import { api } from '@/utils/api-instance'
-import type { AiSessionDto } from '@/apis/__generated/model/dto'
+import type { AiSession } from '@/views/ai/ai-chat/store/ai-chat-store'
 
-type AiSession = AiSessionDto['AiSessionRepository/COMPLEX_FETCHER_FOR_FRONT'] & {
-  checked: boolean
-}
-// active：用来标记当前会话是否处于选中状态
 // entity：用于展示的会话信息
 const prop = defineProps<{ active: boolean; session: AiSession }>()
 // 定义删除事件，当触发删除事件时会向外部发送被删除的会话。

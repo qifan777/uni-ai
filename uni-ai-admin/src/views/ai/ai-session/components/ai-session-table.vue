@@ -98,7 +98,7 @@ const handleDelete = (ids: string[]) => {
         width="120"
       >
         <template v-slot:default="{ row }: AiSessionScope">
-          {{ row.aiRole.name }}
+          {{ row.aiRole?.name }}
         </template>
       </el-table-column>
       <el-table-column

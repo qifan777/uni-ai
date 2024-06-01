@@ -32,7 +32,7 @@ public interface AiSessionRepository extends JRepository<AiSession, String> {
             .aiModel(aiModelFetcher)
             .aiRoleId()
             .aiModelId()
-            .messages(AiMessageFetcher.$.allScalarFields())
+            .messages(AiMessageFetcher.$.aiSessionId().content().createdTime().type())
             .creator(true);
 
     default Page<AiSession> findPage(QueryRequest<AiSessionSpec> queryRequest,

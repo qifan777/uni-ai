@@ -1,7 +1,6 @@
 package io.qifan.ai.dashscope;
 
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
-import org.springframework.ai.document.MetadataMode;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,8 +17,8 @@ public class DashScopeAiAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Primary
-    public DashScopeAiEmbeddingModel dashScopeAiEmbeddingClient(DashScopeAiApi dashScopeAiApi) {
-        return new DashScopeAiEmbeddingModel(dashScopeAiApi, MetadataMode.EMBED, new DashScopeAiEmbeddingOptions().setModel(TEXT_EMBEDDING_V1));
+    public DashScopeAiEmbeddingModel dashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi) {
+        return new DashScopeAiEmbeddingModel(dashScopeAiApi, new DashScopeAiEmbeddingOptions().setModel(TEXT_EMBEDDING_V1));
     }
 
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")

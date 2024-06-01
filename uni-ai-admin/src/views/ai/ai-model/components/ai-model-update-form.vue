@@ -11,7 +11,10 @@ import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import type { AiTagSpec } from '@/apis/__generated/model/static'
 import { recursiveOmit } from '@/components/base/table/table-helper'
-import ChatOptions from '@/views/ai/ai-model/components/options/chat-options.vue'
+import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
+import type { AiTagDto } from '@/apis/__generated/model/dto'
+import type { AiModelTag } from '@/apis/__generated/model/enums'
+import EmbeddingOptions from '@/views/ai/ai-model/components/embedding-options/embedding-options.vue'
 
 const aiModelStore = useAiModelStore()
 const { closeDialog, reloadTableData } = aiModelStore
@@ -51,11 +54,20 @@ const handleConfirm = () => {
     })
   )
 }
+const hasTag = (tagName: AiModelTag) => {
+  return tags.value.filter((tag) => tag.name === tagName).length > 0
+}
+const tags = ref<AiTagDto['AiTagRepository/COMPLEX_FETCHER_FOR_ADMIN'][]>([])
 const aiTagQueryOptions = async (_keyword: string, ids: string[]) => {
   const query: AiTagSpec = { ids, factory: updateForm.value.factory }
-  return (
+  const values = (
     await api.aiTagForAdminController.query({ body: { query: recursiveOmit(query) as AiTagSpec } })
   ).content
+
+  if (ids.length > 0) {
+    tags.value = values
+  }
+  return values
 }
 </script>
 <template>
@@ -79,7 +91,16 @@ const aiTagQueryOptions = async (_keyword: string, ids: string[]) => {
           multiple
         ></remote-select>
       </el-form-item>
-      <chat-options :factory="updateForm.factory" v-model="updateForm.options"></chat-options>
+      <chat-options
+        :factory="updateForm.factory"
+        v-model="updateForm.options"
+        v-if="hasTag('AIGC')"
+      ></chat-options>
+      <embedding-options
+        :factory="updateForm.factory"
+        v-model="updateForm.options"
+        v-if="hasTag('EMBEDDINGS')"
+      ></embedding-options>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>
   </div>
