@@ -20,8 +20,6 @@ public interface AiDocumentRepository extends JRepository<AiDocument, String> {
     AiDocumentFetcher COMPLEX_FETCHER_FOR_ADMIN = AiDocumentFetcher.$.allScalarFields()
             .aiCollectionId()
             .aiCollection(AiCollectionFetcher.$.allScalarFields())
-            .summaryModelId()
-            .summaryModel(AiModelFetcher.$.allScalarFields())
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiDocumentFetcher COMPLEX_FETCHER_FOR_FRONT = AiDocumentFetcher.$.allScalarFields()

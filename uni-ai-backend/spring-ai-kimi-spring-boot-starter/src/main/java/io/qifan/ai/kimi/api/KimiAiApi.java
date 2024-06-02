@@ -8,36 +8,57 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
-import org.springframework.util.StringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Mono;
 
-import java.io.BufferedReader;
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Slf4j
 public class KimiAiApi {
     private final String apiKey;
-    private final Executor executor;
-    private static final String CHAT_COMPLETION_URL = "https://api.moonshot.cn/v1/chat/completions";
+    private final String baseUrl;
+    private static final Predicate<String> SSE_DONE_PREDICATE = "[DONE]"::equals;
 
+    private static final String CHAT_COMPLETION_URL = "https://api.moonshot.cn/v1/chat/completions";
+    private final RestClient restClient;
+
+    private final WebClient webClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public KimiAiApi(String apiKey, Executor executor) {
+    public KimiAiApi(String apiKey, String baseUrl, RestClient.Builder restClientBuilder, WebClient.Builder webClientBuilder) {
         this.apiKey = apiKey;
-        this.executor = executor;
+        this.baseUrl = baseUrl;
+        this.restClient = restClientBuilder
+                .baseUrl(this.baseUrl)
+                .defaultHeaders(getJsonContentHeaders(this.apiKey))
+                .build();
+        this.webClient = webClientBuilder
+                .baseUrl(this.baseUrl)
+                .defaultHeaders(getJsonContentHeaders(this.apiKey))
+                .build();
     }
 
-    public boolean isValidJson(String jsonString) {
-        try {
-            objectMapper.readTree(jsonString);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    @SneakyThrows
+    public ChatResponseChunk toResponse(String jsonString) {
+        log.info("响应结果: {}", jsonString);
+        return objectMapper.readValue(jsonString, ChatResponseChunk.class);
     }
+
+    public static Consumer<HttpHeaders> getJsonContentHeaders(String apiKey) {
+        return (headers) -> {
+            headers.setBearerAuth(apiKey);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+        };
+    }
+
+    ;
 
     @Data
     @Accessors(chain = true)
@@ -74,6 +95,21 @@ public class KimiAiApi {
 
     @Data
     @Accessors(chain = true)
+    public static class ChatResponseChunk {
+        @JsonProperty("id")
+        String id;
+        @JsonProperty("object")
+        String object;
+        @JsonProperty("created")
+        Long created;
+        @JsonProperty("model")
+        String model;
+        @JsonProperty("choices")
+        List<ChatResponseChunkChoice> choices;
+    }
+
+    @Data
+    @Accessors(chain = true)
     public static class ChatResponse {
         @JsonProperty("id")
         String id;
@@ -85,11 +121,14 @@ public class KimiAiApi {
         String model;
         @JsonProperty("choices")
         List<ChatResponseChoice> choices;
+        @JsonProperty("usage")
+        Usage usage;
     }
+
 
     @Data
     @Accessors(chain = true)
-    public static class ChatResponseChoice {
+    public static class ChatResponseChunkChoice {
         @JsonProperty("index")
         Integer index;
         @JsonProperty("delta")
@@ -101,6 +140,19 @@ public class KimiAiApi {
 
     }
 
+    @Data
+    @Accessors(chain = true)
+    public static class ChatResponseChoice {
+        @JsonProperty("index")
+        Integer index;
+        @JsonProperty("message")
+        ChatResponseMessage message;
+        @JsonProperty("finish_reason")
+        String finishReason;
+    }
+
+    @Data
+    @Accessors(chain = true)
     public static class Usage {
         @JsonProperty("prompt_tokens")
         Integer promptTokens;
@@ -119,41 +171,26 @@ public class KimiAiApi {
         String content;
     }
 
-    @SneakyThrows
-    public Flux<ChatResponse> chat(ChatRequest request) {
-        return Flux.create(fluxSink -> {
-            executor.execute(() -> chat(fluxSink, request));
-        });
+    public Flux<ChatResponseChunk> chatCompletionStream(ChatRequest request) {
+        request.setStream(true);
+        return this.webClient
+                .post()
+                .uri("/v1/chat/completions")
+                .body(Mono.just(request), ChatRequest.class)
+                .retrieve()
+                .bodyToFlux(String.class)
+                .takeUntil(SSE_DONE_PREDICATE)
+                .filter(SSE_DONE_PREDICATE.negate())
+                .map(this::toResponse);
     }
 
-    @SneakyThrows
-    public void chat(FluxSink<ChatResponse> fluxSink, ChatRequest request) {
-        Request okhttpRequest = new Request.Builder()
-                .url(CHAT_COMPLETION_URL)
-                .post(RequestBody.create(objectMapper.writeValueAsBytes(request), MediaType.get("application/json")))
-                .addHeader("Authorization", "Bearer " + this.apiKey)
-                .build();
-        Call call = new OkHttpClient().newCall(okhttpRequest);
-        Response okhttpResponse = call.execute();
-        BufferedReader reader = new BufferedReader(okhttpResponse.body().charStream());
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (!StringUtils.hasText(line)) {
-                continue;
-            }
-            if (isValidJson(line)) {
-                log.error("error: {}", line);
-                fluxSink.complete();
-                return;
-            }
-            line = line.replace("data: ", "");
-            if (line.equals("[DONE]") || !isValidJson(line)) {
-                fluxSink.complete();
-                return;
-            }
-            ChatResponse chatCompletionChunk = objectMapper.readValue(line, ChatResponse.class);
-            fluxSink.next(chatCompletionChunk);
-        }
-
+    public ResponseEntity<ChatResponse> chatCompletion(ChatRequest request) {
+        request.setStream(false);
+        RestClient.ResponseSpec retrieve = this.restClient
+                .post()
+                .uri("/v1/chat/completions")
+                .body(request)
+                .retrieve();
+        return retrieve.toEntity(ChatResponse.class);
     }
 }

@@ -4,7 +4,6 @@ import io.qifan.infrastructure.generator.core.GenEntity;
 import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.ai.collection.entity.AiCollection;
-import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import org.babyfish.jimmer.sql.Entity;
 import org.babyfish.jimmer.sql.IdView;
@@ -34,16 +33,4 @@ public interface AiDocument extends BaseEntity {
 
     @ManyToOne
     AiCollection aiCollection();
-
-    /**
-     * 总结
-     */
-    @GenField(value = "总结", order = 2)
-    String summary();
-
-    @IdView
-    String summaryModelId();
-
-    @ManyToOne
-    AiModel summaryModel();
 }

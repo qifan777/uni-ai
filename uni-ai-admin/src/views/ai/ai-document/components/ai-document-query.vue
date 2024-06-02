@@ -15,7 +15,6 @@ const { query } = toRefs(queryData.value)
       <el-form-item label="名称">
         <el-input v-model="query.name"></el-input>
       </el-form-item>
-
       <el-form-item label="文档链接">
         <el-input v-model="query.url"></el-input>
       </el-form-item>
@@ -25,9 +24,6 @@ const { query } = toRefs(queryData.value)
           :query-options="aiCollectionQueryOptions"
           v-model="query.aiCollectionId"
         ></remote-select>
-      </el-form-item>
-      <el-form-item label="总结">
-        <el-input v-model="query.summary"></el-input>
       </el-form-item>
       <el-form-item label=" ">
         <div class="btn-wrapper">

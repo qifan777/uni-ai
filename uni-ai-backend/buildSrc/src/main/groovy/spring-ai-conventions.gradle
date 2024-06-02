@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation project(":common")
     implementation 'io.projectreactor:reactor-core'
+    implementation 'org.springframework.ai:spring-ai-retry'
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation platform(libs.spring.ai)

@@ -9,7 +9,6 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { Result } from '@/typings'
 import { Plus } from '@element-plus/icons-vue'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 
 const API_PREFIX = import.meta.env.VITE_API_PREFIX
@@ -21,8 +20,7 @@ const createFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof createForm>>({
   name: [{ required: true, message: '请输入文档名称', trigger: 'blur' }],
   url: [{ required: true, message: '请输入文档链接', trigger: 'blur' }],
-  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }],
-  summaryModelId: [{ required: true, message: '请选择总结模型)', trigger: 'change' }]
+  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }]
 })
 const init = async () => {
   dialogData.value.title = '创建'
@@ -83,17 +81,6 @@ const onUploadSuccess = (res: Result<{ url: string }>) => {
           label-prop="name"
           :query-options="aiCollectionQueryOptions"
           v-model="createForm.aiCollectionId"
-        ></remote-select>
-      </el-form-item>
-      <el-form-item label="总结模型" prop="summaryModelId">
-        <remote-select
-          label-prop="name"
-          :query-options="
-            (query, id) => {
-              return aiModelQueryOptions(query, id, ['AIGC'])
-            }
-          "
-          v-model="createForm.summaryModelId"
         ></remote-select>
       </el-form-item>
     </el-form>

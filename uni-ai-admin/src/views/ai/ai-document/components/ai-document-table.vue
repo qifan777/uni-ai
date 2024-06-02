@@ -96,17 +96,6 @@ const handleDelete = (ids: string[]) => {
         </template>
       </el-table-column>
       <el-table-column
-        label="总结模型"
-        prop="summaryModel.name"
-        sortable="custom"
-        show-overflow-tooltip
-        width="120"
-      >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.summaryModel.name }}
-        </template>
-      </el-table-column>
-      <el-table-column
         label="知识库"
         prop="aiCollection.name"
         sortable="custom"
@@ -115,17 +104,6 @@ const handleDelete = (ids: string[]) => {
       >
         <template v-slot:default="{ row }: AiDocumentScope">
           {{ row.aiCollection.name }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="总结"
-        prop="summary"
-        sortable="custom"
-        show-overflow-tooltip
-        width="120"
-      >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.summary }}
         </template>
       </el-table-column>
       <el-table-column

@@ -10,6 +10,8 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -29,7 +31,7 @@ public class KimiAiChatService implements UniAiChatService {
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");
         }
-        return new KimiAiChatModel(new KimiAiApi(apiKey, executor));
+        return new KimiAiChatModel(new KimiAiApi(apiKey, "https://api.moonshot.cn", RestClient.builder(), WebClient.builder()));
     }
 
     @Override

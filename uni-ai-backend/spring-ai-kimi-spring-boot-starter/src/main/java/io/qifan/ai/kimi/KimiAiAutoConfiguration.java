@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.Executor;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @AutoConfiguration
 @Configuration
@@ -15,8 +15,8 @@ import java.util.concurrent.Executor;
 public class KimiAiAutoConfiguration {
     @ConditionalOnProperty(prefix = KimiAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Bean(name = "kimiAiApi")
-    public KimiAiApi kimiAiApi(KimiAiProperties kimiAiProperties, Executor executor) {
-        return new KimiAiApi(kimiAiProperties.getApiKey(), executor);
+    public KimiAiApi kimiAiApi(KimiAiProperties kimiAiProperties) {
+        return new KimiAiApi(kimiAiProperties.getApiKey(), "https://api.moonshot.cn", RestClient.builder(), WebClient.builder());
     }
 
     @ConditionalOnProperty(prefix = KimiAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")

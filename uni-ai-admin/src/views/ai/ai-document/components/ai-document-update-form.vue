@@ -17,8 +17,7 @@ const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
   name: [{ required: true, message: '请输入文档名称', trigger: 'blur' }],
   url: [{ required: true, message: '请输入文档链接', trigger: 'blur' }],
-  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }],
-  summaryModelId: [{ required: true, message: '请选择总结模型)', trigger: 'change' }]
+  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }]
 })
 const init = async () => {
   dialogData.value.title = '编辑'
@@ -57,25 +56,11 @@ const handleConfirm = () => {
       <el-form-item label="文档链接" prop="url">
         <el-input v-model="updateForm.url"></el-input>
       </el-form-item>
-      <el-form-item label="总结" prop="summary">
-        <el-input v-model="updateForm.summary"></el-input>
-      </el-form-item>
       <el-form-item label="知识库" prop="aiCollectionId">
         <remote-select
           label-prop="name"
           :query-options="aiCollectionQueryOptions"
           v-model="updateForm.aiCollectionId"
-        ></remote-select>
-      </el-form-item>
-      <el-form-item label="总结模型" prop="summaryModelId">
-        <remote-select
-          label-prop="name"
-          :query-options="
-            (query, id) => {
-              return aiModelQueryOptions(query, id, ['AIGC'])
-            }
-          "
-          v-model="updateForm.summaryModelId"
         ></remote-select>
       </el-form-item>
     </el-form>
