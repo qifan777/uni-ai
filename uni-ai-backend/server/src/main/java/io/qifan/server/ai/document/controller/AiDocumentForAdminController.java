@@ -15,7 +15,7 @@ import io.qifan.server.ai.model.repository.AiModelRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
-import io.qifan.server.ai.uni.vector.MilvusRepository;
+import io.qifan.server.ai.uni.vector.UniAiVectorService;
 import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import lombok.AllArgsConstructor;
@@ -51,7 +51,7 @@ public class AiDocumentForAdminController {
     private final AiDocumentRepository aiDocumentRepository;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final AiModelRepository aiModelRepository;
-    private final MilvusRepository milvusRepository;
+    private final UniAiVectorService uniAiVectorService;
 
     @GetMapping("{id}")
     public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiDocument findById(@PathVariable String id) {
@@ -69,7 +69,7 @@ public class AiDocumentForAdminController {
         TikaDocumentReader tikaDocumentReader = new TikaDocumentReader(new UrlResource(new URL(aiDocumentInput.getUrl())));
         List<Document> documents = tikaDocumentReader.get();
         List<Document> splitDocuments = new TokenTextSplitter().apply(documents);
-        milvusRepository.embedding(splitDocuments, aiDocumentInput.getAiCollectionId());
+        uniAiVectorService.embedding(splitDocuments, aiDocumentInput.getAiCollectionId());
         String summary = summary(String.join("", documents.stream().map(Document::getContent).toList()), aiDocumentInput.getSummaryModelId());
         return aiDocumentRepository.save(AiDocumentDraft.$.produce(aiDocumentInput.toEntity(), draft -> {
             draft.setSummary(summary);

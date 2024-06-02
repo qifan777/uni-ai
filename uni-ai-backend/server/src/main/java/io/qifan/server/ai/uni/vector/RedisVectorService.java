@@ -1,6 +1,5 @@
 package io.qifan.server.ai.uni.vector;
 
-import io.milvus.client.MilvusServiceClient;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.collection.entity.AiCollection;
 import io.qifan.server.ai.collection.entity.AiCollectionFetcher;
@@ -15,36 +14,43 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.vectorstore.MilvusVectorStore;
-import org.springframework.stereotype.Repository;
+import org.springframework.ai.vectorstore.RedisVectorStore;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Service
 @AllArgsConstructor
-public class MilvusRepository {
+public class RedisVectorService implements UniAiVectorService {
     private final Map<String, UniAiEmbeddingService> embeddingServiceMap;
-    private final MilvusServiceClient milvusServiceClient;
     private final AiCollectionRepository aiCollectionRepository;
+    private final RedisConnectionDetails redisConnectionDetails;
 
 
     @SneakyThrows
     public void embedding(List<Document> documents, String collectionId) {
-        MilvusVectorStore milvusVectorStore = getMilvusVectorStore(collectionId);
-        milvusVectorStore.afterPropertiesSet();
-        milvusVectorStore.add(documents);
+        VectorStore vectorStore = getVectorStore(collectionId);
+        if (vectorStore instanceof InitializingBean store) {
+            store.afterPropertiesSet();
+        }
+        vectorStore.add(documents);
     }
 
     @SneakyThrows
     public List<Document> similaritySearch(String query, String collectionId) {
-        MilvusVectorStore milvusVectorStore = getMilvusVectorStore(collectionId);
-        milvusVectorStore.afterPropertiesSet();
-        return milvusVectorStore.similaritySearch(query);
+        VectorStore vectorStore = getVectorStore(collectionId);
+        if (vectorStore instanceof InitializingBean store) {
+            store.afterPropertiesSet();
+        }
+        return vectorStore.similaritySearch(query);
     }
 
-    public MilvusVectorStore getMilvusVectorStore(String collectionId) {
+    public VectorStore getVectorStore(String collectionId) {
         AiCollection aiCollection = aiCollectionRepository.findById(collectionId, AiCollectionFetcher.$.allScalarFields()
                         .embeddingModel(AiModelFetcher.$
                                 .allScalarFields()
@@ -61,9 +67,13 @@ public class MilvusRepository {
         Map<String, Object> options = aiCollection.embeddingModel().aiFactory().options();
         options.putAll(aiCollection.embeddingModel().options());
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
-        return new MilvusVectorStore(milvusServiceClient, embeddingModel, MilvusVectorStore.MilvusVectorStoreConfig.builder()
-                .withCollectionName(aiCollection.collectionName())
-                .withEmbeddingDimension(options.containsKey("dimension") ? (int) options.get("dimension") : MilvusVectorStore.OPENAI_EMBEDDING_DIMENSION_SIZE)
-                .build(), true);
+        RedisVectorStore.RedisVectorStoreConfig config = RedisVectorStore.RedisVectorStoreConfig.builder()
+                .withURI("redis://default:" +
+                         redisConnectionDetails.getPassword() + "@" +
+                         redisConnectionDetails.getStandalone().getHost() + ":" +
+                         redisConnectionDetails.getStandalone().getPort())
+                .withIndexName(aiCollection.collectionName())
+                .build();
+        return new RedisVectorStore(config, embeddingModel, true);
     }
 }

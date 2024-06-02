@@ -10,7 +10,7 @@ import io.qifan.server.ai.session.entity.AiSession;
 import io.qifan.server.ai.session.repository.AiSessionRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
-import io.qifan.server.ai.uni.vector.MilvusRepository;
+import io.qifan.server.ai.uni.vector.UniAiVectorService;
 import io.qifan.server.dict.model.DictConstants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +40,7 @@ import java.util.Map;
 public class AiMessageService {
     private final AiSessionRepository aiSessionRepository;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
-    private final MilvusRepository milvusRepository;
+    private final UniAiVectorService uniAiVectorService;
 
     public Flux<ChatResponse> chat(AiMessageCreateInput messageInput, ChatParams params) {
         AiSession aiSession = aiSessionRepository.findById(messageInput.getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
@@ -68,7 +68,7 @@ public class AiMessageService {
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {
         ChatMessage chatMessage = toMessage(DictConstants.AiMessageType.USER, messageInput.getContent());
         if (params.getKnowledge()) {
-            List<String> context = milvusRepository.similaritySearch(chatMessage.getContent(), params.getCollectionId())
+            List<String> context = uniAiVectorService.similaritySearch(chatMessage.getContent(), params.getCollectionId())
                     .stream()
                     .map(Document::getContent)
                     .toList();
