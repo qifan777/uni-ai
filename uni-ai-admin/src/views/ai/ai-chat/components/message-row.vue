@@ -71,7 +71,7 @@ const props = withDefaults(
       font-size: 15px;
       padding: 1.5px;
       // 限制消息展示的最大宽度
-      max-width: 700px;
+      max-width: 800px;
       // 圆润一点
       border-radius: 7px;
       // 给消息框加一些描边，看起来更加实一些，要不然太扁了轻飘飘的。

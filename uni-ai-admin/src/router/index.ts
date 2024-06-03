@@ -84,12 +84,12 @@ const router = createRouter({
         {
           path: '/setting',
           component: () => import('@/views/setting/setting-view.vue')
+        },
+        {
+          path: '/chat',
+          component: () => import('@/views/ai/ai-chat/ai-chat-view.vue')
         }
       ]
-    },
-    {
-      path: '/chat',
-      component: () => import('@/views/ai/ai-chat/ai-chat-view.vue')
     },
     {
       path: '/login',

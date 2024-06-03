@@ -15,6 +15,7 @@ import { SSE, type SSEvent } from 'sse.js'
 import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store/ai-chat-store'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
 import _ from 'lodash'
+import { useTagStore } from '@/layout/store/tag-store'
 
 type ChatResponse = {
   metadata: {
@@ -52,6 +53,7 @@ const activeTag = computed<AiModelTag>(() => {
 provide('activeTag', activeTag)
 
 onMounted(async () => {
+  useTagStore().collapse = true
   const userInfo = await homeStore.getUserInfo()
   // 查询自己的聊天会话
   api.aiSessionForFrontController
@@ -237,9 +239,9 @@ const handleDelete = () => {
   .session-list {
     height: calc($height + 200px);
   }
-  .message-panel {
-    width: $width;
-  }
+  //.message-panel {
+  //  width: $width;
+  //}
   .message-list {
     height: $height;
   }
@@ -247,10 +249,10 @@ const handleDelete = () => {
 
 .home-view {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  //align-items: center;
   @media screen and (max-width: 2560px) {
     @include chat-style(600px, 1200px);
   }
@@ -266,14 +268,14 @@ const handleDelete = () => {
 
   .chat-panel {
     display: flex;
-    border-radius: 20px;
+    //border-radius: 20px;
     background-color: white;
-    box-shadow: 0 0 20px 20px rgba(black, 0.05);
-
+    //box-shadow: 0 0 20px 20px rgba(black, 0.05);
+    width: 100%;
     .session-panel {
       width: 250px;
-      border-top-left-radius: 20px;
-      border-bottom-left-radius: 20px;
+      //border-top-left-radius: 20px;
+      //border-bottom-left-radius: 20px;
       padding: 20px;
       position: relative;
       border-right: 1px solid rgba(black, 0.07);
@@ -337,6 +339,7 @@ const handleDelete = () => {
 
     /* 右侧消息记录面板*/
     .message-panel {
+      width: 100%;
       .header {
         padding: 20px 20px 0 20px;
         display: flex;
@@ -364,10 +367,10 @@ const handleDelete = () => {
       }
 
       .message-list {
-        //height: 800px;
         max-height: 70vh;
-
         padding: 15px;
+        width: 100%;
+        box-sizing: border-box;
         // 消息条数太多时，溢出部分滚动
         overflow-y: scroll;
         // 当切换聊天会话时，消息记录也随之切换的过渡效果

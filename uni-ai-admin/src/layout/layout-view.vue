@@ -1,20 +1,38 @@
 <script setup lang="ts">
 import AsideMenu from '@/layout/components/aside-menu.vue'
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Avatar, Fold, Setting } from '@element-plus/icons-vue'
 import { useHomeStore } from '@/stores/home-store'
 import { storeToRefs } from 'pinia'
 import logo from '@/assets/logo.jpg'
 import RouterTags from '@/layout/components/router-tags.vue'
 import router from '@/router'
-const isCollapse = ref(false)
+import { useTagStore } from '@/layout/store/tag-store'
+const tagStore = useTagStore()
+const { collapse } = storeToRefs(tagStore)
 const homeStore = useHomeStore()
+
 homeStore.init()
 const { userInfo } = storeToRefs(homeStore)
 const handleLogout = () => {
   homeStore.logout()
   router.push('/login')
 }
+onMounted(() => {
+  let init = false
+  if (tagStore.activeTag.path) {
+    console.log(tagStore.activeTag.path)
+  }
+  watch(
+    () => homeStore.menuTreeList.length,
+    (value) => {
+      if (!init && value > 0) {
+        tagStore.openTag(tagStore.activeTag.path)
+        init = true
+      }
+    }
+  )
+})
 </script>
 
 <template>
@@ -53,14 +71,14 @@ const handleLogout = () => {
     <el-container class="menu-router">
       <!-- 对应蓝色的左半部分，展示侧边菜单 -->
       <div class="aside-menu-wrapper">
-        <aside-menu :collapse="isCollapse"></aside-menu>
+        <aside-menu :collapse="collapse"></aside-menu>
       </div>
       <!-- 对应蓝色的右半部分 -->
       <el-main class="router-wrapper">
         <!-- 对应绿色的上半部分，展示页签 -->
         <el-header class="router-header">
-          <div @click="isCollapse = !isCollapse" class="fold-wrapper">
-            <el-icon :class="['fold', isCollapse ? 'expand' : '']" size="20">
+          <div @click="collapse = !collapse" class="fold-wrapper">
+            <el-icon :class="['fold', collapse ? 'expand' : '']" size="20">
               <fold></fold>
             </el-icon>
           </div>
@@ -69,11 +87,9 @@ const handleLogout = () => {
         <!-- 对应绿色的下半部分，展示子路由 -->
         <el-scrollbar class="router">
           <router-view v-slot="{ Component }">
-            <!--            <transition name="slide">-->
             <keep-alive>
               <component :is="Component" />
             </keep-alive>
-            <!--            </transition>-->
           </router-view>
         </el-scrollbar>
       </el-main>

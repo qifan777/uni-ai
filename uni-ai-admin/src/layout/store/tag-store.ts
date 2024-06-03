@@ -4,6 +4,7 @@ import type { RouteLocationPathRaw } from 'vue-router'
 import type { MenuDto } from '@/apis/__generated/model/dto'
 import { useHomeStore } from '@/stores/home-store'
 import { useStorage } from '@vueuse/core'
+import { ref } from 'vue'
 // tag是基于menu拓展的，不需要太多的不必要属性，从menu中选择（id，name，menuType，icon，path）再加上（reloadKey和route（跳转路由））
 export type TagMenu = Pick<
   MenuDto['MenuRepository/COMPLEX_FETCHER'],
@@ -23,6 +24,7 @@ export const useTagStore = defineStore('tags', () => {
     reloadKey: 0,
     route: { path: '' }
   })
+  const collapse = ref(false)
   // 页签列表
   const tags = useStorage<TagMenu[]>('tagList', [])
   // 打开页签的时候可以传入"/user"或者{path: "/user",query:{id:1}}这两种类型。和使用router.push差不多。
@@ -80,6 +82,7 @@ export const useTagStore = defineStore('tags', () => {
   return {
     activeTag,
     tags,
+    collapse,
     closeTag,
     closeAll,
     closeOther,
