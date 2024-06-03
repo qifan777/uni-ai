@@ -340,6 +340,8 @@ const handleDelete = () => {
     /* 右侧消息记录面板*/
     .message-panel {
       width: 100%;
+      display: flex;
+      flex-direction: column;
       .header {
         padding: 20px 20px 0 20px;
         display: flex;
@@ -367,9 +369,9 @@ const handleDelete = () => {
       }
 
       .message-list {
-        max-height: 70vh;
         padding: 15px;
         width: 100%;
+        flex: 1;
         box-sizing: border-box;
         // 消息条数太多时，溢出部分滚动
         overflow-y: scroll;
