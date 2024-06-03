@@ -79,31 +79,31 @@ const handleDelete = (ids: string[]) => {
       v-loading="loading"
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="名称" prop="name" sortable="custom" show-overflow-tooltip width="120">
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.name }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="文档链接"
-        prop="url"
-        sortable="custom"
-        show-overflow-tooltip
-        width="120"
-      >
-        <template v-slot:default="{ row }: AiDocumentScope">
-          {{ row.url }}
-        </template>
-      </el-table-column>
       <el-table-column
         label="知识库"
-        prop="aiCollection.name"
+        prop="aiCollectionId"
         sortable="custom"
         show-overflow-tooltip
         width="120"
       >
         <template v-slot:default="{ row }: AiDocumentScope">
           {{ row.aiCollection.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="名称" prop="name" sortable="custom" show-overflow-tooltip width="120">
+        <template v-slot:default="{ row }: AiDocumentScope">
+          {{ row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="内容"
+        prop="content"
+        sortable="custom"
+        show-overflow-tooltip
+        width="120"
+      >
+        <template v-slot:default="{ row }: AiDocumentScope">
+          {{ row.content }}
         </template>
       </el-table-column>
       <el-table-column

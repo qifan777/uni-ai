@@ -11,18 +11,12 @@ import { api } from '@/utils/api-instance'
 import { ref } from 'vue'
 
 export const aiDocumentQueryOptions = async (keyword: string, id: string) => {
-  return (
-    await api.aiDocumentForAdminController.query({ body: { query: { summary: keyword, id } } })
-  ).content
+  return (await api.aiDocumentForAdminController.query({ body: { query: { name: keyword, id } } }))
+    .content
 }
 export const useAiDocumentStore = defineStore('aiDocument', () => {
   const initQuery: AiDocumentSpec = {}
-  const initForm: AiDocumentCreateInput & AiDocumentUpdateInput = {
-    collection: '',
-    id: '',
-    summary: '',
-    url: ''
-  }
+  const initForm: AiDocumentCreateInput & AiDocumentUpdateInput = {}
   const tableHelper = useTableHelper(
     api.aiDocumentForAdminController.query,
     api.aiDocumentForAdminController,

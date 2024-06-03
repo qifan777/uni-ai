@@ -7,7 +7,6 @@ import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 
 const aiDocumentStore = useAiDocumentStore()
@@ -15,9 +14,9 @@ const { closeDialog, reloadTableData } = aiDocumentStore
 const { updateForm, dialogData } = storeToRefs(aiDocumentStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
-  name: [{ required: true, message: '请输入文档名称', trigger: 'blur' }],
-  url: [{ required: true, message: '请输入文档链接', trigger: 'blur' }],
-  aiCollectionId: [{ required: true, message: '请选择知识库)', trigger: 'change' }]
+  aiCollectionId: [{ required: true, message: '请输入知识库', trigger: 'blur' }],
+  name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+  content: [{ required: true, message: '请输入内容', trigger: 'blur' }]
 })
 const init = async () => {
   dialogData.value.title = '编辑'
@@ -52,16 +51,6 @@ const handleConfirm = () => {
     <el-form labelWidth="120" class="form" ref="updateFormRef" :model="updateForm" :rules="rules">
       <el-form-item label="名称" prop="name">
         <el-input v-model="updateForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="文档链接" prop="url">
-        <el-input v-model="updateForm.url"></el-input>
-      </el-form-item>
-      <el-form-item label="知识库" prop="aiCollectionId">
-        <remote-select
-          label-prop="name"
-          :query-options="aiCollectionQueryOptions"
-          v-model="updateForm.aiCollectionId"
-        ></remote-select>
       </el-form-item>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>

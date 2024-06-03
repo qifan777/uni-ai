@@ -2,8 +2,8 @@
 import { toRefs } from 'vue'
 import { useAiDocumentStore } from '../store/ai-document-store'
 import { storeToRefs } from 'pinia'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
+import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 
 const aiDocumentStore = useAiDocumentStore()
 const { queryData } = storeToRefs(aiDocumentStore)
@@ -12,18 +12,18 @@ const { query } = toRefs(queryData.value)
 <template>
   <div class="search">
     <el-form inline label-width="80" size="small">
-      <el-form-item label="名称">
-        <el-input v-model="query.name"></el-input>
-      </el-form-item>
-      <el-form-item label="文档链接">
-        <el-input v-model="query.url"></el-input>
-      </el-form-item>
-      <el-form-item label="知识库" prop="aiCollectionId">
+      <el-form-item label="知识库">
         <remote-select
           label-prop="name"
           :query-options="aiCollectionQueryOptions"
           v-model="query.aiCollectionId"
         ></remote-select>
+      </el-form-item>
+      <el-form-item label="名称">
+        <el-input v-model="query.name"></el-input>
+      </el-form-item>
+      <el-form-item label="内容">
+        <el-input v-model="query.content"></el-input>
       </el-form-item>
       <el-form-item label=" ">
         <div class="btn-wrapper">

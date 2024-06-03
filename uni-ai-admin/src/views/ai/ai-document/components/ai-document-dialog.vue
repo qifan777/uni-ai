@@ -16,7 +16,12 @@ const formMap: Record<EditMode, Component> = {
 </script>
 <template>
   <div>
-    <el-dialog v-model="dialogData.visible" :title="dialogData.title" :width="dialogData.width">
+    <el-dialog
+      fullscreen
+      v-model="dialogData.visible"
+      :title="dialogData.title"
+      :width="dialogData.width"
+    >
       <component :is="formMap[dialogData.mode]"></component>
     </el-dialog>
   </div>

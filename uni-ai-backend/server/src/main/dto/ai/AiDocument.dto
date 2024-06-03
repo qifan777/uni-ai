@@ -3,18 +3,20 @@ export io.qifan.server.ai.document.entity.AiDocument
 input AiDocumentCreateInput {
     #allScalars(AiDocument)
     id(aiCollection)
+    -docIds
 }
 input AiDocumentUpdateInput {
     #allScalars(AiDocument)
     id!
     id(aiCollection)
+    -docIds
 }
 
 specification AiDocumentSpec {
     #allScalars
     like/i(name)
-    like/i(url)
     like/i(id)
+    like/i(content)
     ge(editedTime)
     le(editedTime)
     ge(createdTime)
