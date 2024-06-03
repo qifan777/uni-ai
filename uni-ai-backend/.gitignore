@@ -42,3 +42,4 @@ bin/
 .DS_Store
 /server/src/main/resources/application-private.yml
 /server/src/main/resources/wechat-private/
+/server/src/main/resources/dist/

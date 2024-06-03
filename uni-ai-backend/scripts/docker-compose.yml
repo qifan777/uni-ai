@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  mysql:
+    # 镜像名称
+    image: mysql:8.0.26
+    # 相当于 --name
+    container_name: mysql
+    # 相当于多个 -e
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      TZ: Asia/Shanghai
+      MYSQL_DATABASE: uni_ai
+    # 相当于 -p
+    ports:
+      - "3308:3306"
+    # 相当于 -v
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # 容器启动后执行下面这个命令
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+  redis:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    restart: always
+    ports:
+      - "6381:6379"
+      - "8001:8001"
+    environment:
+      REDIS_ARGS: --requirepass 123456
+    volumes:
+      - redis-data:/data
+  uni-ai:
+    image: qifan7/uni-ai:0.1.0-snapshot
+    container_name: uni-ai
+    environment:
+      spring.profiles.active: prod
+    ports:
+      - "8877:8877"
+    depends_on:
+      - mysql
+      - redis
+volumes:
+  mysql-data: { }
+  redis-data: { }

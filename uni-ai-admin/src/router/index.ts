@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import RegisterView from '@/views/login/register-view.vue'
 import LoginView from '@/views/login/login-view.vue'
 import DictView from '@/views/dict/dict-view.vue'
@@ -9,7 +9,7 @@ import { useHomeStore } from '@/stores/home-store'
 import RestPasswordView from '@/views/login/rest-password-view.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',

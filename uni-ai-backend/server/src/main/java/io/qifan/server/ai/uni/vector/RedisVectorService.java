@@ -67,11 +67,12 @@ public class RedisVectorService implements UniAiVectorService {
         Map<String, Object> options = aiCollection.embeddingModel().aiFactory().options();
         options.putAll(aiCollection.embeddingModel().options());
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
+        String username = StringUtils.hasText(redisConnectionDetails.getUsername()) ? redisConnectionDetails.getUsername() : "default";
         RedisVectorStore.RedisVectorStoreConfig config = RedisVectorStore.RedisVectorStoreConfig.builder()
-                .withURI("redis://default:" +
-                         redisConnectionDetails.getPassword() + "@" +
-                         redisConnectionDetails.getStandalone().getHost() + ":" +
-                         redisConnectionDetails.getStandalone().getPort())
+                .withURI("redis://+" + username + ":" +
+                        redisConnectionDetails.getPassword() + "@" +
+                        redisConnectionDetails.getStandalone().getHost() + ":" +
+                        redisConnectionDetails.getStandalone().getPort())
                 .withIndexName(aiCollection.collectionName())
                 .build();
         return new RedisVectorStore(config, embeddingModel, true);
