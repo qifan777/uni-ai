@@ -69,7 +69,7 @@ public class RedisVectorService implements UniAiVectorService {
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
         String username = StringUtils.hasText(redisConnectionDetails.getUsername()) ? redisConnectionDetails.getUsername() : "default";
         RedisVectorStore.RedisVectorStoreConfig config = RedisVectorStore.RedisVectorStoreConfig.builder()
-                .withURI("redis://+" + username + ":" +
+                .withURI("redis://" + username + ":" +
                         redisConnectionDetails.getPassword() + "@" +
                         redisConnectionDetails.getStandalone().getHost() + ":" +
                         redisConnectionDetails.getStandalone().getPort())
