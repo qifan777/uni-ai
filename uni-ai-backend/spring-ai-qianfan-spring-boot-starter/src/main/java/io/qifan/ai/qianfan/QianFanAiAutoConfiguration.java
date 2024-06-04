@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class QianFanAiAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = QianFanAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
-    public QianFanAiChatModel qianFanAiChatModel(QianFanApi qianFanApi) {
-        return new QianFanAiChatModel(qianFanApi);
+    public QianFanAiChatModel qianFanAiChatModel(QianFanApi qianFanApi, QianFanAiProperties properties) {
+        return new QianFanAiChatModel(qianFanApi, properties.getChat());
     }
 
 

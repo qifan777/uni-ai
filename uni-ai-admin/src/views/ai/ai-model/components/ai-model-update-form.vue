@@ -13,6 +13,7 @@ import type { AiFactoryDto, AiTagDto } from '@/apis/__generated/model/dto'
 import type { AiTagSpec } from '@/apis/__generated/model/static'
 import { recursiveOmit } from '@/components/base/table/table-helper'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
+import ImageOptions from '@/views/ai/ai-model/components/image-options/image-options.vue'
 
 const aiModelStore = useAiModelStore()
 const { closeDialog, reloadTableData } = aiModelStore
@@ -108,6 +109,11 @@ const aiFactoryQueryOptions = async (_keyword: string, id: string) => {
         v-model="updateForm.options"
         v-if="hasTag('EMBEDDINGS') && factory"
       ></embedding-options>
+      <image-options
+        :factory="factory.name"
+        v-model="updateForm.options"
+        v-if="hasTag('IMAGE') && factory"
+      ></image-options>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>
   </div>

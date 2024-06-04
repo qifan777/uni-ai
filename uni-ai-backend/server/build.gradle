@@ -1,25 +1,10 @@
 plugins {
     id('java-conventions')
     id "tech.argonariod.gradle-plugin-jimmer" version "latest.release"
-    id "com.github.node-gradle.node" version "7.0.2"
 }
 apply plugin: 'io.spring.dependency-management'
 jimmer {
     version = libs.versions.jimmer
-}
-node {
-    nodeProjectDir = file("C:\\Users\\Administrator\\Documents\\Workplace\\Code\\OpenSource\\uni-ai\\uni-ai-admin")
-    workDir = file("C:\\Users\\Administrator\\AppData\\Roaming\\nvm\\v20.9.0")
-    npmWorkDir = file("C:\\Users\\Administrator\\AppData\\Roaming\\nvm\\v20.9.0\\npm")
-}
-tasks.register('buildAngularApp', NpxTask) {
-//    dependsOn npmInstall
-    command = 'npm'
-    args = ['build-only']
-    inputs.files('package.json', 'package-lock.json', 'angular.json', 'tsconfig.json', 'tsconfig.app.json')
-    inputs.dir('src')
-    inputs.dir(fileTree("node_modules").exclude(".cache"))
-    outputs.dir('dist')
 }
 repositories {
     mavenCentral()

@@ -5,6 +5,7 @@ import com.alibaba.dashscope.aigc.generation.GenerationResult;
 import com.alibaba.dashscope.common.Message;
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
 import io.reactivex.Flowable;
+import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
@@ -14,18 +15,17 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 public class DashScopeAiChatModel implements ChatModel {
     private final DashScopeAiApi dashScopeAiApi;
-
-    public DashScopeAiChatModel(DashScopeAiApi dashScopeAiApi) {
-        this.dashScopeAiApi = dashScopeAiApi;
-    }
+    private final DashScopeAiChatOptions defaultOptions;
 
     @Override
     public ChatResponse call(Prompt prompt) {
@@ -71,7 +71,13 @@ public class DashScopeAiChatModel implements ChatModel {
         builder
                 .messages(list)
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE);
-        DashScopeAiChatOptions options = (DashScopeAiChatOptions) prompt.getOptions();
+        DashScopeAiChatOptions options = new DashScopeAiChatOptions();
+        if (defaultOptions != null) {
+            options = ModelOptionsUtils.merge(defaultOptions, options, DashScopeAiChatOptions.class);
+        }
+        if (prompt.getOptions() != null) {
+            options = ModelOptionsUtils.merge(prompt.getOptions(), options, DashScopeAiChatOptions.class);
+        }
         if (options != null) {
             builder.tools(options.getTools());
             if (StringUtils.hasText(options.getModel())) {

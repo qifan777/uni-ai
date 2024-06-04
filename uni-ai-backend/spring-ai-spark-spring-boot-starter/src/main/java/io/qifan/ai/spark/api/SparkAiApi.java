@@ -29,6 +29,7 @@ public class SparkAiApi {
     private final String apiSecret;
     private final String appId;
     private final ObjectMapper objectMapper;
+    // TODO 取消executor
     private final Executor executor;
 
     public SparkAiApi(String apiKey, String apiSecret,

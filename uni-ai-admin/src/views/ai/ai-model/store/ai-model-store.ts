@@ -14,7 +14,7 @@ import type { AiModelTag } from '@/apis/__generated/model/enums'
 export const aiModelQueryOptions = async (keyword: string, id: string, tagNames: AiModelTag[]) => {
   return (
     await api.aiModelForAdminController.query({
-      body: { query: { name: keyword, id, tagNames } }
+      body: { query: { name: keyword, id, tagNames }, pageSize: 100000 }
     })
   ).content
 }

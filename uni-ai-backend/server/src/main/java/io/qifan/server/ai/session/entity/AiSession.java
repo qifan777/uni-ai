@@ -37,10 +37,8 @@ public interface AiSession extends BaseEntity {
     AiRole aiRole();
 
     @IdView
-    @Nullable
     String aiModelId();
 
-    @Nullable
     @ManyToOne
     @OnDissociate(DissociateAction.DELETE)
     AiModel aiModel();

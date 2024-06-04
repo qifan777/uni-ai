@@ -17,8 +17,8 @@ public class SparkAiAutoConfiguration {
 
     @ConditionalOnProperty(prefix = SparkAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Bean
-    public SparkAiChatModel sparkAiChatModel(SparkAiApi sparkAiApi) {
-        return new SparkAiChatModel(sparkAiApi);
+    public SparkAiChatModel sparkAiChatModel(SparkAiApi sparkAiApi, SparkAiProperties properties) {
+        return new SparkAiChatModel(sparkAiApi, properties.getOptions());
     }
 
     @ConditionalOnProperty(prefix = SparkAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")

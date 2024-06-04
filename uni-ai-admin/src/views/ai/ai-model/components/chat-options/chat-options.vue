@@ -5,6 +5,8 @@ import SparkAiChatOptions from './spark-ai-chat-options.vue'
 import DashScopeAiOptions from './dash-scope-ai-chat-options.vue'
 import OpenAiOptions from './open-ai-chat-options.vue'
 import QianFanAiOptions from './qian-fan-ai-chat-options.vue'
+import KimiAiChatOptions from './kimi-ai-chat-options.vue'
+import ZhiPuAiChatOptions from './zhi-pu-ai-chat-options.vue'
 
 const props = defineProps<{ factory: AiFactoryType }>()
 const model = defineModel<any>({ default: {} })
@@ -18,6 +20,10 @@ const optionsComponent = computed(() => {
       return OpenAiOptions
     case 'QIAN_FAN':
       return QianFanAiOptions
+    case 'KIMI':
+      return KimiAiChatOptions
+    case 'ZHI_PU':
+      return ZhiPuAiChatOptions
     default:
       return OpenAiOptions
   }

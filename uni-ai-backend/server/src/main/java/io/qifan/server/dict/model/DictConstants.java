@@ -106,11 +106,12 @@ public class DictConstants {
   @Getter
   @AllArgsConstructor
   public enum AiModelTag{
-        AIGC(0, "aigc", "AIGC", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
-        EMBEDDINGS(1, "embeddings", "EMBEDDINGS", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
-        AUDIO(2, "audio", "AUDIO", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+        AIGC(0, "文本生成", "AIGC", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+        EMBEDDINGS(1, "文本嵌入", "EMBEDDINGS", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+        AUDIO(2, "语言", "AUDIO", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
         NLU(3, "nlu", "NLU", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
-        VISION(4, "vision", "VISION", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+        VISION(4, "图片理解", "VISION", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+        IMAGE(5, "图片生成", "IMAGE", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
   ;
   final int keyId;
   final String keyName;

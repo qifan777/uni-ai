@@ -5,6 +5,7 @@ import com.alibaba.dashscope.aigc.multimodalconversation.MultiModalConversationR
 import com.alibaba.dashscope.common.MultiModalMessage;
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
 import io.reactivex.Flowable;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
@@ -13,6 +14,7 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
@@ -20,12 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 public class DashScopeAiVLChatModel implements ChatModel {
     private final DashScopeAiApi dashScopeAiApi;
-
-    public DashScopeAiVLChatModel(DashScopeAiApi dashScopeAiApi) {
-        this.dashScopeAiApi = dashScopeAiApi;
-    }
+    private final DashScopeAiChatOptions defaultOptions;
 
     @Override
     public ChatResponse call(Prompt prompt) {
@@ -66,22 +66,18 @@ public class DashScopeAiVLChatModel implements ChatModel {
                     return build;
                 })
                 .toList();
-        var builder = MultiModalConversationParam.builder()
-                .messages(modalMessages);
-
-        if (prompt.getOptions() != null) {
-            DashScopeAiChatOptions options = (DashScopeAiChatOptions) prompt.getOptions();
-            if (StringUtils.hasText(options.getModel())) {
-                builder.model(options.getModel());
-            }
-            if (options.getTopK() != null) {
-                builder.topK(options.getTopK());
-            }
-            if (options.getMaxTokens() != null) {
-                builder.maxLength(options.getMaxTokens());
-            }
+        DashScopeAiChatOptions options = new DashScopeAiChatOptions();
+        if (defaultOptions != null) {
+            options = ModelOptionsUtils.merge(defaultOptions, options, DashScopeAiChatOptions.class);
         }
-        return builder.build();
+        if (prompt.getOptions() != null) {
+            options = ModelOptionsUtils.merge(prompt.getOptions(), defaultOptions, DashScopeAiChatOptions.class);
+        }
+        return MultiModalConversationParam.builder()
+                .messages(modalMessages).model(options.getModel())
+                .topK(options.getTopK())
+                .maxLength(options.getMaxTokens())
+                .build();
     }
 
     public ChatResponse toResponse(MultiModalConversationResult result) {

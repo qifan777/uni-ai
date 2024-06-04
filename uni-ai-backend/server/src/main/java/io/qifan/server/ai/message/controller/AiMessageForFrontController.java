@@ -7,14 +7,10 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.message.entity.AiMessage;
-import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
-import io.qifan.server.ai.message.entity.dto.AiMessageSpec;
-import io.qifan.server.ai.message.entity.dto.AiMessageUpdateInput;
-import io.qifan.server.ai.message.entity.model.ChatParams;
+import io.qifan.server.ai.message.entity.dto.*;
 import io.qifan.server.ai.message.repository.AiMessageRepository;
-import io.qifan.server.ai.message.service.AiMessageService;
-import io.qifan.server.ai.model.repository.AiModelRepository;
-import io.qifan.server.ai.uni.embedding.UniAiEmbeddingService;
+import io.qifan.server.ai.message.service.chat.AiMessageChatService;
+import io.qifan.server.ai.message.service.image.AiMessageImageService;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,6 +18,7 @@ import org.babyfish.jimmer.client.ApiIgnore;
 import org.babyfish.jimmer.client.FetchBy;
 import org.babyfish.jimmer.client.meta.DefaultFetcherOwner;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.image.ImageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
@@ -31,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("front/ai-message")
@@ -42,7 +38,8 @@ import java.util.Map;
 @SaCheckDisable
 public class AiMessageForFrontController {
     private final AiMessageRepository aiMessageRepository;
-    private final AiMessageService aiMessageService;
+    private final AiMessageChatService aiMessageChatService;
+    private final AiMessageImageService aiMessageImageService;
     private final ObjectMapper jacksonObjectMapper;
 
     @GetMapping("{id}")
@@ -83,10 +80,15 @@ public class AiMessageForFrontController {
 
     @PostMapping(value = "chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ApiIgnore
-    public Flux<ServerSentEvent<String>> chat(@RequestBody AiMessageCreateInput messageInput, @ModelAttribute ChatParams params) {
-        return aiMessageService
-                .chat(messageInput, params)
+    public Flux<ServerSentEvent<String>> chat(@RequestBody ChatMessageRequest request) {
+        return aiMessageChatService
+                .chat(request)
                 .map(this::apply);
+    }
+
+    @PostMapping(value = "generate")
+    public ImageResponse generate(@RequestBody ChatMessageRequest request) {
+        return aiMessageImageService.generate(request);
     }
 
 

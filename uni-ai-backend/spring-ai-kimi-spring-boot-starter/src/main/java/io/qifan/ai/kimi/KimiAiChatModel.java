@@ -1,6 +1,7 @@
 package io.qifan.ai.kimi;
 
 import io.qifan.ai.kimi.api.KimiAiApi;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
@@ -10,26 +11,18 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.retry.RetryUtils;
+import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.retry.support.RetryTemplate;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 
 @Slf4j
+@AllArgsConstructor
 public class KimiAiChatModel implements ChatModel {
     private final KimiAiApi kimiAiApi;
+    private final KimiAiChatOptions defaultOptions;
     private final RetryTemplate retryTemplate;
-
-    public KimiAiChatModel(KimiAiApi kimiAiApi, RetryTemplate retryTemplate) {
-        this.kimiAiApi = kimiAiApi;
-        this.retryTemplate = retryTemplate;
-    }
-
-    public KimiAiChatModel(KimiAiApi kimiAiApi) {
-        this(kimiAiApi, RetryUtils.DEFAULT_RETRY_TEMPLATE);
-    }
-
 
     @Override
     public ChatResponse call(Prompt prompt) {
@@ -114,9 +107,15 @@ public class KimiAiChatModel implements ChatModel {
     }
 
     KimiAiApi.ChatRequest toRequest(Prompt prompt, boolean stream) {
-        KimiAiChatOptions options = (KimiAiChatOptions) prompt.getOptions();
         List<KimiAiApi.ChatMessage> messages = prompt.getInstructions().stream().map(message -> new KimiAiApi.ChatMessage().setRole(message.getMessageType().getValue())
                 .setContent(message.getContent())).toList();
+        KimiAiChatOptions options = new KimiAiChatOptions();
+        if (defaultOptions != null) {
+            options = ModelOptionsUtils.merge(options, defaultOptions, KimiAiChatOptions.class);
+        }
+        if (prompt.getOptions() != null) {
+            options = ModelOptionsUtils.merge(options, prompt.getOptions(), KimiAiChatOptions.class);
+        }
         return new KimiAiApi.ChatRequest()
                 .setModel(options.getModel())
                 .setStream(stream)

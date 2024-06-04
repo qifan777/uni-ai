@@ -51,7 +51,7 @@ const sendMessage = () => {
       size="small"
       label-position="left"
     >
-      <el-form-item label="知识库">
+      <el-form-item label="知识库" v-if="activeTag == 'AIGC'">
         <el-switch v-model="message.options.knowledge"></el-switch>
       </el-form-item>
       <el-form-item v-if="message.options.knowledge" prop="collectionId">

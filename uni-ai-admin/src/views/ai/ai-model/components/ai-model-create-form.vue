@@ -13,6 +13,7 @@ import type { AiFactoryDto, AiTagDto } from '@/apis/__generated/model/dto'
 import type { AiModelTag } from '@/apis/__generated/model/enums'
 import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
 import EmbeddingOptions from '@/views/ai/ai-model/components/embedding-options/embedding-options.vue'
+import ImageOptions from '@/views/ai/ai-model/components/image-options/image-options.vue'
 
 const aiModelStore = useAiModelStore()
 const { closeDialog, reloadTableData } = aiModelStore
@@ -104,6 +105,11 @@ const aiFactoryQueryOptions = async (_keyword: string, id: string) => {
         v-model="createForm.options"
         v-if="hasTag('EMBEDDINGS') && factory"
       ></embedding-options>
+      <image-options
+        :factory="factory.name"
+        v-model="createForm.options"
+        v-if="hasTag('IMAGE') && factory"
+      ></image-options>
     </el-form>
     <footer-button @close="closeDialog" @confirm="handleConfirm"></footer-button>
   </div>

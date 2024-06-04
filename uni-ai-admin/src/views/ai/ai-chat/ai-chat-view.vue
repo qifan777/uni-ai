@@ -16,6 +16,9 @@ import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store
 import type { AiModelTag } from '@/apis/__generated/model/enums'
 import _ from 'lodash'
 import { useTagStore } from '@/layout/store/tag-store'
+import type { ChatMessageRequest } from '@/apis/__generated/model/static'
+import ImageOptions from '@/views/ai/ai-model/components/image-options/image-options.vue'
+import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
 
 type ChatResponse = {
   metadata: {
@@ -48,7 +51,13 @@ const activeTag = computed<AiModelTag>(() => {
   if (!model) {
     return 'AIGC'
   }
-  return model.tagsView.filter((tag) => tag.name == 'VISION').length > 0 ? 'VISION' : 'AIGC'
+  if (model.tagsView.filter((tag) => tag.name == 'VISION').length > 0) {
+    return 'VISION'
+  }
+  if (model.tagsView.filter((tag) => tag.name == 'IMAGE').length > 0) {
+    return 'IMAGE'
+  }
+  return 'AIGC'
 })
 provide('activeTag', activeTag)
 
@@ -80,7 +89,7 @@ const responseMessage = ref<AiMessage>({
   // 因为回复的消息没有id，所以统一将创建时间+index当作key
   createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
 })
-const handleSendMessage = (message: MessageWithOptions) => {
+const handleChatMessage = (message: MessageWithOptions) => {
   if (!activeSession.value) return
   // 用户的提问
   const chatMessage = {
@@ -100,25 +109,19 @@ const handleSendMessage = (message: MessageWithOptions) => {
     // 因为回复的消息没有id，所以统一将创建时间+index当作key
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
   }
-  const queries = Object.keys(message.options || {})
-    .map((key) => {
-      return key + '=' + _.get(message.options, [key])
-    })
-    .join('&')
-  const evtSource = new SSE(
-    import.meta.env.VITE_API_PREFIX +
-      `/front/ai-message/chat?tag=` +
-      activeTag.value +
-      '&' +
-      queries,
-    {
-      withCredentials: true,
-      start: false,
-      headers: { 'Content-Type': 'application/json' },
-      payload: JSON.stringify(chatMessage),
-      method: 'POST'
-    }
-  )
+  const body: ChatMessageRequest = {
+    message: chatMessage,
+    chatParams: { tag: activeTag.value, ...message.options },
+    chatOptions: activeSession.value.aiModel.options || {},
+    imageOptions: {}
+  }
+  const evtSource = new SSE(import.meta.env.VITE_API_PREFIX + '/front/ai-message/chat', {
+    withCredentials: true,
+    start: false,
+    headers: { 'Content-Type': 'application/json' },
+    payload: JSON.stringify(body),
+    method: 'POST'
+  })
   evtSource.addEventListener('chat', async (event: any) => {
     console.log('status', event)
     const response = JSON.parse(event.data) as ChatResponse
@@ -139,6 +142,54 @@ const handleSendMessage = (message: MessageWithOptions) => {
   evtSource.onerror = (error: SSEvent) => {
     console.log(error)
   }
+
+  // 将两条消息显示在页面中
+  activeSession.value.messages.push(...[chatMessage, responseMessage.value])
+  nextTick(() => {
+    messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
+  })
+}
+const handleSendMessage = (message: MessageWithOptions) => {
+  if (activeTag.value == 'IMAGE') {
+    handleImageMessage(message)
+  } else {
+    handleChatMessage(message)
+  }
+}
+const handleImageMessage = (message: MessageWithOptions) => {
+  if (!activeSession.value) return
+  // 用户的提问
+  const chatMessage = {
+    id: '',
+    aiSessionId: activeSession.value.id,
+    content: message.content,
+    type: 'USER',
+    createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+  } satisfies AiMessage
+
+  // 新建一个ChatGPT回复对象，不能重复使用同一个对象。
+  responseMessage.value = {
+    id: '',
+    type: 'ASSISTANT',
+    content: [{ urls: [] }],
+    aiSessionId: activeSession.value.id,
+    // 因为回复的消息没有id，所以统一将创建时间+index当作key
+    createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
+  }
+  const body: ChatMessageRequest = {
+    message: chatMessage,
+    chatParams: { tag: activeTag.value, ...message.options },
+    chatOptions: {},
+    imageOptions: activeSession.value.aiModel.options || {}
+  }
+  api.aiMessageForFrontController.generate({ body }).then(async (res) => {
+    responseMessage.value.content[0].urls = res.results.map((item) => item.output.url)
+    await api.aiMessageForFrontController.create({ body: chatMessage })
+    await api.aiMessageForFrontController.create({ body: responseMessage.value })
+    nextTick(() => {
+      messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
+    })
+  })
 
   // 将两条消息显示在页面中
   activeSession.value.messages.push(...[chatMessage, responseMessage.value])
@@ -225,11 +276,26 @@ const handleDelete = () => {
               v-for="(message, index) in activeSession.messages"
               :key="message.createdTime + index"
               :message="message"
+              :avatar="homeStore.userInfo?.avatar"
             ></message-row>
           </transition-group>
         </div>
         <!-- 监听发送事件 -->
         <message-input @send="handleSendMessage" v-if="activeSession"></message-input>
+      </div>
+      <div class="option-panel" v-if="activeSession && activeSession.aiModel">
+        <el-form label-position="top">
+          <chat-options
+            v-if="activeTag == 'AIGC' || activeTag == 'VISION'"
+            :factory="activeSession.aiModel.aiFactory.name"
+            v-model="activeSession.aiModel.options"
+          ></chat-options>
+          <image-options
+            v-if="activeTag == 'IMAGE'"
+            :factory="activeSession.aiModel.aiFactory.name"
+            v-model="activeSession.aiModel.options"
+          ></image-options>
+        </el-form>
       </div>
     </div>
   </div>
@@ -268,14 +334,10 @@ const handleDelete = () => {
 
   .chat-panel {
     display: flex;
-    //border-radius: 20px;
     background-color: white;
-    //box-shadow: 0 0 20px 20px rgba(black, 0.05);
     width: 100%;
     .session-panel {
       width: 250px;
-      //border-top-left-radius: 20px;
-      //border-bottom-left-radius: 20px;
       padding: 20px;
       position: relative;
       border-right: 1px solid rgba(black, 0.07);
@@ -390,33 +452,9 @@ const handleDelete = () => {
     }
   }
 
-  .note-panel {
+  .option-panel {
     padding: 20px;
-
-    .note {
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid rgba(black, 0.05);
-      border-radius: 5px;
-      box-shadow: 0 0 5px 10px rgba(black, 0.01);
-
-      .image {
-        width: 50px;
-        height: 50px;
-      }
-
-      .category {
-        margin-top: 10px;
-        font-size: 13px;
-        color: rgb(black, 0.7);
-      }
-
-      .time {
-        margin-top: 10px;
-        font-size: 12px;
-        color: rgba(black, 0.5);
-      }
-    }
+    border-left: 1px solid rgba(black, 0.07);
   }
 }
 </style>

@@ -1,8 +1,9 @@
-package io.qifan.server.ai.message.service;
+package io.qifan.server.ai.message.service.chat;
 
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
+import io.qifan.server.ai.message.entity.dto.ChatMessageRequest;
 import io.qifan.server.ai.message.entity.model.ChatMessage;
 import io.qifan.server.ai.message.entity.model.ChatParams;
 import io.qifan.server.ai.model.entity.AiModel;
@@ -37,13 +38,13 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @Transactional
-public class AiMessageService {
+public class AiMessageChatService {
     private final AiSessionRepository aiSessionRepository;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final UniAiVectorService uniAiVectorService;
 
-    public Flux<ChatResponse> chat(AiMessageCreateInput messageInput, ChatParams params) {
-        AiSession aiSession = aiSessionRepository.findById(messageInput.getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
+    public Flux<ChatResponse> chat(ChatMessageRequest request) {
+        AiSession aiSession = aiSessionRepository.findById(request.getMessage().getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "会话不存在"));
         AiModel model = aiSession.aiModel();
         if (model == null) {
@@ -52,7 +53,7 @@ public class AiMessageService {
         if (model.tagsView() == null) {
             throw new BusinessException("请配置模型标签");
         }
-        AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(params.getTag()))
+        AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(request.getChatParams().getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
         UniAiChatService aiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.service()));
@@ -60,9 +61,14 @@ public class AiMessageService {
             throw new BusinessException("后端未配置模型服务");
         }
         List<Message> messages = historyMessageList(aiSession);
-        messages.add(toUserMessage(messageInput, params));
-        Prompt prompt = new Prompt(messages, aiChatService.getChatOptions(model.options()));
-        return aiChatService.getChatModel(model.aiFactory().options()).stream(prompt);
+        messages.add(toUserMessage(request.getMessage(), request.getChatParams()));
+        Prompt prompt = new Prompt(messages);
+        Map<String, Object> options = model.aiFactory().options();
+        options.putAll(model.options());
+        if (request.getChatOptions()!=null){
+            options.putAll(request.getChatOptions());
+        }
+        return aiChatService.getChatModel(options).stream(prompt);
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {

@@ -1,6 +1,7 @@
 package io.qifan.ai.spark;
 
 import io.qifan.ai.spark.api.SparkAiApi;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
@@ -15,12 +16,11 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
 public class SparkAiChatModel implements ChatModel {
     private final SparkAiApi sparkAiApi;
+    private final SparkAiChatOptions defaultOptions;
 
-    public SparkAiChatModel(SparkAiApi sparkAiApi) {
-        this.sparkAiApi = sparkAiApi;
-    }
 
     @Override
     public ChatResponse call(Prompt prompt) {
@@ -29,7 +29,7 @@ public class SparkAiChatModel implements ChatModel {
 
     @Override
     public ChatOptions getDefaultOptions() {
-        return null;
+        return defaultOptions;
     }
 
     @Override

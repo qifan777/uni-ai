@@ -3,6 +3,7 @@ package io.qifan.ai.qianfan;
 import com.baidubce.qianfan.model.chat.ChatRequest;
 import com.baidubce.qianfan.model.chat.Message;
 import io.qifan.ai.qianfan.api.QianFanApi;
+import lombok.AllArgsConstructor;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
@@ -11,18 +12,16 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.util.StringUtils;
+import org.springframework.ai.model.ModelOptionsUtils;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class QianFanAiChatModel implements ChatModel {
     private final QianFanApi qianFanApi;
+    private final QianFanAiChatOptions defaultOptions;
 
-
-    public QianFanAiChatModel(QianFanApi qianFanApi) {
-        this.qianFanApi = qianFanApi;
-    }
 
     @Override
     public ChatResponse call(Prompt prompt) {
@@ -71,18 +70,18 @@ public class QianFanAiChatModel implements ChatModel {
                         .setRole(message.getMessageType().getValue())
                 )
                 .toList();
-        QianFanAiChatOptions options = (QianFanAiChatOptions) prompt.getOptions();
-        ChatRequest chatRequest = new ChatRequest();
-        chatRequest.setMessages(messages);
-        if (StringUtils.hasText(options.getModel())) {
-            chatRequest.setModel(options.getModel());
+
+        QianFanAiChatOptions options = new QianFanAiChatOptions();
+        if (defaultOptions != null) {
+            options = ModelOptionsUtils.merge(options, defaultOptions, QianFanAiChatOptions.class);
         }
-        if (options.getTemperature() != null) {
-            chatRequest.setTemperature(options.getTemperature().doubleValue());
+        if (prompt.getOptions() != null) {
+            options = ModelOptionsUtils.merge(options, prompt.getOptions(), QianFanAiChatOptions.class);
         }
-        if (options.getTopP() != null) {
-            chatRequest.setTopP(options.getTopP().doubleValue());
-        }
-        return chatRequest;
+        return new ChatRequest().setMessages(messages)
+                .setTemperature(options.getTemperature().doubleValue())
+                .setModel(options.getModel())
+                .setTopP(options.getTopP().doubleValue())
+                .setMaxOutputTokens(options.getMaxTokens());
     }
 }

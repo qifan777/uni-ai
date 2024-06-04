@@ -10,4 +10,10 @@ public class DashScopeAiProperties {
     public static final String CONFIG_PREFIX = "spring.ai.dash-scope";
     private String apiKey;
     private Boolean enabled;
+    @NestedConfigurationProperty
+    private DashScopeAiChatOptions chat = new DashScopeAiChatOptions();
+    @NestedConfigurationProperty
+    private DashScopeAiEmbeddingOptions embedding = new DashScopeAiEmbeddingOptions();
+    @NestedConfigurationProperty
+    private DashScopeAiImageOptions image = new DashScopeAiImageOptions();
 }

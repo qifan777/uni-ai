@@ -6,7 +6,7 @@ import type { AiMessage } from '@/views/ai/ai-chat/store/ai-chat-store'
 // message：接受消息对象，展示消息内容和头像，并且根据角色调整消息位置。
 // avatar：用户头像，如果角色是 Assistant则使用 logo。
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
     message: AiMessage
     avatar?: string
@@ -29,6 +29,13 @@ const props = withDefaults(
       <div class="message">
         <!-- 预览模式，用来展示markdown格式的消息 -->
         <markdown-message :message="message" v-if="message.content[0].text"></markdown-message>
+        <el-image
+          style="width: 600px; height: 600px"
+          :fit="'cover'"
+          :preview-src-list="message.content[0].urls"
+          :src="message.content[0].urls[0]"
+          v-else-if="message.content[0].urls && message.content[0].urls.length"
+        ></el-image>
         <!-- 如果消息的内容为空则显示加载动画 -->
         <TextLoading v-else></TextLoading>
       </div>
@@ -62,7 +69,7 @@ const props = withDefaults(
   .row {
     .avatar-wrapper {
       .avatar {
-        box-shadow: 20px 20px 20px 3px rgba(0, 0, 0, 0.03);
+        box-shadow: 20px 20px 20px 3px rgba(0, 0, 0, 0.01);
         margin-bottom: 20px;
       }
     }
@@ -76,8 +83,6 @@ const props = withDefaults(
       border-radius: 7px;
       // 给消息框加一些描边，看起来更加实一些，要不然太扁了轻飘飘的。
       border: 1px solid rgba(black, 0.1);
-      // 增加一些阴影看起来更加立体
-      box-shadow: 20px 20px 20px 1px rgba(0, 0, 0, 0.01);
     }
   }
 }
