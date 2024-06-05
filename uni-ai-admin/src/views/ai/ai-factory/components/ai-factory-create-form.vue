@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiFactoryStore } from '../store/ai-factory-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiFactoryStore} from '../store/ai-factory-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import type {FormInstance, FormRules} from 'element-plus'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 import Options from '@/views/ai/ai-factory/components/options/options.vue'
 
 const aiFactoryStore = useAiFactoryStore()
@@ -33,7 +33,7 @@ watch(
 const handleConfirm = () => {
   createFormRef.value?.validate(
     assertFormValidate(() =>
-      api.aiFactoryForAdminController.create({ body: createForm.value }).then(async (res) => {
+      api.aiFactoryForFrontController.create({ body: createForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           closeDialog()
           reloadTableData()

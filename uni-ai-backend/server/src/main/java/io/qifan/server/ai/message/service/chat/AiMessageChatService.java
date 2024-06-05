@@ -2,7 +2,8 @@ package io.qifan.server.ai.message.service.chat;
 
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
+import io.qifan.server.ai.factory.entity.AiFactory;
+import io.qifan.server.ai.factory.repository.AiFactoryRepository;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
 import io.qifan.server.ai.message.entity.dto.ChatMessageRequest;
 import io.qifan.server.ai.message.entity.model.ChatMessage;
@@ -49,17 +50,21 @@ public class AiMessageChatService {
     private final UniAiVectorService uniAiVectorService;
     private final AiModelRepository aiModelRepository;
     private final AiRoleRepository aiRoleRepository;
+    private final AiFactoryRepository aiFactoryRepository;
 
     public Flux<ChatResponse> chat(ChatMessageRequest request) {
         AiSession aiSession = aiSessionRepository.findById(request.getMessage().getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "会话不存在"));
         AiModel aiModel = aiModelRepository.findById(request.getChatParams().getAiModelId(), AiModelFetcher.$.allScalarFields()
-                        .aiFactory(AiFactoryFetcher.$.allScalarFields())
                         .tagsView(AiTagFetcher.$.allScalarFields()))
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "模型不存在"));
+        if (aiModel == null) {
+            throw new BusinessException("清选择模式");
+        }
         if (aiModel.tagsView() == null) {
             throw new BusinessException("请配置模型标签");
         }
+        AiFactory aiFactory = aiFactoryRepository.findUserFactory(aiModel.factory());
         AiTag aiTag = aiModel.tagsView().stream().filter(tag -> tag.name().equals(request.getChatParams().getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
@@ -70,7 +75,7 @@ public class AiMessageChatService {
         List<Message> messages = historyMessageList(aiSession, request.getChatParams().getAiRoleId());
         messages.add(toUserMessage(request.getMessage(), request.getChatParams()));
         Prompt prompt = new Prompt(messages);
-        Map<String, Object> options = aiModel.aiFactory().options();
+        Map<String, Object> options = aiFactory.options();
         options.putAll(aiModel.options());
         if (request.getChatParams().getOptions() != null) {
             options.putAll(request.getChatParams().getOptions());

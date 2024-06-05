@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 enum Provider {
     ALI_YUN,
     LOCAL,
-    TENANT;
+    TENCENT;
 }
 
 @Data

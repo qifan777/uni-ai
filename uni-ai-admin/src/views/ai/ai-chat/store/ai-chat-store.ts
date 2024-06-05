@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { AiMessageDto, AiSessionDto } from '@/apis/__generated/model/dto'
-import { api } from '@/utils/api-instance'
-import type { AiSessionCreateInput } from '@/apis/__generated/model/static'
+import {defineStore} from 'pinia'
+import {ref} from 'vue'
+import type {AiMessageDto, AiSessionDto} from '@/apis/__generated/model/dto'
+import {api} from '@/utils/api-instance'
+import type {AiSessionCreateInput} from '@/apis/__generated/model/static'
 
 export type AiSession = Pick<
   AiSessionDto['AiSessionRepository/COMPLEX_FETCHER_FOR_FRONT'],

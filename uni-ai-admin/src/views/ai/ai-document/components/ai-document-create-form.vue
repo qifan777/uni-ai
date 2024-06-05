@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiDocumentStore } from '../store/ai-document-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiDocumentStore} from '../store/ai-document-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type {FormInstance, FormRules} from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
-import type { Result } from '@/typings'
+import {aiCollectionQueryOptions} from '@/views/ai/ai-collection/store/ai-collection-store'
+import type {Result} from '@/typings'
 
 const API_PREFIX = import.meta.env.VITE_API_PREFIX
 const loading = ref(false)
@@ -38,7 +38,7 @@ const handleConfirm = () => {
   createFormRef.value?.validate(
     assertFormValidate(() => {
       loading.value = true
-      api.aiDocumentForAdminController.create({ body: createForm.value }).then(async (res) => {
+      api.aiDocumentForFrontController.create({ body: createForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           loading.value = false
           closeDialog()

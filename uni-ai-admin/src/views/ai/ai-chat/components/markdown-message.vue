@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { AiMessage } from '@/views/ai/ai-chat/store/ai-chat-store'
+import {computed} from 'vue'
+import type {AiMessage} from '@/views/ai/ai-chat/store/ai-chat-store'
 
 const props = defineProps<{ message: AiMessage }>()
 const images = computed(() => {

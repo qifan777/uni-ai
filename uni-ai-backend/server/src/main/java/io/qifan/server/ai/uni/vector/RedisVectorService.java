@@ -4,7 +4,8 @@ import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.collection.entity.AiCollection;
 import io.qifan.server.ai.collection.entity.AiCollectionFetcher;
 import io.qifan.server.ai.collection.repository.AiCollectionRepository;
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
+import io.qifan.server.ai.factory.entity.AiFactory;
+import io.qifan.server.ai.factory.repository.AiFactoryRepository;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
@@ -30,6 +31,7 @@ public class RedisVectorService implements UniAiVectorService {
     private final Map<String, UniAiEmbeddingService> embeddingServiceMap;
     private final AiCollectionRepository aiCollectionRepository;
     private final RedisConnectionDetails redisConnectionDetails;
+    private final AiFactoryRepository aiFactoryRepository;
 
 
     @SneakyThrows
@@ -54,17 +56,17 @@ public class RedisVectorService implements UniAiVectorService {
         AiCollection aiCollection = aiCollectionRepository.findById(collectionId, AiCollectionFetcher.$.allScalarFields()
                         .embeddingModel(AiModelFetcher.$
                                 .allScalarFields()
-                                .aiFactory(AiFactoryFetcher.$.allScalarFields())
                                 .tagsView(AiTagFetcher.$.allScalarFields())))
                 .orElseThrow(() -> new BusinessException("知识库不存在"));
         AiTag aiTag = aiCollection.embeddingModel().tagsView().stream().filter(tag -> tag.name().equals(DictConstants.AiModelTag.EMBEDDINGS))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型未配置Embeddings标签"));
+        AiFactory aiFactory = aiFactoryRepository.findUserFactory(aiCollection.embeddingModel().factory());
         UniAiEmbeddingService uniAiEmbeddingService = embeddingServiceMap.get(StringUtils.uncapitalize(aiTag.service()));
         if (uniAiEmbeddingService == null) {
             throw new BusinessException("暂不支持该模型");
         }
-        Map<String, Object> options = aiCollection.embeddingModel().aiFactory().options();
+        Map<String, Object> options = aiFactory.options();
         options.putAll(aiCollection.embeddingModel().options());
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
         String username = StringUtils.hasText(redisConnectionDetails.getUsername()) ? redisConnectionDetails.getUsername() : "default";

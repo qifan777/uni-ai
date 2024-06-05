@@ -17,9 +17,12 @@ wxpay-sdk = "4.6.0"
 jaxb-runtime = "2.3.3"
 activation = "1.1.1"
 jaxb-api = "2.3.1"
-aliyun-oss = "3.15.1"
+aliyun-oss = "3.17.4"
+tencent-oss = "5.6.210"
 aliyun-ocr = "2.0.7"
 easyexcel = "3.3.4"
+dash-scope = "2.14.4"
+qian-fan="0.0.5"
 [libraries]
 spring-ai = { group = "org.springframework.ai", name = "spring-ai-bom", version.ref = "springAi" }
 mybatis-plus = { group = "com.baomidou", name = "mybatis-plus-spring-boot3-starter", version.ref = "mybatisPlus" }
@@ -39,7 +42,10 @@ jaxb-runtime = { group = "org.glassfish.jaxb", name = "jaxb-runtime", version.re
 activation = { group = "javax.activation", name = "activation", version.ref = "activation" }
 jax-api = { group = "javax.xml.bind", name = "jaxb-api", version.ref = "jaxb-api" }
 aliyun-oss = { group = "com.aliyun.oss", name = "aliyun-sdk-oss", version.ref = "aliyun-oss" }
-aliyun-ocr = { group = "com.aliyun", name = "ocr_api20210707", version.ref = "aliyun-ocr" }
+aliyun-ocr = { group = "com.aliyun", name = "ocr_api20210707ocr_api20210707", version.ref = "aliyun-ocr" }
+tencent-oss = { group = "com.qcloud", name = "cos_api", version.ref = "tencent-oss" }
+dash-scope = { group = "com.alibaba", name = "dashscope-sdk-java", version.ref = "dash-scope" }
+qian-fan = { group = "com.baidubce", name = "qianfan", version.ref = "qian-fan" }
 easyexcel = { group = "com.alibaba", name = "easyexcel", version.ref = "easyexcel" }
 [plugins]
 springBoot = { id = 'org.springframework.boot', version.ref = "springBoot" }

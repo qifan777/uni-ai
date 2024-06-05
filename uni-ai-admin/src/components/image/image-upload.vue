@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { ElIcon, ElMessage, ElUpload, type UploadProps } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { Result } from '@/typings'
@@ -12,7 +12,9 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const loading = ref(false)
     const handleImageSuccess: UploadProps['onSuccess'] = (response: Result<{ url: string }>) => {
+      loading.value = false
       emit('update:modelValue', response.result.url)
     }
     const types = ['image/png', 'image/jpeg', 'image/webp']
@@ -25,6 +27,7 @@ export default defineComponent({
         ElMessage.error('Image picture size can not exceed 2MB!')
         return false
       }
+      loading.value = true
       return true
     }
     return () => (
@@ -34,6 +37,7 @@ export default defineComponent({
         action={API_PREFIX + '/oss/upload'}
         showFileList={false}
         class="image-uploader"
+        v-loading={loading.value}
       >
         {props.modelValue ? (
           <img

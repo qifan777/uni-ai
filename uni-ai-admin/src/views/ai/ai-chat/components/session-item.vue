@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { CircleClose } from '@element-plus/icons-vue'
-import { api } from '@/utils/api-instance'
-import type { AiSession } from '@/views/ai/ai-chat/store/ai-chat-store'
+import {CircleClose} from '@element-plus/icons-vue'
+import {api} from '@/utils/api-instance'
+import type {AiSession} from '@/views/ai/ai-chat/store/ai-chat-store'
 
 // entity：用于展示的会话信息
 const prop = defineProps<{ active: boolean; session: AiSession }>()

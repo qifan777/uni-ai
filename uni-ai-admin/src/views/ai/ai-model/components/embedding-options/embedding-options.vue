@@ -1,6 +1,6 @@
 <script setup lang="tsx">
-import type { AiFactoryType } from '@/apis/__generated/model/enums'
-import { computed } from 'vue'
+import type {AiFactoryType} from '@/apis/__generated/model/enums'
+import {computed} from 'vue'
 import ZhiPuEmbeddingOptions from './zhi-pu-embedding-options.vue'
 
 const props = defineProps<{ factory: AiFactoryType }>()

@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
-import { ElMessageBox } from 'element-plus'
-import type { Scope } from '@/typings'
-import { useAiTagStore } from '../store/ai-tag-store'
-import type { AiTagDto } from '@/apis/__generated/model/dto'
-import { Delete, Edit, Plus } from '@element-plus/icons-vue'
+import {onMounted} from 'vue'
+import {storeToRefs} from 'pinia'
+import {assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
+import {ElMessageBox} from 'element-plus'
+import type {Scope} from '@/typings'
+import {useAiTagStore} from '../store/ai-tag-store'
+import type {AiTagDto} from '@/apis/__generated/model/dto'
+import {Delete, Edit, Plus} from '@element-plus/icons-vue'
 import DictColumn from '@/components/dict/dict-column.vue'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 
 type AiTagScope = Scope<AiTagDto['AiTagRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiTagStore = useAiTagStore()
@@ -93,7 +93,7 @@ const handleDelete = (ids: string[]) => {
         width="120"
       >
         <template v-slot:default="{ row }: AiTagScope">
-          {{ row.aiFactory.name }}
+          <dict-column :dict-id="DictConstants.AI_FACTORY_TYPE" :value="row.factory"></dict-column>
         </template>
       </el-table-column>
       <el-table-column

@@ -35,8 +35,8 @@ const rules = reactive<FormRules<typeof registerForm>>({
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { max: 16, min: 6, message: '密码长度介于6，16' }
-  ],
-  code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+  ]
+  // code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
 })
 const handleRegister = async () => {
   if (!ruleFormRef.value) return
@@ -99,19 +99,19 @@ const handleSendSMS = () => {
                   <el-form-item label="密码" prop="password">
                     <el-input v-model="registerForm.password" type="password"></el-input>
                   </el-form-item>
-                  <el-form-item label="验证码" prop="code">
-                    <div class="sms">
-                      <el-input v-model="registerForm.code"></el-input>
-                      <el-button
-                        class="send-sms"
-                        type="success"
-                        @click="handleSendSMS"
-                        :disabled="countDown > 0"
-                      >
-                        {{ countDown === 0 ? '发送验证码' : countDown }}
-                      </el-button>
-                    </div>
-                  </el-form-item>
+                  <!--                  <el-form-item label="验证码" prop="code">-->
+                  <!--                    <div class="sms">-->
+                  <!--                      <el-input v-model="registerForm.code"></el-input>-->
+                  <!--                      <el-button-->
+                  <!--                        class="send-sms"-->
+                  <!--                        type="success"-->
+                  <!--                        @click="handleSendSMS"-->
+                  <!--                        :disabled="countDown > 0"-->
+                  <!--                      >-->
+                  <!--                        {{ countDown === 0 ? '发送验证码' : countDown }}-->
+                  <!--                      </el-button>-->
+                  <!--                    </div>-->
+                  <!--                  </el-form-item>-->
                 </el-form>
                 <div class="button-wrapper">
                   <el-button class="register" type="primary" @click="handleRegister">

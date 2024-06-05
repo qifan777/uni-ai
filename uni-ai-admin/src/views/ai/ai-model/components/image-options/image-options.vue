@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { AiFactoryType } from '@/apis/__generated/model/enums'
-import { computed } from 'vue'
+import type {AiFactoryType} from '@/apis/__generated/model/enums'
+import {computed} from 'vue'
 import DashScopeImageOptions from './dash-scope-image-options.vue'
 import OpenAiImageOptions from './open-ai-image-options.vue'
 import ZhiPuAiImageOptions from './zhi-pu-ai-image-options.vue'

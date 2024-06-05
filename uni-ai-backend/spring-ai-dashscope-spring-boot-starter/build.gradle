@@ -3,5 +3,5 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 dependencies {
-    implementation 'com.alibaba:dashscope-sdk-java:2.14.1'
+    implementation(libs.dash.scope)
 }

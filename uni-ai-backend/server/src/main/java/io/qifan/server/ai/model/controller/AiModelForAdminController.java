@@ -1,6 +1,7 @@
 package io.qifan.server.ai.model.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.model.entity.dto.AiModelCreateInput;
@@ -33,11 +34,13 @@ public class AiModelForAdminController {
     private final AiModelRepository aiModelRepository;
     private final AiTagModelRelRepository aiTagModelRelRepository;
 
+    @SaIgnore
     @GetMapping("{id}")
     public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiModel findById(@PathVariable String id) {
         return aiModelRepository.findById(id, AiModelRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
+    @SaIgnore
     @PostMapping("query")
     public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiModel> query(@RequestBody QueryRequest<AiModelSpec> queryRequest) {
         return aiModelRepository.findPage(queryRequest, AiModelRepository.COMPLEX_FETCHER_FOR_ADMIN);

@@ -1,4 +1,4 @@
-package io.qifan.infrastructure.oss.tenant;
+package io.qifan.infrastructure.oss.tencent;
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.ObjectMetadata;
@@ -16,9 +16,9 @@ import java.util.Date;
 
 @Service
 @AllArgsConstructor
-public class TenantOSSService implements OSSService {
+public class TencentOSSService implements OSSService {
     private final COSClient cosClient;
-    private final TenantOSSProperties properties;
+    private final TencentOSSProperties properties;
 
     @SneakyThrows
     @Override

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiSessionStore } from '../store/ai-session-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiSessionStore} from '../store/ai-session-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type {FormInstance, FormRules} from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiRoleQueryOptions } from '@/views/ai/ai-role/store/ai-role-store'
+import {aiRoleQueryOptions} from '@/views/ai/ai-role/store/ai-role-store'
 
 const aiSessionStore = useAiSessionStore()
 const { closeDialog, reloadTableData } = aiSessionStore

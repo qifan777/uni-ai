@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue'
-import { useAiMessageStore } from '../store/ai-message-store'
-import { storeToRefs } from 'pinia'
+import {toRefs} from 'vue'
+import {useAiMessageStore} from '../store/ai-message-store'
+import {storeToRefs} from 'pinia'
 import DictSelect from '@/components/dict/dict-select.vue'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiSessionQueryOptions } from '@/views/ai/ai-session/store/ai-session-store'
+import {aiSessionQueryOptions} from '@/views/ai/ai-session/store/ai-session-store'
 
 const aiMessageStore = useAiMessageStore()
 const { queryData } = storeToRefs(aiMessageStore)

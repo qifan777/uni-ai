@@ -3,5 +3,5 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 dependencies {
-    implementation 'com.baidubce:qianfan:0.0.5'
+    implementation(libs.qian.fan)
 }

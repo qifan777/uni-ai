@@ -2,7 +2,8 @@ package io.qifan.server.ai.message.service.image;
 
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
+import io.qifan.server.ai.factory.entity.AiFactory;
+import io.qifan.server.ai.factory.repository.AiFactoryRepository;
 import io.qifan.server.ai.message.entity.dto.ChatMessageRequest;
 import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
@@ -22,20 +23,20 @@ import java.util.Map;
 @AllArgsConstructor
 public class AiMessageImageService {
     private final AiModelRepository aiModelRepository;
+    private final AiFactoryRepository aiFactoryRepository;
     Map<String, UniAiImageService> uniAiImageServiceMap;
 
     public ImageResponse generate(ChatMessageRequest request) {
         AiModel aiModel = aiModelRepository.findById(request.getChatParams().getAiModelId(), AiModelFetcher.$.allScalarFields()
-                        .aiFactory(AiFactoryFetcher.$.allScalarFields())
                         .tagsView(AiTagFetcher.$.allScalarFields()))
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "模型不存在"));
-
         if (aiModel == null) {
             throw new BusinessException("请配置模型");
         }
         if (aiModel.tagsView() == null) {
             throw new BusinessException("请配置模型标签");
         }
+        AiFactory aiFactory = aiFactoryRepository.findUserFactory(aiModel.factory());
         AiTag aiTag = aiModel.tagsView().stream().filter(tag -> tag.name().equals(request.getChatParams().getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
@@ -43,7 +44,7 @@ public class AiMessageImageService {
         if (aiImageService == null) {
             throw new BusinessException("后端未配置模型服务");
         }
-        Map<String, Object> options = aiModel.aiFactory().options();
+        Map<String, Object> options = aiFactory.options();
         options.putAll(aiModel.options());
         if (request.getChatParams().getOptions() != null) {
             options.putAll(request.getChatParams().getOptions());

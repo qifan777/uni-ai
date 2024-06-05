@@ -1,6 +1,5 @@
 package io.qifan.server.ai.model.repository;
 
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.ai.model.entity.AiModelTable;
@@ -19,8 +18,6 @@ public interface AiModelRepository extends JRepository<AiModel, String> {
     AiModelTable aiModelTable = AiModelTable.$;
     AiModelFetcher COMPLEX_FETCHER_FOR_ADMIN = AiModelFetcher.$.allScalarFields()
             .options()
-            .aiFactoryId()
-            .aiFactory(AiFactoryFetcher.$.name())
             .tagsView(AiTagFetcher.$.name())
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());

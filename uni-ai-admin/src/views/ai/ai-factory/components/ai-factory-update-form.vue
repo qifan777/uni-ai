@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiFactoryStore } from '../store/ai-factory-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiFactoryStore} from '../store/ai-factory-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import type {FormInstance, FormRules} from 'element-plus'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 import Options from '@/views/ai/ai-factory/components/options/options.vue'
 
 const aiFactoryStore = useAiFactoryStore()
@@ -20,7 +20,7 @@ const rules = reactive<FormRules<typeof updateForm>>({
 const init = async () => {
   dialogData.value.title = '编辑'
   updateForm.value = {
-    ...(await api.aiFactoryForAdminController.findById({ id: updateForm.value.id || '' }))
+    ...(await api.aiFactoryForFrontController.findById({ id: updateForm.value.id || '' }))
   }
 }
 watch(
@@ -35,7 +35,7 @@ watch(
 const handleConfirm = () => {
   updateFormRef.value?.validate(
     assertFormValidate(() => {
-      api.aiFactoryForAdminController.update({ body: updateForm.value }).then(async (res) => {
+      api.aiFactoryForFrontController.update({ body: updateForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           closeDialog()
           reloadTableData()
@@ -53,6 +53,7 @@ const handleConfirm = () => {
           :key="updateForm.id"
           :dict-id="DictConstants.AI_FACTORY_TYPE"
           v-model="updateForm.name"
+          disabled
         ></dict-select>
       </el-form-item>
       <el-form-item label="厂家描述" prop="description">

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue'
-import { useAiSessionStore } from '../store/ai-session-store'
-import { storeToRefs } from 'pinia'
+import {toRefs} from 'vue'
+import {useAiSessionStore} from '../store/ai-session-store'
+import {storeToRefs} from 'pinia'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiRoleQueryOptions } from '@/views/ai/ai-role/store/ai-role-store'
+import {aiRoleQueryOptions} from '@/views/ai/ai-role/store/ai-role-store'
 
 const aiSessionStore = useAiSessionStore()
 const { queryData } = storeToRefs(aiSessionStore)

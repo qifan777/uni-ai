@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
-import { ElMessageBox } from 'element-plus'
-import type { Scope } from '@/typings'
-import { useAiFactoryStore } from '../store/ai-factory-store'
-import type { AiFactoryDto } from '@/apis/__generated/model/dto'
-import { Delete, Edit, Plus } from '@element-plus/icons-vue'
+import {onMounted} from 'vue'
+import {storeToRefs} from 'pinia'
+import {assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
+import {ElMessageBox} from 'element-plus'
+import type {Scope} from '@/typings'
+import {useAiFactoryStore} from '../store/ai-factory-store'
+import type {AiFactoryDto} from '@/apis/__generated/model/dto'
+import {Edit} from '@element-plus/icons-vue'
 import DictColumn from '@/components/dict/dict-column.vue'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 
 type AiFactoryScope = Scope<AiFactoryDto['AiFactoryRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiFactoryStore = useAiFactoryStore()
@@ -50,7 +50,7 @@ const handleDelete = (ids: string[]) => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    api.aiFactoryForAdminController.delete({ body: ids }).then((res) => {
+    api.aiFactoryForFrontController.delete({ body: ids }).then((res) => {
       assertSuccess(res).then(() => reloadTableData())
     })
   })
@@ -58,20 +58,6 @@ const handleDelete = (ids: string[]) => {
 </script>
 <template>
   <div>
-    <div class="button-section">
-      <el-button type="success" size="small" @click="handleCreate">
-        <el-icon>
-          <plus />
-        </el-icon>
-        新增
-      </el-button>
-      <el-button type="danger" size="small" @click="handleBatchDelete">
-        <el-icon>
-          <delete />
-        </el-icon>
-        删除
-      </el-button>
-    </div>
     <el-table
       ref="table"
       :data="pageData.content"
@@ -153,17 +139,6 @@ const handleDelete = (ids: string[]) => {
             <el-button class="edit-btn" link size="small" type="primary" @click="handleEdit(row)">
               <el-icon>
                 <edit />
-              </el-icon>
-            </el-button>
-            <el-button
-              class="delete-btn"
-              link
-              size="small"
-              type="primary"
-              @click="handleSingleDelete(row)"
-            >
-              <el-icon>
-                <delete />
               </el-icon>
             </el-button>
           </div>

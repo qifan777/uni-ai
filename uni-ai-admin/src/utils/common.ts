@@ -1,6 +1,6 @@
-import { ElMessage } from 'element-plus'
+import {ElMessage} from 'element-plus'
 import _ from 'lodash'
-import type { ValidateFieldsError } from 'async-validator/dist-types'
+import type {ValidateFieldsError} from 'async-validator/dist-types'
 
 export const assertSuccess = async <T>(result: T) => {
   return await new Promise<T>((resolve, reject) => {

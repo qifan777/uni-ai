@@ -1,15 +1,11 @@
-import { defineStore } from 'pinia'
-import { useTableHelper } from '@/components/base/table/table-helper'
-import { useDialogHelper } from '@/components/base/dialog/dialog-helper'
-import { useQueryHelper } from '@/components/base/query/query-helper'
-import type {
-  AiModelCreateInput,
-  AiModelSpec,
-  AiModelUpdateInput
-} from '@/apis/__generated/model/static'
-import { api } from '@/utils/api-instance'
-import { ref } from 'vue'
-import type { AiModelTag } from '@/apis/__generated/model/enums'
+import {defineStore} from 'pinia'
+import {useTableHelper} from '@/components/base/table/table-helper'
+import {useDialogHelper} from '@/components/base/dialog/dialog-helper'
+import {useQueryHelper} from '@/components/base/query/query-helper'
+import type {AiModelCreateInput, AiModelSpec, AiModelUpdateInput} from '@/apis/__generated/model/static'
+import {api} from '@/utils/api-instance'
+import {ref} from 'vue'
+import type {AiModelTag} from '@/apis/__generated/model/enums'
 
 export const aiModelQueryOptions = async (keyword: string, id: string, tagNames: AiModelTag[]) => {
   return (

@@ -2,7 +2,7 @@
 import TextLoading from './text-loading.vue'
 import logo from '@/assets/logo.jpg'
 import MarkdownMessage from '@/views/ai/ai-chat/components/markdown-message.vue'
-import type { AiMessage } from '@/views/ai/ai-chat/store/ai-chat-store'
+import type {AiMessage} from '@/views/ai/ai-chat/store/ai-chat-store'
 // message：接受消息对象，展示消息内容和头像，并且根据角色调整消息位置。
 // avatar：用户头像，如果角色是 Assistant则使用 logo。
 

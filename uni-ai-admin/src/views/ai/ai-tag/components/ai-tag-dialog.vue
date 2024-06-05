@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { type Component } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAiTagStore } from '../store/ai-tag-store'
+import {type Component} from 'vue'
+import {storeToRefs} from 'pinia'
+import {useAiTagStore} from '../store/ai-tag-store'
 import AiTagCreateForm from './ai-tag-create-form.vue'
 import AiTagUpdateForm from './ai-tag-update-form.vue'
-import type { EditMode } from '@/typings'
+import type {EditMode} from '@/typings'
 
 const aiTagStore = useAiTagStore()
 const { dialogData } = storeToRefs(aiTagStore)

@@ -1,6 +1,5 @@
 package io.qifan.server.ai.tag.root.repository;
 
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
 import io.qifan.server.ai.tag.root.entity.AiTagTable;
@@ -17,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 public interface AiTagRepository extends JRepository<AiTag, String> {
     AiTagTable aiTagTable = AiTagTable.$;
     AiTagFetcher COMPLEX_FETCHER_FOR_ADMIN = AiTagFetcher.$.allScalarFields()
-            .aiFactoryId()
-            .aiFactory(AiFactoryFetcher.$.name())
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiTagFetcher COMPLEX_FETCHER_FOR_FRONT = AiTagFetcher.$.allScalarFields()

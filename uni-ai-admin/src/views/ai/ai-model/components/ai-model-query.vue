@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue'
-import { useAiModelStore } from '../store/ai-model-store'
-import { storeToRefs } from 'pinia'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiFactoryQueryOptions } from '@/views/ai/ai-factory/store/ai-factory-store'
+import {toRefs} from 'vue'
+import {useAiModelStore} from '../store/ai-model-store'
+import {storeToRefs} from 'pinia'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import DictSelect from '@/components/dict/dict-select.vue'
 
 const aiModelStore = useAiModelStore()
 const { queryData } = storeToRefs(aiModelStore)
@@ -13,11 +13,7 @@ const { query } = toRefs(queryData.value)
   <div class="search">
     <el-form inline label-width="80" size="small">
       <el-form-item label="厂家">
-        <remote-select
-          label-prop="name"
-          :query-options="aiFactoryQueryOptions"
-          v-model="query.aiFactoryId"
-        ></remote-select>
+        <dict-select :dict-id="DictConstants.AI_FACTORY_TYPE" v-model="query.factory" />
       </el-form-item>
       <el-form-item label="模型">
         <el-input v-model="query.name"></el-input>

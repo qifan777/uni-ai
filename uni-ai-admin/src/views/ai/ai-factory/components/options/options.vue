@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { AiFactoryType } from '@/apis/__generated/model/enums'
+import {computed} from 'vue'
+import type {AiFactoryType} from '@/apis/__generated/model/enums'
 import SparkOptions from './spark-options.vue'
 import DashScopeOptions from './dash-scope-options.vue'
 import OpenAiOptions from './open-ai-options.vue'

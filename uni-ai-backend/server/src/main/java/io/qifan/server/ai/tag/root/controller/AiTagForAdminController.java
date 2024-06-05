@@ -1,5 +1,7 @@
 package io.qifan.server.ai.tag.root.controller;
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.tag.root.entity.AiTag;
 import io.qifan.server.ai.tag.root.entity.dto.AiTagCreateInput;
@@ -23,16 +25,18 @@ import java.util.List;
 @DefaultFetcherOwner(AiTagRepository.class)
 @SaCheckPermission("/ai-tag")
 @Transactional
-public class  AiTagForAdminController {
-    private final  AiTagRepository aiTagRepository;
+public class AiTagForAdminController {
+    private final AiTagRepository aiTagRepository;
 
+    @SaIgnore
     @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiTag findById(@PathVariable String id) {
-        return aiTagRepository.findById(id,AiTagRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
+    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiTag findById(@PathVariable String id) {
+        return aiTagRepository.findById(id, AiTagRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
+    @SaIgnore
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiTag> query(@RequestBody QueryRequest<AiTagSpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiTag> query(@RequestBody QueryRequest<AiTagSpec> queryRequest) {
         return aiTagRepository.findPage(queryRequest, AiTagRepository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 

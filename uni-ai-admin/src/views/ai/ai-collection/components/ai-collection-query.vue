@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue'
-import { useAiCollectionStore } from '../store/ai-collection-store'
-import { storeToRefs } from 'pinia'
+import {toRefs} from 'vue'
+import {useAiCollectionStore} from '../store/ai-collection-store'
+import {storeToRefs} from 'pinia'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import {aiModelQueryOptions} from '@/views/ai/ai-model/store/ai-model-store'
 
 const aiCollectionStore = useAiCollectionStore()
 const { queryData } = storeToRefs(aiCollectionStore)

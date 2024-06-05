@@ -7,7 +7,6 @@ import io.qifan.server.dict.model.DictConstants;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import jakarta.validation.constraints.Null;
 import org.babyfish.jimmer.sql.Entity;
-import org.babyfish.jimmer.sql.Key;
 import org.babyfish.jimmer.sql.Serialized;
 
 import java.util.Map;
@@ -25,7 +24,6 @@ public interface AiFactory extends BaseEntity {
     /**
      * 厂家名称
      */
-    @Key
     @GenField(value = "厂家名称", type = ItemType.SELECTABLE, dictEnName = DictConstants.AI_FACTORY_TYPE, order = 0)
     DictConstants.AiFactoryType name();
 
@@ -42,5 +40,4 @@ public interface AiFactory extends BaseEntity {
     @Null
     @Serialized
     Map<String, Object> options();
-
 }

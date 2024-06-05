@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { type Component } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAiMessageStore } from '../store/ai-message-store'
+import {type Component} from 'vue'
+import {storeToRefs} from 'pinia'
+import {useAiMessageStore} from '../store/ai-message-store'
 import AiMessageCreateForm from './ai-message-create-form.vue'
 import AiMessageUpdateForm from './ai-message-update-form.vue'
-import type { EditMode } from '@/typings'
+import type {EditMode} from '@/typings'
 
 const aiMessageStore = useAiMessageStore()
 const { dialogData } = storeToRefs(aiMessageStore)

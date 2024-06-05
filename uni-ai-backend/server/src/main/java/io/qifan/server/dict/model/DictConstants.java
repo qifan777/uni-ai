@@ -10,6 +10,7 @@ public class DictConstants {
   public static final String USER_STATUS = "USER_STATUS";
   public static final String AI_FACTORY_TYPE = "AI_FACTORY_TYPE";
   public static final String AI_MODEL_TAG = "AI_MODEL_TAG";
+  public static final String OSS_TYPE = "OSS_TYPE";
   @Getter
   @AllArgsConstructor
   public enum MenuType{
@@ -112,6 +113,21 @@ public class DictConstants {
         NLU(3, "nlu", "NLU", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
         VISION(4, "图片理解", "VISION", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
         IMAGE(5, "图片生成", "IMAGE", 1017, "AI模型标签", "AI_MODEL_TAG", 0),
+  ;
+  final int keyId;
+  final String keyName;
+  final String keyEnName;
+  final int dictId;
+  final String dictName;
+  final String dictEnName;
+  final int orderNum;
+  }
+  @Getter
+  @AllArgsConstructor
+  public enum OssType{
+        ALI_YUN_OSS(0, "阿里云OSS", "ALI_YUN_OSS", 1018, "OSS类型", "OSS_TYPE", 0),
+        TENANT_OSS(1, "腾讯云OSS", "TENANT_OSS", 1018, "OSS类型", "OSS_TYPE", 0),
+        NGINX_OSS(2, "本地nginx", "NGINX_OSS", 1018, "OSS类型", "OSS_TYPE", 0),
   ;
   final int keyId;
   final String keyName;

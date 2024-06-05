@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia'
-import { useTableHelper } from '@/components/base/table/table-helper'
-import { useDialogHelper } from '@/components/base/dialog/dialog-helper'
-import { useQueryHelper } from '@/components/base/query/query-helper'
-import type { AiTagCreateInput, AiTagSpec, AiTagUpdateInput } from '@/apis/__generated/model/static'
-import { api } from '@/utils/api-instance'
-import { ref } from 'vue'
+import {defineStore} from 'pinia'
+import {useTableHelper} from '@/components/base/table/table-helper'
+import {useDialogHelper} from '@/components/base/dialog/dialog-helper'
+import {useQueryHelper} from '@/components/base/query/query-helper'
+import type {AiTagCreateInput, AiTagSpec, AiTagUpdateInput} from '@/apis/__generated/model/static'
+import {api} from '@/utils/api-instance'
+import {ref} from 'vue'
 
 export const aiTagQueryOptions = async (keyword: string, id: string) => {
   return (await api.aiTagForAdminController.query({ body: { query: { name: keyword, id } } }))

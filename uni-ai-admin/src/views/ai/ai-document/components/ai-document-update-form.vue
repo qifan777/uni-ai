@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiDocumentStore } from '../store/ai-document-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiDocumentStore} from '../store/ai-document-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
+import type {FormInstance, FormRules} from 'element-plus'
 
 const aiDocumentStore = useAiDocumentStore()
 const { closeDialog, reloadTableData } = aiDocumentStore
@@ -21,7 +19,7 @@ const rules = reactive<FormRules<typeof updateForm>>({
 const init = async () => {
   dialogData.value.title = '编辑'
   updateForm.value = {
-    ...(await api.aiDocumentForAdminController.findById({ id: updateForm.value.id || '' }))
+    ...(await api.aiDocumentForFrontController.findById({ id: updateForm.value.id || '' }))
   }
 }
 watch(
@@ -36,7 +34,7 @@ watch(
 const handleConfirm = () => {
   updateFormRef.value?.validate(
     assertFormValidate(() => {
-      api.aiDocumentForAdminController.update({ body: updateForm.value }).then(async (res) => {
+      api.aiDocumentForFrontController.update({ body: updateForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           closeDialog()
           reloadTableData()

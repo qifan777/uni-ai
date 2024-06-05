@@ -9,31 +9,22 @@ import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.region.Region;
 import io.qifan.infrastructure.oss.aliyun.AliYunOSSProperties;
 import io.qifan.infrastructure.oss.aliyun.AliYunOSSService;
-import io.qifan.infrastructure.oss.controller.OSSController;
 import io.qifan.infrastructure.oss.local.LocalOSSProperties;
 import io.qifan.infrastructure.oss.local.LocalOSSService;
 import io.qifan.infrastructure.oss.service.OSSService;
-import io.qifan.infrastructure.oss.tenant.TenantOSSProperties;
-import io.qifan.infrastructure.oss.tenant.TenantOSSService;
+import io.qifan.infrastructure.oss.tencent.TencentOSSProperties;
+import io.qifan.infrastructure.oss.tencent.TencentOSSService;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @AutoConfiguration
-@EnableConfigurationProperties(OSSProperties.class)
+@EnableConfigurationProperties(value = {OSSProperties.class, TencentOSSProperties.class, AliYunOSSProperties.class, LocalOSSProperties.class})
 public class OSSAutoConfiguration {
 
-    @Bean
-    @ConditionalOnBean(OSSService.class)
-    public OSSController ossController(OSSService ossService) {
-        return new OSSController(ossService);
-    }
-
-    @Configuration
+    @AutoConfiguration
     @ConditionalOnProperty(prefix = "oss", name = "provider", havingValue = "LOCAL")
     @EnableConfigurationProperties(LocalOSSProperties.class)
     public static class LocalConfig {
@@ -45,7 +36,7 @@ public class OSSAutoConfiguration {
         }
     }
 
-    @Configuration
+    @AutoConfiguration
     @ConditionalOnProperty(prefix = "oss", name = "provider", havingValue = "ALI_YUN")
     @EnableConfigurationProperties(AliYunOSSProperties.class)
     public static class AliYunConfig {
@@ -64,13 +55,13 @@ public class OSSAutoConfiguration {
         }
     }
 
-    @Configuration
+    @AutoConfiguration
     @ConditionalOnProperty(prefix = "oss", name = "provider", havingValue = "TENANT")
-    @EnableConfigurationProperties(TenantOSSProperties.class)
-    public static class TenantConfig {
+    @EnableConfigurationProperties(TencentOSSProperties.class)
+    public static class TencentConfig {
 
         @Bean
-        public COSClient tenantOSS(TenantOSSProperties properties) {
+        public COSClient tencentOSS(TencentOSSProperties properties) {
             COSCredentials cred = new BasicCOSCredentials(properties.getSecretId(), properties.getSecretKey());
             Region region = new Region(properties.getRegion());
             ClientConfig clientConfig = new ClientConfig(region);
@@ -79,8 +70,8 @@ public class OSSAutoConfiguration {
 
         @Bean
         @ConditionalOnMissingBean(OSSService.class)
-        public OSSService tenantOSSService(COSClient client, TenantOSSProperties properties) {
-            return new TenantOSSService(client, properties);
+        public OSSService tencentOSSService(COSClient client, TencentOSSProperties properties) {
+            return new TencentOSSService(client, properties);
         }
     }
 

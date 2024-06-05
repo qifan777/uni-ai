@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { type Component } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAiSessionStore } from '../store/ai-session-store'
+import {type Component} from 'vue'
+import {storeToRefs} from 'pinia'
+import {useAiSessionStore} from '../store/ai-session-store'
 import AiSessionCreateForm from './ai-session-create-form.vue'
 import AiSessionUpdateForm from './ai-session-update-form.vue'
-import type { EditMode } from '@/typings'
+import type {EditMode} from '@/typings'
 
 const aiSessionStore = useAiSessionStore()
 const { dialogData } = storeToRefs(aiSessionStore)

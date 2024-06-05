@@ -1,18 +1,13 @@
-import { defineStore } from 'pinia'
-import { useTableHelper } from '@/components/base/table/table-helper'
-import { useDialogHelper } from '@/components/base/dialog/dialog-helper'
-import { useQueryHelper } from '@/components/base/query/query-helper'
-import type {
-  AiFactoryCreateInput,
-  AiFactorySpec,
-  AiFactoryUpdateInput
-} from '@/apis/__generated/model/static'
-import { api } from '@/utils/api-instance'
-import { ref } from 'vue'
-import type { AiFactoryType } from '@/apis/__generated/model/enums'
+import {defineStore} from 'pinia'
+import {useTableHelper} from '@/components/base/table/table-helper'
+import {useDialogHelper} from '@/components/base/dialog/dialog-helper'
+import {useQueryHelper} from '@/components/base/query/query-helper'
+import type {AiFactoryCreateInput, AiFactorySpec, AiFactoryUpdateInput} from '@/apis/__generated/model/static'
+import {api} from '@/utils/api-instance'
+import {ref} from 'vue'
 
 export const aiFactoryQueryOptions = async (_keyword: string, id: string) => {
-  return (await api.aiFactoryForAdminController.query({ body: { query: { id } } })).content
+  return (await api.aiFactoryForFrontController.query({ body: { query: { id } } })).content
 }
 export const useAiFactoryStore = defineStore('aiFactory', () => {
   const initQuery: AiFactorySpec = {}
@@ -22,8 +17,8 @@ export const useAiFactoryStore = defineStore('aiFactory', () => {
     options: {}
   }
   const tableHelper = useTableHelper(
-    api.aiFactoryForAdminController.query,
-    api.aiFactoryForAdminController,
+    api.aiFactoryForFrontController.query,
+    api.aiFactoryForFrontController,
     initQuery
   )
   const dialogHelper = useDialogHelper()

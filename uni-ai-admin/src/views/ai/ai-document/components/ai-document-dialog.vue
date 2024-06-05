@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { type Component } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useAiDocumentStore } from '../store/ai-document-store'
+import {type Component} from 'vue'
+import {storeToRefs} from 'pinia'
+import {useAiDocumentStore} from '../store/ai-document-store'
 import AiDocumentCreateForm from './ai-document-create-form.vue'
 import AiDocumentUpdateForm from './ai-document-update-form.vue'
-import type { EditMode } from '@/typings'
+import type {EditMode} from '@/typings'
 
 const aiDocumentStore = useAiDocumentStore()
 const { dialogData } = storeToRefs(aiDocumentStore)

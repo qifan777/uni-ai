@@ -88,6 +88,10 @@ const router = createRouter({
         {
           path: '/chat',
           component: () => import('@/views/ai/ai-chat/ai-chat-view.vue')
+        },
+        {
+          path: '/oss',
+          component: () => import('@/views/oss/oss-view.vue')
         }
       ]
     },

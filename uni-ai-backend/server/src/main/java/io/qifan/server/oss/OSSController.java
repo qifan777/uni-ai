@@ -1,14 +1,11 @@
-package io.qifan.infrastructure.oss.controller;
+package io.qifan.server.oss;
 
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.infrastructure.common.model.R;
 import io.qifan.infrastructure.oss.service.OSSService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -20,11 +17,15 @@ import java.util.Map;
 @RequestMapping("oss")
 @AllArgsConstructor
 public class OSSController {
-    private final OSSService ossService;
+    private final Map<String, UniOSSService> uniOSSServiceMap;
+    private final OSSRepository ossRepository;
 
     @PostMapping("upload")
     public R<Map<String, String>> upload(@RequestParam Map<String, MultipartFile> files) {
         List<String> arrayList = new ArrayList<>();
+        OSSSetting ossSetting = ossRepository.get();
+        UniOSSService uniOSSService = uniOSSServiceMap.get(ossSetting.getType().getKeyEnName());
+        OSSService ossService = uniOSSService.getOSSService(ossSetting.getOptions());
         files.forEach((String key, MultipartFile file) -> {
             try {
                 String url = ossService.upload(file);
@@ -37,5 +38,16 @@ public class OSSController {
         Map<String, String> urlMap = new HashMap<>();
         urlMap.put("url", join);
         return R.ok(urlMap);
+    }
+
+    @PostMapping
+    public boolean save(@RequestBody OSSSetting ossSetting) {
+        ossRepository.save(ossSetting);
+        return true;
+    }
+
+    @GetMapping
+    public OSSSetting get() {
+        return ossRepository.get();
     }
 }

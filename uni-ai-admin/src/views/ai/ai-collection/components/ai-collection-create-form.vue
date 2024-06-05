@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiCollectionStore } from '../store/ai-collection-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiCollectionStore} from '../store/ai-collection-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type { FormInstance, FormRules } from 'element-plus'
+import type {FormInstance, FormRules} from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import {aiModelQueryOptions} from '@/views/ai/ai-model/store/ai-model-store'
 
 const aiCollectionStore = useAiCollectionStore()
 const { closeDialog, reloadTableData } = aiCollectionStore
@@ -34,7 +34,7 @@ watch(
 const handleConfirm = () => {
   createFormRef.value?.validate(
     assertFormValidate(() =>
-      api.aiCollectionForAdminController.create({ body: createForm.value }).then(async (res) => {
+      api.aiCollectionForFrontController.create({ body: createForm.value }).then(async (res) => {
         assertSuccess(res).then(() => {
           closeDialog()
           reloadTableData()

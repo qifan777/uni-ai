@@ -1,15 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiTagStore } from '../store/ai-tag-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiTagStore} from '../store/ai-tag-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiFactoryQueryOptions } from '@/views/ai/ai-factory/store/ai-factory-store'
+import type {FormInstance, FormRules} from 'element-plus'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 
 const aiTagStore = useAiTagStore()
 const { closeDialog, reloadTableData } = aiTagStore
@@ -17,7 +15,7 @@ const { updateForm, dialogData } = storeToRefs(aiTagStore)
 const updateFormRef = ref<FormInstance>()
 const rules = reactive<FormRules<typeof updateForm>>({
   name: [{ required: true, message: '请输入标签', trigger: 'change' }],
-  aiFactoryId: [{ required: true, message: '请输入厂家', trigger: 'blur' }],
+  factory: [{ required: true, message: '请输入厂家', trigger: 'change' }],
   service: [{ required: true, message: '请输入service', trigger: 'blur' }]
 })
 const init = async () => {
@@ -54,12 +52,8 @@ const handleConfirm = () => {
       <el-form-item label="标签" prop="name">
         <dict-select :dict-id="DictConstants.AI_MODEL_TAG" v-model="updateForm.name"></dict-select>
       </el-form-item>
-      <el-form-item label="厂家" prop="aiFactoryId">
-        <remote-select
-          label-prop="name"
-          :query-options="aiFactoryQueryOptions"
-          v-model="updateForm.aiFactoryId"
-        ></remote-select>
+      <el-form-item label="厂家" prop="factory">
+        <dict-select :dict-id="DictConstants.AI_FACTORY_TYPE" v-model="updateForm.factory" />
       </el-form-item>
       <el-form-item label="service" prop="service">
         <el-input v-model="updateForm.service"></el-input>

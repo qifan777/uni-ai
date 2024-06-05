@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
-import { reactive, ref, watch } from 'vue'
-import { useAiRoleStore } from '../store/ai-role-store'
-import { assertFormValidate, assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
+import {storeToRefs} from 'pinia'
+import {reactive, ref, watch} from 'vue'
+import {useAiRoleStore} from '../store/ai-role-store'
+import {assertFormValidate, assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
 import ImageUpload from '@/components/image/image-upload.vue'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type { FormInstance, FormRules } from 'element-plus'
-import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
+import type {FormInstance, FormRules} from 'element-plus'
+import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
 import DictSelect from '@/components/dict/dict-select.vue'
 
 const aiRoleStore = useAiRoleStore()

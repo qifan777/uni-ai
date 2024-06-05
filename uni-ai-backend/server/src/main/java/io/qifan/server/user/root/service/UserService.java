@@ -36,10 +36,10 @@ public class UserService {
 
 
     public SaTokenInfo register(UserRegisterInput registerInput) {
-        boolean checked = smsService.checkSms(registerInput.getPhone(), registerInput.getCode());
-        if (!checked) {
-            throw new BusinessException(ResultCode.ValidateError, "验证码错误");
-        }
+//        boolean checked = smsService.checkSms(registerInput.getPhone(), registerInput.getCode());
+//        if (!checked) {
+//            throw new BusinessException(ResultCode.ValidateError, "验证码错误");
+//        }
         UserTable userTable = UserTable.$;
         userRepository.sql().createQuery(userTable)
                 .where(userTable.phone().eq(registerInput.getPhone()))

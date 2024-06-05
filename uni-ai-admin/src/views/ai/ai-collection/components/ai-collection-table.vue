@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { assertSuccess } from '@/utils/common'
-import { api } from '@/utils/api-instance'
-import { ElMessageBox } from 'element-plus'
-import type { Scope } from '@/typings'
-import { useAiCollectionStore } from '../store/ai-collection-store'
-import type { AiCollectionDto } from '@/apis/__generated/model/dto'
-import { Delete, Edit, Plus } from '@element-plus/icons-vue'
+import {onMounted} from 'vue'
+import {storeToRefs} from 'pinia'
+import {assertSuccess} from '@/utils/common'
+import {api} from '@/utils/api-instance'
+import {ElMessageBox} from 'element-plus'
+import type {Scope} from '@/typings'
+import {useAiCollectionStore} from '../store/ai-collection-store'
+import type {AiCollectionDto} from '@/apis/__generated/model/dto'
+import {Delete, Edit, Plus} from '@element-plus/icons-vue'
 
 type AiCollectionScope = Scope<AiCollectionDto['AiCollectionRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiCollectionStore = useAiCollectionStore()
@@ -48,7 +48,7 @@ const handleDelete = (ids: string[]) => {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    api.aiCollectionForAdminController.delete({ body: ids }).then((res) => {
+    api.aiCollectionForFrontController.delete({ body: ids }).then((res) => {
       assertSuccess(res).then(() => reloadTableData())
     })
   })

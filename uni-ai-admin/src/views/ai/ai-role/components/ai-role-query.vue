@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { toRefs } from 'vue'
-import { useAiRoleStore } from '../store/ai-role-store'
-import { storeToRefs } from 'pinia'
+import {toRefs} from 'vue'
+import {useAiRoleStore} from '../store/ai-role-store'
+import {storeToRefs} from 'pinia'
 
 const aiRoleStore = useAiRoleStore()
 const { queryData } = storeToRefs(aiRoleStore)
