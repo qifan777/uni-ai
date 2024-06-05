@@ -5,7 +5,6 @@ import io.qifan.server.ai.document.entity.AiDocument;
 import io.qifan.server.ai.document.entity.AiDocumentFetcher;
 import io.qifan.server.ai.document.entity.AiDocumentTable;
 import io.qifan.server.ai.document.entity.dto.AiDocumentSpec;
-import io.qifan.server.ai.model.entity.AiModelFetcher;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import io.qifan.server.user.root.entity.UserFetcher;
 import org.babyfish.jimmer.spring.repository.JRepository;
@@ -23,7 +22,10 @@ public interface AiDocumentRepository extends JRepository<AiDocument, String> {
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiDocumentFetcher COMPLEX_FETCHER_FOR_FRONT = AiDocumentFetcher.$.allScalarFields()
-            .creator(true);
+            .aiCollectionId()
+            .aiCollection(AiCollectionFetcher.$.allScalarFields())
+            .creator(UserFetcher.$.phone().nickname())
+            .editor(UserFetcher.$.phone().nickname());
 
     default Page<AiDocument> findPage(QueryRequest<AiDocumentSpec> queryRequest,
                                       Fetcher<AiDocument> fetcher) {

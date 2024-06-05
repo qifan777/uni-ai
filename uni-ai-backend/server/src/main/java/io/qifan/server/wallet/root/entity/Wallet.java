@@ -47,6 +47,7 @@ public interface Wallet extends BaseEntity {
 
     @Key
     @ManyToOne
+    @OnDissociate(DissociateAction.DELETE)
     User user();
 
 }

@@ -64,8 +64,9 @@ public class UserForAdminController {
 
 
     @DeleteMapping
-    public void delete(@RequestBody List<String> ids) {
+    public Boolean delete(@RequestBody List<String> ids) {
         userRepository.deleteAllById(ids);
+        return true;
     }
 
     public User beforeSave(User user, String[] roleIds) {

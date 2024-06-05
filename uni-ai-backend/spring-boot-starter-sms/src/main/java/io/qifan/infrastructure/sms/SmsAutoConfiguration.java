@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 @AutoConfiguration
-@EnableConfigurationProperties(SmsProperties.class)
+@EnableConfigurationProperties(value = {SmsProperties.class, AliYunSmsProperties.class})
 public class SmsAutoConfiguration {
     @Bean
     public SmsController smsController(SmsService service) {

@@ -54,7 +54,7 @@ public class UserService {
                     .select(t)
                     .fetchOptional()
                     .orElseThrow(() -> new BusinessException("角色不存在，请联系管理员"));
-            draft.addIntoRoles(draft1 -> draft1.setRole(role).setUser(registerInput.toEntity()));
+            draft.addIntoRoles(draft1 -> draft1.setRoleId(role.id()).setUser(registerInput.toEntity()));
             draft.setNickname("默认用户").setPassword(BCrypt.hashpw(draft.password()));
         });
         StpUtil.login(userRepository.save(user).id(), new SaLoginModel()

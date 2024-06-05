@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue'
-import {storeToRefs} from 'pinia'
-import {assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
-import {ElMessageBox} from 'element-plus'
-import type {Scope} from '@/typings'
-import {useAiDocumentStore} from '../store/ai-document-store'
-import type {AiDocumentDto} from '@/apis/__generated/model/dto'
-import {Delete, Edit, Plus} from '@element-plus/icons-vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
+import { ElMessageBox } from 'element-plus'
+import type { Scope } from '@/typings'
+import { useAiDocumentStore } from '../store/ai-document-store'
+import type { AiDocumentDto } from '@/apis/__generated/model/dto'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 
-type AiDocumentScope = Scope<AiDocumentDto['AiDocumentRepository/COMPLEX_FETCHER_FOR_ADMIN']>
+type AiDocumentScope = Scope<AiDocumentDto['AiDocumentRepository/COMPLEX_FETCHER_FOR_FRONT']>
 const aiDocumentStore = useAiDocumentStore()
 const {
   loadTableData,

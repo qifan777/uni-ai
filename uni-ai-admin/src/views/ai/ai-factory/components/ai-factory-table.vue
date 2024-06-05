@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue'
-import {storeToRefs} from 'pinia'
-import {assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
-import {ElMessageBox} from 'element-plus'
-import type {Scope} from '@/typings'
-import {useAiFactoryStore} from '../store/ai-factory-store'
-import type {AiFactoryDto} from '@/apis/__generated/model/dto'
-import {Edit} from '@element-plus/icons-vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
+import { ElMessageBox } from 'element-plus'
+import type { Scope } from '@/typings'
+import { useAiFactoryStore } from '../store/ai-factory-store'
+import type { AiFactoryDto } from '@/apis/__generated/model/dto'
+import { Edit } from '@element-plus/icons-vue'
 import DictColumn from '@/components/dict/dict-column.vue'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 
-type AiFactoryScope = Scope<AiFactoryDto['AiFactoryRepository/COMPLEX_FETCHER_FOR_ADMIN']>
+type AiFactoryScope = Scope<AiFactoryDto['AiFactoryRepository/COMPLEX_FETCHER_FOR_FRONT']>
 const aiFactoryStore = useAiFactoryStore()
 const {
   loadTableData,

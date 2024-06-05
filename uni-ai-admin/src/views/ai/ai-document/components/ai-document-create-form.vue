@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import {storeToRefs} from 'pinia'
-import {reactive, ref, watch} from 'vue'
-import {useAiDocumentStore} from '../store/ai-document-store'
-import {assertFormValidate, assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, watch } from 'vue'
+import { useAiDocumentStore } from '../store/ai-document-store'
+import { assertFormValidate, assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type {FormInstance, FormRules} from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import {aiCollectionQueryOptions} from '@/views/ai/ai-collection/store/ai-collection-store'
-import type {Result} from '@/typings'
+import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
+import type { Result } from '@/typings'
 
 const API_PREFIX = import.meta.env.VITE_API_PREFIX
 const loading = ref(false)
@@ -74,7 +74,7 @@ const onUploadSuccess = (res: Result<string>) => {
       </el-form-item>
       <el-form-item label="文档解析" prop="url">
         <el-upload
-          :action="`${API_PREFIX}/admin/ai-document/extract`"
+          :action="`${API_PREFIX}/front/ai-document/extract`"
           show-file-list
           :limit="1"
           :on-success="onUploadSuccess"

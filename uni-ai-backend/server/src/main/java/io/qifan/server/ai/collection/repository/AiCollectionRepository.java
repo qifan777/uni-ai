@@ -22,7 +22,10 @@ public interface AiCollectionRepository extends JRepository<AiCollection, String
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
     AiCollectionFetcher COMPLEX_FETCHER_FOR_FRONT = AiCollectionFetcher.$.allScalarFields()
-            .creator(true);
+            .embeddingModel(AiModelFetcher.$.allScalarFields())
+            .embeddingModelId()
+            .creator(UserFetcher.$.phone().nickname())
+            .editor(UserFetcher.$.phone().nickname());
 
     default Page<AiCollection> findPage(QueryRequest<AiCollectionSpec> queryRequest,
                                         Fetcher<AiCollection> fetcher) {
