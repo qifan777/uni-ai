@@ -2,14 +2,10 @@ export io.qifan.server.ai.session.entity.AiSession
 
 input AiSessionCreateInput {
     #allScalars(AiSession)
-    id(aiRole)
-    id(aiModel)
 }
 input AiSessionUpdateInput {
     #allScalars(AiSession)
     id!
-    id(aiRole)
-    id(aiModel)
 }
 
 specification AiSessionSpec {
@@ -21,6 +17,4 @@ specification AiSessionSpec {
     ge(editedTime)
     le(editedTime)
     id(creator)
-    id(aiRole)
-    id(aiModel)
 }

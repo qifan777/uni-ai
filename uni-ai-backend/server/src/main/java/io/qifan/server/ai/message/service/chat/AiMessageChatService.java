@@ -2,14 +2,19 @@ package io.qifan.server.ai.message.service.chat;
 
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
+import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
 import io.qifan.server.ai.message.entity.dto.ChatMessageRequest;
 import io.qifan.server.ai.message.entity.model.ChatMessage;
 import io.qifan.server.ai.message.entity.model.ChatParams;
 import io.qifan.server.ai.model.entity.AiModel;
+import io.qifan.server.ai.model.entity.AiModelFetcher;
+import io.qifan.server.ai.model.repository.AiModelRepository;
+import io.qifan.server.ai.role.repository.AiRoleRepository;
 import io.qifan.server.ai.session.entity.AiSession;
 import io.qifan.server.ai.session.repository.AiSessionRepository;
 import io.qifan.server.ai.tag.root.entity.AiTag;
+import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
 import io.qifan.server.ai.uni.chat.UniAiChatService;
 import io.qifan.server.ai.uni.vector.UniAiVectorService;
 import io.qifan.server.dict.model.DictConstants;
@@ -42,38 +47,40 @@ public class AiMessageChatService {
     private final AiSessionRepository aiSessionRepository;
     private final Map<String, UniAiChatService> uniAiChatServiceMap;
     private final UniAiVectorService uniAiVectorService;
+    private final AiModelRepository aiModelRepository;
+    private final AiRoleRepository aiRoleRepository;
 
     public Flux<ChatResponse> chat(ChatMessageRequest request) {
         AiSession aiSession = aiSessionRepository.findById(request.getMessage().getAiSessionId(), AiSessionRepository.COMPLEX_FETCHER_FOR_FRONT)
                 .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "会话不存在"));
-        AiModel model = aiSession.aiModel();
-        if (model == null) {
-            throw new BusinessException("请配置模型");
-        }
-        if (model.tagsView() == null) {
+        AiModel aiModel = aiModelRepository.findById(request.getChatParams().getAiModelId(), AiModelFetcher.$.allScalarFields()
+                        .aiFactory(AiFactoryFetcher.$.allScalarFields())
+                        .tagsView(AiTagFetcher.$.allScalarFields()))
+                .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "模型不存在"));
+        if (aiModel.tagsView() == null) {
             throw new BusinessException("请配置模型标签");
         }
-        AiTag aiTag = model.tagsView().stream().filter(tag -> tag.name().equals(request.getChatParams().getTag()))
+        AiTag aiTag = aiModel.tagsView().stream().filter(tag -> tag.name().equals(request.getChatParams().getTag()))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException("模型不支持该场景"));
         UniAiChatService aiChatService = uniAiChatServiceMap.get(StringUtils.uncapitalize(aiTag.service()));
         if (aiChatService == null) {
             throw new BusinessException("后端未配置模型服务");
         }
-        List<Message> messages = historyMessageList(aiSession);
+        List<Message> messages = historyMessageList(aiSession, request.getChatParams().getAiRoleId());
         messages.add(toUserMessage(request.getMessage(), request.getChatParams()));
         Prompt prompt = new Prompt(messages);
-        Map<String, Object> options = model.aiFactory().options();
-        options.putAll(model.options());
-        if (request.getChatOptions()!=null){
-            options.putAll(request.getChatOptions());
+        Map<String, Object> options = aiModel.aiFactory().options();
+        options.putAll(aiModel.options());
+        if (request.getChatParams().getOptions() != null) {
+            options.putAll(request.getChatParams().getOptions());
         }
         return aiChatService.getChatModel(options).stream(prompt);
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {
         ChatMessage chatMessage = toMessage(DictConstants.AiMessageType.USER, messageInput.getContent());
-        if (params.getKnowledge()) {
+        if (StringUtils.hasText(params.getCollectionId())) {
             List<String> context = uniAiVectorService.similaritySearch(chatMessage.getContent(), params.getCollectionId())
                     .stream()
                     .map(Document::getContent)
@@ -89,19 +96,19 @@ public class AiMessageChatService {
         return chatMessage;
     }
 
-    public List<Message> historyMessageList(AiSession aiSession) {
+    public List<Message> historyMessageList(AiSession aiSession, String aiRoleId) {
         List<Message> messages = new ArrayList<>(aiSession.messages()
                 .stream()
                 .map(message -> toMessage(message.type(), message.content())
                 )
                 .toList());
-        if (aiSession.aiRole() != null) {
-            messages.addAll(0, aiSession.aiRole()
+        aiRoleRepository.findById(aiRoleId).ifPresent(aiRole -> {
+            messages.addAll(0, aiRole
                     .prompts()
                     .stream()
                     .map(message -> toMessage(message.getType(), message.getContent()))
                     .toList());
-        }
+        });
         return messages;
     }
 

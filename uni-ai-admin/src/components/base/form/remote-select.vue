@@ -26,28 +26,24 @@ const emit = defineEmits<{ 'update:modelValue': [value: any] }>()
 
 const options = ref<OptionItem[]>([])
 const loading = ref(false)
-const remoteMethod = (keyword: string, enforce: boolean) => {
-  if (keyword || enforce) {
-    loading.value = true
-    props.queryOptions(keyword.trim()).then((res) => {
-      options.value = res.map((row) => {
-        return {
-          label:
-            typeof props.labelProp === 'string'
-              ? _.get(row, props.labelProp)
-              : props.labelProp(row),
-          value: _.get(row, props.valueProp)
-        } satisfies OptionItem
-      })
-      loading.value = false
+const remoteMethod = (keyword: string) => {
+  loading.value = true
+  props.queryOptions(keyword.trim()).then((res) => {
+    options.value = res.map((row) => {
+      return {
+        label:
+          typeof props.labelProp === 'string' ? _.get(row, props.labelProp) : props.labelProp(row),
+        value: _.get(row, props.valueProp)
+      } satisfies OptionItem
     })
-  }
+    loading.value = false
+  })
 }
 const handleChange = (value: string[] | string) => {
   emit('update:modelValue', value)
 }
 onMounted(() => {
-  remoteMethod('', true)
+  remoteMethod('')
 })
 const isInit = ref(false)
 watch(

@@ -1,83 +1,51 @@
 <script lang="ts" setup>
-import { inject, reactive, ref } from 'vue'
+import { inject, ref } from 'vue'
 import { Position } from '@element-plus/icons-vue'
-import type { MessageWithOptions } from '@/views/ai/ai-chat/store/ai-chat-store'
 import ImageUpload from '@/components/image/image-upload.vue'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
-import type { AiModelTag } from '@/apis/__generated/model/enums'
-import RemoteSelect from '@/components/base/form/remote-select.vue'
-import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
-import { assertFormValidate } from '@/utils/common'
+import { ElMessage } from 'element-plus'
+import type { AiMessage } from '@/views/ai/ai-chat/store/ai-chat-store'
+import type { ChatParams } from '@/apis/__generated/model/static'
+const chatParams = inject<ChatParams>('chatParams')
 
-const rules = reactive<FormRules<MessageWithOptions['options']>>({
-  collectionId: [{ required: true, message: '请选择知识库', trigger: 'change' }]
-})
-
-const formRef = ref<FormInstance>()
 // 发送消息消息事件
 const emit = defineEmits<{
-  send: [message: MessageWithOptions]
+  send: [message: AiMessage['content']]
 }>()
-const activeTag = inject<AiModelTag>('activeTag', 'AIGC')
 // 输入框内的消息
-const message = ref<MessageWithOptions>({
-  content: [{ text: '' }, { image: '' }],
-  options: { knowledge: false, collectionId: '' }
-})
+const message = ref<AiMessage['content']>([{ text: '' }, { image: '' }])
 const sendMessage = () => {
-  formRef.value?.validate(
-    assertFormValidate(() => {
-      const msg = message.value.content.filter((item) => item.text || item.image)
-      if (msg.length == 0) {
-        ElMessage.warning('请输入消息')
-        return
-      }
-      emit('send', { content: msg, options: message.value.options })
-      // 发送完清除
-      message.value.content = [{ text: '' }, { image: '' }]
-    })
-  )
+  const msg = message.value.filter((item) => item.text || item.image)
+  if (msg.length == 0) {
+    ElMessage.warning('请输入消息')
+    return
+  }
+  emit('send', msg)
+  // 发送完清除
+  message.value = [{ text: '' }, { image: '' }]
 }
 </script>
 
 <template>
   <div class="message-input">
-    <el-form
-      :rules="rules"
-      :model="message.options"
-      ref="formRef"
-      class="tools"
-      inline
-      size="small"
-      label-position="left"
-    >
-      <el-form-item label="知识库" v-if="activeTag == 'AIGC'">
-        <el-switch v-model="message.options.knowledge"></el-switch>
-      </el-form-item>
-      <el-form-item v-if="message.options.knowledge" prop="collectionId">
-        <remote-select
-          label-prop="name"
-          :query-options="aiCollectionQueryOptions"
-          v-model="message.options.collectionId"
-        ></remote-select>
-      </el-form-item>
-      <el-form-item label="图片" v-if="activeTag == 'VISION'">
-        <image-upload :size="40" v-model="message.content[1].image"></image-upload>
-      </el-form-item>
-    </el-form>
     <div class="input-wrapper">
       <!-- 按回车键发送，输入框高度三行 -->
       <el-input
-        v-model="message.content[0].text"
+        v-model="message[0].text"
         :autosize="false"
         :rows="3"
         class="input"
         resize="none"
         type="textarea"
-        @keydown.enter="sendMessage"
+        @keydown.enter.prevent="sendMessage"
       >
       </el-input>
       <div class="button-wrapper">
+        <image-upload
+          class="image"
+          :size="40"
+          v-model="message[1].image"
+          v-if="chatParams && chatParams.tag == 'VISION'"
+        ></image-upload>
         <el-button type="primary" @click="sendMessage">
           <el-icon class="el-icon--left">
             <Position />
@@ -107,5 +75,8 @@ const sendMessage = () => {
   justify-content: flex-end;
   align-items: center;
   padding: 20px;
+  .image {
+    margin-right: 20px;
+  }
 }
 </style>

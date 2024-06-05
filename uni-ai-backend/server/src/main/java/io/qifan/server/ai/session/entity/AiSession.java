@@ -23,25 +23,6 @@ public interface AiSession extends BaseEntity {
     @GenField(value = "会话名称", order = 0)
     String name();
 
-    /**
-     * 角色id
-     */
-    @IdView
-    @GenField(value = "角色", type = ItemType.ASSOCIATION_SELECT, order = 1)
-    @Nullable
-    String aiRoleId();
-
-    @ManyToOne
-    @Nullable
-    @OnDissociate(DissociateAction.DELETE)
-    AiRole aiRole();
-
-    @IdView
-    String aiModelId();
-
-    @ManyToOne
-    @OnDissociate(DissociateAction.DELETE)
-    AiModel aiModel();
 
     @OneToMany(mappedBy = "aiSession", orderedProps = @OrderedProp(value = "createdTime"))
     List<AiMessage> messages();

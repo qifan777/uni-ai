@@ -32,10 +32,7 @@ const onChooseChange = (val: any, session: AiSession) => {
     <!-- 如果处于激活状态则增加 active class -->
     <div :class="['session-item', active ? 'active' : '']">
       <!-- 会话的名称 -->
-      <div class="name-wrapper">
-        <div class="name">{{ session.name }}</div>
-        <div class="model">{{ session.aiModel.name }}</div>
-      </div>
+      <div class="name">{{ session.name }}</div>
       <!-- 会话内的消息数量和最近修改的时间 -->
       <div class="count-time">
         <div class="count">{{ session.messages ? session.messages.length : 0 }}条对话</div>
@@ -80,22 +77,14 @@ const onChooseChange = (val: any, session: AiSession) => {
   /* 子元素的遮罩一开始会在外面，让溢出的遮罩不显示 */
   overflow: hidden;
 
-  .name-wrapper {
-    display: flex;
-    justify-content: space-between;
-    .name {
-      /* 会话名称字体要大一些 */
-      font-size: 14px;
-      /* 凸显名称，加粗 */
-      font-weight: 700;
-      width: 200px;
-      /* 加粗后颜色淡一些 */
-      color: rgba(black, 0.8);
-    }
-    .model {
-      font-size: 10px;
-      color: rgba(black, 0.5);
-    }
+  .name {
+    /* 会话名称字体要大一些 */
+    font-size: 14px;
+    /* 凸显名称，加粗 */
+    font-weight: 700;
+    width: 200px;
+    /* 加粗后颜色淡一些 */
+    color: rgba(black, 0.8);
   }
 
   .count-time {

@@ -8,7 +8,5 @@ import java.util.Map;
 @Data
 public class ChatMessageRequest {
     AiMessageCreateInput message;
-    Map<String, Object> chatOptions;
-    Map<String, Object> imageOptions;
     ChatParams chatParams;
 }

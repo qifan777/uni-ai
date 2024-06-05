@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, provide, ref } from 'vue'
+import { nextTick, onMounted, provide, ref, watch } from 'vue'
 import SessionItem from './components/session-item.vue'
-import { Close, Delete, EditPen } from '@element-plus/icons-vue'
+import { ChatRound, Close, Delete, EditPen } from '@element-plus/icons-vue'
 import MessageRow from './components/message-row.vue'
 import MessageInput from './components/message-input.vue'
 
@@ -10,15 +10,12 @@ import { storeToRefs } from 'pinia'
 import { ElIcon } from 'element-plus'
 import { api } from '@/utils/api-instance'
 import { useHomeStore } from '@/stores/home-store'
-import SessionCreateDialog from './components/session-create-dialog.vue'
 import { SSE, type SSEvent } from 'sse.js'
-import { type AiMessage, type MessageWithOptions, useAiChatStore } from './store/ai-chat-store'
-import type { AiModelTag } from '@/apis/__generated/model/enums'
-import _ from 'lodash'
+import { type AiMessage, useAiChatStore } from './store/ai-chat-store'
+
 import { useTagStore } from '@/layout/store/tag-store'
-import type { ChatMessageRequest } from '@/apis/__generated/model/static'
-import ImageOptions from '@/views/ai/ai-model/components/image-options/image-options.vue'
-import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
+import type { ChatMessageRequest, ChatParams } from '@/apis/__generated/model/static'
+import AiOptions from '@/views/ai/ai-chat/components/ai-options.vue'
 
 type ChatResponse = {
   metadata: {
@@ -43,23 +40,15 @@ const { handleDeleteSession, handleUpdateSession } = chatStore
 const { activeSession, sessionList, isEdit } = storeToRefs(chatStore)
 const messageListRef = ref<InstanceType<typeof HTMLDivElement>>()
 const loading = ref(true)
-const activeTag = computed<AiModelTag>(() => {
-  if (!activeSession.value) {
-    return 'AIGC'
-  }
-  const model = activeSession.value.aiModel
-  if (!model) {
-    return 'AIGC'
-  }
-  if (model.tagsView.filter((tag) => tag.name == 'VISION').length > 0) {
-    return 'VISION'
-  }
-  if (model.tagsView.filter((tag) => tag.name == 'IMAGE').length > 0) {
-    return 'IMAGE'
-  }
-  return 'AIGC'
+const chatParams = ref<ChatParams>({
+  knowledge: false,
+  aiModelId: '',
+  aiRoleId: '',
+  collectionId: '',
+  options: {},
+  tag: 'AIGC'
 })
-provide('activeTag', activeTag)
+provide('chatParams', chatParams)
 
 onMounted(async () => {
   useTagStore().collapse = true
@@ -89,13 +78,13 @@ const responseMessage = ref<AiMessage>({
   // 因为回复的消息没有id，所以统一将创建时间+index当作key
   createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
 })
-const handleChatMessage = (message: MessageWithOptions) => {
+const handleChatMessage = (message: AiMessage['content']) => {
   if (!activeSession.value) return
   // 用户的提问
   const chatMessage = {
     id: '',
     aiSessionId: activeSession.value.id,
-    content: message.content,
+    content: message,
     type: 'USER',
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
   } satisfies AiMessage
@@ -111,9 +100,7 @@ const handleChatMessage = (message: MessageWithOptions) => {
   }
   const body: ChatMessageRequest = {
     message: chatMessage,
-    chatParams: { tag: activeTag.value, ...message.options },
-    chatOptions: activeSession.value.aiModel.options || {},
-    imageOptions: {}
+    chatParams: chatParams.value
   }
   const evtSource = new SSE(import.meta.env.VITE_API_PREFIX + '/front/ai-message/chat', {
     withCredentials: true,
@@ -149,20 +136,25 @@ const handleChatMessage = (message: MessageWithOptions) => {
     messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
   })
 }
-const handleSendMessage = (message: MessageWithOptions) => {
-  if (activeTag.value == 'IMAGE') {
-    handleImageMessage(message)
-  } else {
-    handleChatMessage(message)
+const handleSendMessage = async (message: AiMessage['content']) => {
+  if (!activeSession.value) {
+    await chatStore.handleCreateSession({ name: message[0].text })
   }
+  await nextTick(() => {
+    if (chatParams.value.tag === 'IMAGE') {
+      handleImageMessage(message)
+    } else {
+      handleChatMessage(message)
+    }
+  })
 }
-const handleImageMessage = (message: MessageWithOptions) => {
+const handleImageMessage = (message: AiMessage['content']) => {
   if (!activeSession.value) return
   // 用户的提问
   const chatMessage = {
     id: '',
     aiSessionId: activeSession.value.id,
-    content: message.content,
+    content: message,
     type: 'USER',
     createdTime: dayjs().format('YYYY-MM-DD HH:mm:ss')
   } satisfies AiMessage
@@ -178,9 +170,7 @@ const handleImageMessage = (message: MessageWithOptions) => {
   }
   const body: ChatMessageRequest = {
     message: chatMessage,
-    chatParams: { tag: activeTag.value, ...message.options },
-    chatOptions: {},
-    imageOptions: activeSession.value.aiModel.options || {}
+    chatParams: chatParams.value
   }
   api.aiMessageForFrontController.generate({ body }).then(async (res) => {
     responseMessage.value.content[0].urls = res.results.map((item) => item.output.url)
@@ -206,6 +196,9 @@ const handleDelete = () => {
     .forEach((session) => {
       handleDeleteSession(session)
     })
+}
+const handleSessionCreate = () => {
+  chatStore.handleCreateSession({ name: '新的聊天' })
 }
 </script>
 <template>
@@ -238,7 +231,13 @@ const handleDelete = () => {
           ></session-item>
         </div>
         <div class="button-wrapper">
-          <session-create-dialog class="new-session"></session-create-dialog>
+          <el-button
+            style="margin-right: 20px"
+            :icon="ChatRound"
+            size="small"
+            @click="handleSessionCreate"
+            >创建会话</el-button
+          >
         </div>
       </div>
       <!-- 右侧的消息记录 -->
@@ -283,19 +282,8 @@ const handleDelete = () => {
         <!-- 监听发送事件 -->
         <message-input @send="handleSendMessage" v-if="activeSession"></message-input>
       </div>
-      <div class="option-panel" v-if="activeSession && activeSession.aiModel">
-        <el-form label-position="top">
-          <chat-options
-            v-if="activeTag == 'AIGC' || activeTag == 'VISION'"
-            :factory="activeSession.aiModel.aiFactory.name"
-            v-model="activeSession.aiModel.options"
-          ></chat-options>
-          <image-options
-            v-if="activeTag == 'IMAGE'"
-            :factory="activeSession.aiModel.aiFactory.name"
-            v-model="activeSession.aiModel.options"
-          ></image-options>
-        </el-form>
+      <div class="option-panel" v-if="activeSession">
+        <ai-options v-model="chatParams"></ai-options>
       </div>
     </div>
   </div>
@@ -454,6 +442,7 @@ const handleDelete = () => {
 
   .option-panel {
     padding: 20px;
+    width: 300px;
     border-left: 1px solid rgba(black, 0.07);
   }
 }

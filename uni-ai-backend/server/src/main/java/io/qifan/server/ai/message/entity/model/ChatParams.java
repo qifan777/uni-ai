@@ -4,10 +4,14 @@ import io.qifan.server.dict.model.DictConstants;
 import lombok.Data;
 import org.babyfish.jimmer.sql.EnableDtoGeneration;
 
+import java.util.Map;
+
 @Data
 @EnableDtoGeneration
 public class ChatParams {
     DictConstants.AiModelTag tag;
-    Boolean knowledge;
     String collectionId;
+    String aiModelId;
+    String aiRoleId;
+    Map<String, Object> options;
 }

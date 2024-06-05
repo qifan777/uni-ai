@@ -21,19 +21,10 @@ import org.springframework.data.domain.Pageable;
 public interface AiSessionRepository extends JRepository<AiSession, String> {
     AiSessionTable aiSessionTable = AiSessionTable.$;
     AiSessionFetcher COMPLEX_FETCHER_FOR_ADMIN = AiSessionFetcher.$.allScalarFields()
-            .aiRole(AiRoleFetcher.$.allScalarFields())
-            .aiRoleId()
             .creator(UserFetcher.$.phone().nickname())
             .editor(UserFetcher.$.phone().nickname());
-    AiModelFetcher aiModelFetcher = AiModelFetcher.$.allScalarFields()
-            .aiFactory(AiFactoryFetcher.$.allScalarFields())
-            .tagsView(AiTagFetcher.$.allScalarFields());
     AiSessionFetcher COMPLEX_FETCHER_FOR_FRONT = AiSessionFetcher.$
             .allScalarFields()
-            .aiRole(AiRoleFetcher.$.allScalarFields())
-            .aiModel(aiModelFetcher)
-            .aiRoleId()
-            .aiModelId()
             .messages(AiMessageFetcher.$.aiSessionId().content().createdTime().type())
             .creator(true);
 
