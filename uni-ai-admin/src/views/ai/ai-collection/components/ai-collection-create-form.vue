@@ -8,6 +8,8 @@ import FooterButton from '@/components/base/dialog/footer-button.vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import type { AiModelDto } from '@/apis/__generated/model/dto'
+import { Dictionaries } from '@/apis/__generated/model/enums/DictConstants'
 
 const aiCollectionStore = useAiCollectionStore()
 const { closeDialog, reloadTableData } = aiCollectionStore
@@ -43,6 +45,10 @@ const handleConfirm = () => {
     )
   )
 }
+const modelLabelProp = (row: AiModelDto['AiModelRepository/COMPLEX_FETCHER_FOR_ADMIN']) => {
+  const tags = row.tagsView.map((tag) => Dictionaries.AiModelTag[tag.name].keyName).join('、')
+  return `${row.name}(${Dictionaries.AiFactoryType[row.factory].keyName}-${tags})`
+}
 </script>
 <template>
   <div class="create-form">
@@ -50,12 +56,12 @@ const handleConfirm = () => {
       <el-form-item label="名称" prop="name">
         <el-input v-model="createForm.name"></el-input>
       </el-form-item>
-      <el-form-item label="英文名称" prop="collectionName">
+      <el-form-item label="英文名称(仅支持字母和_)" prop="collectionName">
         <el-input v-model="createForm.collectionName"></el-input>
       </el-form-item>
       <el-form-item label="嵌入模型" prop="embeddingModelId">
         <remote-select
-          label-prop="name"
+          :label-prop="modelLabelProp"
           :query-options="(query, id) => aiModelQueryOptions(query, id, ['EMBEDDINGS'])"
           v-model="createForm.embeddingModelId"
         ></remote-select>

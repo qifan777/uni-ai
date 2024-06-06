@@ -41,7 +41,6 @@ const { activeSession, sessionList, isEdit } = storeToRefs(chatStore)
 const messageListRef = ref<InstanceType<typeof HTMLDivElement>>()
 const loading = ref(true)
 const chatParams = ref<ChatParams>({
-  knowledge: false,
   aiModelId: '',
   aiRoleId: '',
   collectionId: '',
@@ -64,6 +63,8 @@ onMounted(async () => {
       // 默认选中的聊天会话是第一个
       if (sessionList.value.length > 0) {
         activeSession.value = sessionList.value[0]
+      } else {
+        handleSessionCreate()
       }
       loading.value = false
     })

@@ -19,20 +19,28 @@ import org.springframework.ai.vectorstore.RedisVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import redis.clients.jedis.JedisPooled;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Configuration
 public class RedisVectorService implements UniAiVectorService {
     private final Map<String, UniAiEmbeddingService> embeddingServiceMap;
     private final AiCollectionRepository aiCollectionRepository;
     private final RedisConnectionDetails redisConnectionDetails;
     private final AiFactoryRepository aiFactoryRepository;
 
+    @Bean
+    public JedisPooled getJedisPooled() {
+        return new JedisPooled(getUri());
+    }
 
     @SneakyThrows
     public void embedding(List<Document> documents, String collectionId) {
@@ -69,14 +77,26 @@ public class RedisVectorService implements UniAiVectorService {
         Map<String, Object> options = aiFactory.options();
         options.putAll(aiCollection.embeddingModel().options());
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
-        String username = StringUtils.hasText(redisConnectionDetails.getUsername()) ? redisConnectionDetails.getUsername() : "default";
-        RedisVectorStore.RedisVectorStoreConfig config = RedisVectorStore.RedisVectorStoreConfig.builder()
-                .withURI("redis://" + username + ":" +
-                        redisConnectionDetails.getPassword() + "@" +
-                        redisConnectionDetails.getStandalone().getHost() + ":" +
-                        redisConnectionDetails.getStandalone().getPort())
-                .withIndexName(aiCollection.collectionName())
+        return new RedisVectorStore(getConfig(aiCollection.collectionName()), embeddingModel, true);
+    }
+
+    public RedisVectorStore.RedisVectorStoreConfig getConfig(String collectionName) {
+        return RedisVectorStore.RedisVectorStoreConfig.builder()
+                .withURI(getUri())
+                .withIndexName(collectionName)
                 .build();
-        return new RedisVectorStore(config, embeddingModel, true);
+    }
+
+    public String getUri() {
+        String username = StringUtils.hasText(redisConnectionDetails.getUsername()) ? redisConnectionDetails.getUsername() : "default";
+        return "redis://" + username + ":" +
+                redisConnectionDetails.getPassword() + "@" +
+                redisConnectionDetails.getStandalone().getHost() + ":" +
+                redisConnectionDetails.getStandalone().getPort();
+    }
+
+    @Override
+    public void deleteCollection(String collectionName) {
+        getJedisPooled().ftDropIndex(collectionName);
     }
 }

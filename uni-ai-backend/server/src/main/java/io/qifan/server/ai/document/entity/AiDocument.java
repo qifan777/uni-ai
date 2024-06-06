@@ -5,10 +5,7 @@ import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.ai.collection.entity.AiCollection;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
-import org.babyfish.jimmer.sql.Entity;
-import org.babyfish.jimmer.sql.IdView;
-import org.babyfish.jimmer.sql.ManyToOne;
-import org.babyfish.jimmer.sql.Serialized;
+import org.babyfish.jimmer.sql.*;
 
 import java.util.List;
 
@@ -32,6 +29,7 @@ public interface AiDocument extends BaseEntity {
     String aiCollectionId();
 
     @ManyToOne
+    @OnDissociate(DissociateAction.DELETE)
     AiCollection aiCollection();
 
     @Serialized

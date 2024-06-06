@@ -81,6 +81,13 @@ const tags = computed(() => {
         v-model="model.collectionId"
       ></remote-select>
     </el-form-item>
+    <el-form-item label="角色" v-if="model.tag == 'AIGC'">
+      <remote-select
+        label-prop="name"
+        :query-options="aiRoleQueryOptions"
+        v-model="model.aiRoleId"
+      ></remote-select>
+    </el-form-item>
     <el-form-item prop="collectionId"> </el-form-item>
     <div v-if="aiModel">
       <chat-options
@@ -94,13 +101,6 @@ const tags = computed(() => {
         v-model="aiModel.options"
       ></image-options>
     </div>
-    <el-form-item label="角色">
-      <remote-select
-        label-prop="name"
-        :query-options="aiRoleQueryOptions"
-        v-model="model.aiRoleId"
-      ></remote-select>
-    </el-form-item>
   </el-form>
 </template>
 
