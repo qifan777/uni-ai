@@ -14,6 +14,9 @@ repositories {
 configurations {
     all*.exclude group: 'org.slf4j', module: 'slf4j-simple'
 }
+bootJar{
+    exclude('application-private.yml')
+}
 dependencies {
     implementation 'redis.clients:jedis'
     implementation(libs.dash.scope)
