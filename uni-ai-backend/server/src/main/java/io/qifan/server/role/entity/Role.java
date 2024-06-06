@@ -5,11 +5,12 @@ import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import io.qifan.server.menu.entity.Menu;
 import io.qifan.server.user.root.entity.UserRoleRel;
-import java.util.List;
 import org.babyfish.jimmer.sql.Entity;
 import org.babyfish.jimmer.sql.Key;
 import org.babyfish.jimmer.sql.ManyToManyView;
 import org.babyfish.jimmer.sql.OneToMany;
+
+import java.util.List;
 
 @GenEntity
 @Entity

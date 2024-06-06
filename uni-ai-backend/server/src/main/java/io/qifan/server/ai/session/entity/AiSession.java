@@ -2,13 +2,12 @@ package io.qifan.server.ai.session.entity;
 
 import io.qifan.infrastructure.generator.core.GenEntity;
 import io.qifan.infrastructure.generator.core.GenField;
-import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.ai.message.entity.AiMessage;
-import io.qifan.server.ai.model.entity.AiModel;
-import io.qifan.server.ai.role.entity.AiRole;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
-import org.babyfish.jimmer.sql.*;
-import org.jetbrains.annotations.Nullable;
+import org.babyfish.jimmer.sql.Entity;
+import org.babyfish.jimmer.sql.OneToMany;
+import org.babyfish.jimmer.sql.OrderedProp;
+import org.babyfish.jimmer.sql.Table;
 
 import java.util.List;
 

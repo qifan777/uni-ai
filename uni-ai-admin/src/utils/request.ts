@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {ElMessage} from 'element-plus'
+import { ElMessage } from 'element-plus'
 import router from '@/router'
 
 const BASE_URL = import.meta.env.VITE_API_PREFIX

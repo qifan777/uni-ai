@@ -12,6 +12,13 @@ import io.qifan.server.dict.entity.dto.DictSpec;
 import io.qifan.server.dict.model.DictGenContext;
 import io.qifan.server.dict.repository.DictRepository;
 import io.qifan.server.infrastructure.model.QueryRequest;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.StringWriter;
@@ -21,12 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j

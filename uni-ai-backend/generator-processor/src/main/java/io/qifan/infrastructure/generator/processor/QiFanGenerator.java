@@ -6,7 +6,6 @@ import io.qifan.infrastructure.generator.processor.processor.EntityCreateProcess
 import io.qifan.infrastructure.generator.processor.processor.ModelElementProcessor;
 import org.reflections.Reflections;
 
-import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;

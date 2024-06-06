@@ -13,22 +13,32 @@ import org.babyfish.jimmer.sql.fetcher.Fetcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Optional;
+
 public interface RoleRepository extends JRepository<Role, String> {
 
-  RoleTable roleTable = RoleTable.$;
-  RoleFetcher COMPLEX_FETCHER = RoleFetcher.$.allScalarFields()
-      .creator(UserFetcher.$.phone().nickname())
-      .editor(UserFetcher.$.phone().nickname());
-  RoleFetcher ROLE_MENU_FETCHER = RoleFetcher.$.allScalarFields().menusView(true);
+    RoleTable roleTable = RoleTable.$;
+    RoleFetcher COMPLEX_FETCHER = RoleFetcher.$.allScalarFields()
+            .creator(UserFetcher.$.phone().nickname())
+            .editor(UserFetcher.$.phone().nickname());
+    RoleFetcher ROLE_MENU_FETCHER = RoleFetcher.$.allScalarFields().menusView(true);
 
-  default Page<Role> findPage(QueryRequest<RoleSpec> queryRequest, Fetcher<Role> fetcher) {
-    RoleSpec query = queryRequest.getQuery();
-    Pageable pageable = queryRequest.toPageable();
-    return sql().createQuery(roleTable)
-        .where(query)
-        .orderBy(SpringOrders.toOrders(roleTable, pageable.getSort()))
-        .select(roleTable.fetch(fetcher))
-        .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
-            SpringPageFactory.getInstance());
-  }
+    default Optional<Role> findRoleByName(String role) {
+        return sql().createQuery(roleTable)
+                .where(roleTable.name().eq("普通用户"))
+                .select(roleTable)
+                .fetchOptional();
+
+    }
+
+    default Page<Role> findPage(QueryRequest<RoleSpec> queryRequest, Fetcher<Role> fetcher) {
+        RoleSpec query = queryRequest.getQuery();
+        Pageable pageable = queryRequest.toPageable();
+        return sql().createQuery(roleTable)
+                .where(query)
+                .orderBy(SpringOrders.toOrders(roleTable, pageable.getSort()))
+                .select(roleTable.fetch(fetcher))
+                .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
+                        SpringPageFactory.getInstance());
+    }
 }

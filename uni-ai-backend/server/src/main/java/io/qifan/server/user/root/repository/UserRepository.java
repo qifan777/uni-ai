@@ -3,7 +3,6 @@ package io.qifan.server.user.root.repository;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import io.qifan.server.role.entity.RoleFetcher;
 import io.qifan.server.user.root.entity.User;
-
 import io.qifan.server.user.root.entity.UserFetcher;
 import io.qifan.server.user.root.entity.UserTable;
 import io.qifan.server.user.root.entity.dto.UserSpec;

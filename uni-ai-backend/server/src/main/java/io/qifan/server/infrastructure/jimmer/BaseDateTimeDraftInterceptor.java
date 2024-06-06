@@ -1,11 +1,11 @@
 package io.qifan.server.infrastructure.jimmer;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import org.babyfish.jimmer.sql.DraftInterceptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 @AllArgsConstructor

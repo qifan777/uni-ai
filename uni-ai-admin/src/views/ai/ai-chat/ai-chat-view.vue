@@ -1,20 +1,20 @@
 <script lang="ts" setup>
-import {nextTick, onMounted, provide, ref} from 'vue'
+import { nextTick, onMounted, provide, ref } from 'vue'
 import SessionItem from './components/session-item.vue'
-import {ChatRound, Close, Delete, EditPen} from '@element-plus/icons-vue'
+import { ChatRound, Close, Delete, EditPen } from '@element-plus/icons-vue'
 import MessageRow from './components/message-row.vue'
 import MessageInput from './components/message-input.vue'
 
 import dayjs from 'dayjs'
-import {storeToRefs} from 'pinia'
-import {ElIcon} from 'element-plus'
-import {api} from '@/utils/api-instance'
-import {useHomeStore} from '@/stores/home-store'
-import {SSE, type SSEvent} from 'sse.js'
-import {type AiMessage, useAiChatStore} from './store/ai-chat-store'
+import { storeToRefs } from 'pinia'
+import { ElIcon } from 'element-plus'
+import { api } from '@/utils/api-instance'
+import { useHomeStore } from '@/stores/home-store'
+import { SSE, type SSEvent } from 'sse.js'
+import { type AiMessage, useAiChatStore } from './store/ai-chat-store'
 
-import {useTagStore} from '@/layout/store/tag-store'
-import type {ChatMessageRequest, ChatParams} from '@/apis/__generated/model/static'
+import { useTagStore } from '@/layout/store/tag-store'
+import type { ChatMessageRequest, ChatParams } from '@/apis/__generated/model/static'
 import AiOptions from '@/views/ai/ai-chat/components/ai-options.vue'
 
 type ChatResponse = {

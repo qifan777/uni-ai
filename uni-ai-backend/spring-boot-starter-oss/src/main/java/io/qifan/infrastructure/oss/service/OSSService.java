@@ -1,7 +1,8 @@
 package io.qifan.infrastructure.oss.service;
 
-import java.io.InputStream;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 
 public interface OSSService {
     String upload(MultipartFile multipartFile);

@@ -6,16 +6,14 @@ import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.wallet.item.entity.WalletItem;
 import io.qifan.server.wallet.item.entity.WalletItemDraft;
 import io.qifan.server.wallet.item.entity.WalletItemFetcher;
-import java.lang.Object;
-import java.lang.Override;
-import java.lang.String;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Objects;
 import org.babyfish.jimmer.View;
 import org.babyfish.jimmer.internal.GeneratedBy;
 import org.babyfish.jimmer.sql.fetcher.ViewMetadata;
 import org.jetbrains.annotations.NotNull;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *  <p>

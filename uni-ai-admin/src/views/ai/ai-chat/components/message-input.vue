@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {inject, ref} from 'vue'
-import {Position} from '@element-plus/icons-vue'
+import { inject, ref } from 'vue'
+import { Position } from '@element-plus/icons-vue'
 import ImageUpload from '@/components/image/image-upload.vue'
-import {ElMessage} from 'element-plus'
-import type {AiMessage} from '@/views/ai/ai-chat/store/ai-chat-store'
-import type {ChatParams} from '@/apis/__generated/model/static'
+import { ElMessage } from 'element-plus'
+import type { AiMessage } from '@/views/ai/ai-chat/store/ai-chat-store'
+import type { ChatParams } from '@/apis/__generated/model/static'
 
 const chatParams = inject<ChatParams>('chatParams')
 

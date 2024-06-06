@@ -3,14 +3,15 @@ package io.qifan.infrastructure.oss.local;
 import io.qifan.infrastructure.common.constants.ResultCode;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.infrastructure.oss.service.OSSService;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service

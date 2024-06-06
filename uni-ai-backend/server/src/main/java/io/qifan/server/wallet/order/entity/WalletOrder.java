@@ -5,7 +5,6 @@ import io.qifan.infrastructure.generator.core.GenField;
 import io.qifan.infrastructure.generator.core.ItemType;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import io.qifan.server.user.root.entity.User;
-import io.qifan.server.wallet.item.entity.WalletItem;
 import io.qifan.server.wallet.item.entity.dto.WalletItemView;
 import org.babyfish.jimmer.sql.*;
 import org.jetbrains.annotations.Nullable;

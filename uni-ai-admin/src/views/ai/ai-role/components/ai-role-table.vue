@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue'
-import {storeToRefs} from 'pinia'
-import {assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
-import {ElMessageBox} from 'element-plus'
-import type {Scope} from '@/typings'
-import {useAiRoleStore} from '../store/ai-role-store'
-import type {AiRoleDto} from '@/apis/__generated/model/dto'
-import {Delete, Edit, Plus} from '@element-plus/icons-vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
+import { ElMessageBox } from 'element-plus'
+import type { Scope } from '@/typings'
+import { useAiRoleStore } from '../store/ai-role-store'
+import type { AiRoleDto } from '@/apis/__generated/model/dto'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 
 type AiRoleScope = Scope<AiRoleDto['AiRoleRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiRoleStore = useAiRoleStore()

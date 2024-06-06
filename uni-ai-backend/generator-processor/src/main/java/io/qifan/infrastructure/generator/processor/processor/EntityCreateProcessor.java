@@ -12,8 +12,6 @@ import io.qifan.infrastructure.generator.processor.utils.FieldUtils;
 import io.qifan.infrastructure.generator.processor.utils.TypeUtils;
 import io.qifan.infrastructure.generator.processor.writer.ModelWriter;
 
-import java.io.File;
-
 public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity> {
 
 

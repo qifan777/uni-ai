@@ -5,12 +5,8 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
-import io.qifan.infrastructure.common.constants.ResultCode;
-import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.infrastructure.model.LoginDevice;
-import io.qifan.server.infrastructure.model.QueryRequest;
 import io.qifan.server.user.root.entity.User;
-
 import io.qifan.server.user.root.entity.UserDraft;
 import io.qifan.server.user.root.entity.UserFetcher;
 import io.qifan.server.user.root.entity.UserTable;

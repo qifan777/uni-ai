@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {toRefs} from 'vue'
-import {useAiFactoryStore} from '../store/ai-factory-store'
-import {storeToRefs} from 'pinia'
+import { toRefs } from 'vue'
+import { useAiFactoryStore } from '../store/ai-factory-store'
+import { storeToRefs } from 'pinia'
 import DictSelect from '@/components/dict/dict-select.vue'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 
 const aiFactoryStore = useAiFactoryStore()
 const { queryData } = storeToRefs(aiFactoryStore)

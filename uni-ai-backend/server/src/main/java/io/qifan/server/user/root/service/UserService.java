@@ -1,5 +1,6 @@
 package io.qifan.server.user.root.service;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
@@ -10,16 +11,13 @@ import io.qifan.infrastructure.security.AuthErrorCode;
 import io.qifan.infrastructure.sms.SmsService;
 import io.qifan.server.infrastructure.model.LoginDevice;
 import io.qifan.server.role.entity.Role;
-import io.qifan.server.role.entity.RoleTable;
 import io.qifan.server.role.repository.RoleRepository;
-import io.qifan.server.user.root.entity.User;
-import io.qifan.server.user.root.entity.UserDraft;
-import io.qifan.server.user.root.entity.UserFetcher;
-import io.qifan.server.user.root.entity.UserTable;
+import io.qifan.server.user.root.entity.*;
 import io.qifan.server.user.root.entity.dto.UserLoginInput;
 import io.qifan.server.user.root.entity.dto.UserRegisterInput;
 import io.qifan.server.user.root.entity.dto.UserResetPasswordInput;
 import io.qifan.server.user.root.repository.UserRepository;
+import io.qifan.server.user.root.repository.UserRoleRelRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final SmsService smsService;
     private final RoleRepository roleRepository;
+    private final UserRoleRelRepository userRoleRelRepository;
 
+    @SaIgnore
 
     public SaTokenInfo register(UserRegisterInput registerInput) {
 //        boolean checked = smsService.checkSms(registerInput.getPhone(), registerInput.getCode());
@@ -47,19 +47,18 @@ public class UserService {
                 .ifPresent((user) -> {
                     throw new BusinessException(ResultCode.StatusHasValid, "用户已经存在");
                 });
-        User user = UserDraft.$.produce(registerInput.toEntity(), draft -> {
-            RoleTable t = RoleTable.$;
-            Role role = roleRepository.sql().createQuery(t)
-                    .where(t.name().eq("普通用户"))
-                    .select(t)
-                    .fetchOptional()
-                    .orElseThrow(() -> new BusinessException("角色不存在，请联系管理员"));
-            draft.addIntoRoles(draft1 -> draft1.setRoleId(role.id()).setUser(registerInput.toEntity()));
+
+        User user = userRepository.save(UserDraft.$.produce(registerInput.toEntity(), draft -> {
             draft.setNickname("默认用户").setPassword(BCrypt.hashpw(draft.password()));
-        });
-        StpUtil.login(userRepository.save(user).id(), new SaLoginModel()
+        }));
+        StpUtil.login(user.id(), new SaLoginModel()
                 .setDevice(LoginDevice.BROWSER)
                 .setTimeout(60 * 60 * 24 * 30 * 36));
+        Role role = roleRepository.findRoleByName("普通用户").orElseThrow(() -> new BusinessException("角色不存在，清联系管理员"));
+        userRoleRelRepository.save(UserRoleRelDraft.$.produce(draft -> {
+            draft.setRoleId(role.id())
+                    .setUserId(user.id());
+        }));
         return StpUtil.getTokenInfo();
     }
 

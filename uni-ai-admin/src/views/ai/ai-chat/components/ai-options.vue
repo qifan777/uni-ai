@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import ChatOptions from '@/views/ai/ai-model/components/chat-options/chat-options.vue'
 import ImageOptions from '@/views/ai/ai-model/components/image-options/image-options.vue'
-import {computed, reactive, ref} from 'vue'
-import type {AiModelDto} from '@/apis/__generated/model/dto'
+import { computed, reactive, ref } from 'vue'
+import type { AiModelDto } from '@/apis/__generated/model/dto'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import {Dictionaries} from '@/apis/__generated/model/enums/DictConstants'
-import {aiModelQueryOptions} from '@/views/ai/ai-model/store/ai-model-store'
-import {aiRoleQueryOptions} from '@/views/ai/ai-role/store/ai-role-store'
-import type {ChatParams} from '@/apis/__generated/model/static'
-import {aiCollectionQueryOptions} from '@/views/ai/ai-collection/store/ai-collection-store'
-import type {FormRules} from 'element-plus'
-import {api} from '@/utils/api-instance'
+import { Dictionaries } from '@/apis/__generated/model/enums/DictConstants'
+import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
+import { aiRoleQueryOptions } from '@/views/ai/ai-role/store/ai-role-store'
+import type { ChatParams } from '@/apis/__generated/model/static'
+import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
+import type { FormRules } from 'element-plus'
+import { api } from '@/utils/api-instance'
 
 const rules = reactive<FormRules<ChatParams>>({
   tag: [{ required: true, message: '请选择类型', trigger: 'change' }],

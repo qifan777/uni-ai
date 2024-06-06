@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {storeToRefs} from 'pinia'
-import {reactive, ref, watch} from 'vue'
-import {useAiTagStore} from '../store/ai-tag-store'
-import {assertFormValidate, assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, watch } from 'vue'
+import { useAiTagStore } from '../store/ai-tag-store'
+import { assertFormValidate, assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import type {FormInstance, FormRules} from 'element-plus'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import type { FormInstance, FormRules } from 'element-plus'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 
 const aiTagStore = useAiTagStore()
 const { closeDialog, reloadTableData } = aiTagStore

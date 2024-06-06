@@ -7,12 +7,13 @@ import io.qifan.server.menu.entity.Menu;
 import io.qifan.server.menu.entity.dto.MenuInput;
 import io.qifan.server.menu.entity.dto.MenuSpec;
 import io.qifan.server.menu.repository.MenuRepository;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j

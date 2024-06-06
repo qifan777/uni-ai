@@ -1,14 +1,10 @@
 package io.qifan.server.ai.session.repository;
 
-import io.qifan.server.ai.factory.entity.AiFactoryFetcher;
 import io.qifan.server.ai.message.entity.AiMessageFetcher;
-import io.qifan.server.ai.model.entity.AiModelFetcher;
-import io.qifan.server.ai.role.entity.AiRoleFetcher;
 import io.qifan.server.ai.session.entity.AiSession;
 import io.qifan.server.ai.session.entity.AiSessionFetcher;
 import io.qifan.server.ai.session.entity.AiSessionTable;
 import io.qifan.server.ai.session.entity.dto.AiSessionSpec;
-import io.qifan.server.ai.tag.root.entity.AiTagFetcher;
 import io.qifan.server.infrastructure.model.QueryRequest;
 import io.qifan.server.user.root.entity.UserFetcher;
 import org.babyfish.jimmer.spring.repository.JRepository;

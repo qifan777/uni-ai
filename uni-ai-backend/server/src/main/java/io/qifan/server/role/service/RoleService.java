@@ -8,14 +8,15 @@ import io.qifan.server.role.entity.RoleDraft;
 import io.qifan.server.role.entity.dto.RoleInput;
 import io.qifan.server.role.entity.dto.RoleSpec;
 import io.qifan.server.role.repository.RoleRepository;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Slf4j

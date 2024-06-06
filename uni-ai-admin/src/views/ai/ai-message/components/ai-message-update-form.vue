@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {storeToRefs} from 'pinia'
-import {reactive, ref, watch} from 'vue'
-import {useAiMessageStore} from '../store/ai-message-store'
-import {assertFormValidate, assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, watch } from 'vue'
+import { useAiMessageStore } from '../store/ai-message-store'
+import { assertFormValidate, assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
 import DictSelect from '@/components/dict/dict-select.vue'
-import type {FormInstance, FormRules} from 'element-plus'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import type { FormInstance, FormRules } from 'element-plus'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 import RemoteSelect from '@/components/base/form/remote-select.vue'
-import {aiSessionQueryOptions} from '@/views/ai/ai-session/store/ai-session-store'
+import { aiSessionQueryOptions } from '@/views/ai/ai-session/store/ai-session-store'
 
 const aiMessageStore = useAiMessageStore()
 const { closeDialog, reloadTableData } = aiMessageStore

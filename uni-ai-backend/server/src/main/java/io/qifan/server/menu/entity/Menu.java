@@ -8,9 +8,10 @@ import io.qifan.server.dict.model.DictConstants.MenuType;
 import io.qifan.server.infrastructure.jimmer.BaseEntity;
 import io.qifan.server.role.entity.RoleMenuRel;
 import jakarta.validation.constraints.Null;
-import java.util.List;
 import org.babyfish.jimmer.sql.Entity;
 import org.babyfish.jimmer.sql.OneToMany;
+
+import java.util.List;
 
 @GenEntity
 @Entity

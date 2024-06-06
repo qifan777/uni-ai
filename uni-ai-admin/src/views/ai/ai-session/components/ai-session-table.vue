@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue'
-import {storeToRefs} from 'pinia'
-import {assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
-import {ElMessageBox} from 'element-plus'
-import type {Scope} from '@/typings'
-import {useAiSessionStore} from '../store/ai-session-store'
-import type {AiSessionDto} from '@/apis/__generated/model/dto'
-import {Delete, Edit, Plus} from '@element-plus/icons-vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
+import { ElMessageBox } from 'element-plus'
+import type { Scope } from '@/typings'
+import { useAiSessionStore } from '../store/ai-session-store'
+import type { AiSessionDto } from '@/apis/__generated/model/dto'
+import { Delete, Edit, Plus } from '@element-plus/icons-vue'
 
 type AiSessionScope = Scope<AiSessionDto['AiSessionRepository/COMPLEX_FETCHER_FOR_ADMIN']>
 const aiSessionStore = useAiSessionStore()

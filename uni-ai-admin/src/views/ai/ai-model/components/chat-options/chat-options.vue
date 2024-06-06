@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type {AiFactoryType} from '@/apis/__generated/model/enums'
-import {computed} from 'vue'
+import type { AiFactoryType } from '@/apis/__generated/model/enums'
+import { computed } from 'vue'
 import SparkAiChatOptions from './spark-ai-chat-options.vue'
 import DashScopeAiOptions from './dash-scope-ai-chat-options.vue'
 import OpenAiOptions from './open-ai-chat-options.vue'

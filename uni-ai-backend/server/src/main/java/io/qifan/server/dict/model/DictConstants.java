@@ -1,6 +1,7 @@
 package io.qifan.server.dict.model;
-import lombok.Getter;
+
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 public class DictConstants {
   public static final String MENU_TYPE = "MENU_TYPE";

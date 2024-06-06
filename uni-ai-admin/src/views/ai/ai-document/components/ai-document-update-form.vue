@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import {storeToRefs} from 'pinia'
-import {reactive, ref, watch} from 'vue'
-import {useAiDocumentStore} from '../store/ai-document-store'
-import {assertFormValidate, assertSuccess} from '@/utils/common'
-import {api} from '@/utils/api-instance'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, watch } from 'vue'
+import { useAiDocumentStore } from '../store/ai-document-store'
+import { assertFormValidate, assertSuccess } from '@/utils/common'
+import { api } from '@/utils/api-instance'
 import FooterButton from '@/components/base/dialog/footer-button.vue'
-import type {FormInstance, FormRules} from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 
 const aiDocumentStore = useAiDocumentStore()
 const { closeDialog, reloadTableData } = aiDocumentStore

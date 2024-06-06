@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import {toRefs} from 'vue'
-import {useAiModelStore} from '../store/ai-model-store'
-import {storeToRefs} from 'pinia'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import { toRefs } from 'vue'
+import { useAiModelStore } from '../store/ai-model-store'
+import { storeToRefs } from 'pinia'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 import DictSelect from '@/components/dict/dict-select.vue'
 
 const aiModelStore = useAiModelStore()

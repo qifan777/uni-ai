@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {toRefs} from 'vue'
-import {useAiTagStore} from '../store/ai-tag-store'
-import {storeToRefs} from 'pinia'
+import { toRefs } from 'vue'
+import { useAiTagStore } from '../store/ai-tag-store'
+import { storeToRefs } from 'pinia'
 import DictSelect from '@/components/dict/dict-select.vue'
-import {DictConstants} from '@/apis/__generated/model/enums/DictConstants'
+import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
 
 const aiTagStore = useAiTagStore()
 const { queryData } = storeToRefs(aiTagStore)

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {type Component} from 'vue'
-import {storeToRefs} from 'pinia'
-import {useAiRoleStore} from '../store/ai-role-store'
+import { type Component } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAiRoleStore } from '../store/ai-role-store'
 import AiRoleCreateForm from './ai-role-create-form.vue'
 import AiRoleUpdateForm from './ai-role-update-form.vue'
-import type {EditMode} from '@/typings'
+import type { EditMode } from '@/typings'
 
 const aiRoleStore = useAiRoleStore()
 const { dialogData } = storeToRefs(aiRoleStore)

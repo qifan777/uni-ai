@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qifan.infrastructure.oss.OSSAutoConfiguration;
 import io.qifan.infrastructure.oss.aliyun.AliYunOSSProperties;
 import io.qifan.infrastructure.oss.service.OSSService;
-import io.qifan.server.dict.model.DictConstants;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.model.ModelOptionsUtils;
