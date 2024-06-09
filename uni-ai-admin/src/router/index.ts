@@ -82,6 +82,10 @@ const router = createRouter({
           component: () => import('@/views/ai/ai-collection/ai-collection-view.vue')
         },
         {
+          path: '/ai-plugin',
+          component: () => import('@/views/ai/ai-plugin/ai-plugin-view.vue')
+        },
+        {
           path: '/setting',
           component: () => import('@/views/setting/setting-view.vue')
         },

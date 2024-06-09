@@ -30,6 +30,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
@@ -80,13 +81,16 @@ public class AiMessageChatService {
         if (request.getChatParams().getOptions() != null) {
             options.putAll(request.getChatParams().getOptions());
         }
+        if (!CollectionUtils.isEmpty(request.getChatParams().getPluginNames())) {
+            options.put("functions", request.getChatParams().getPluginNames());
+        }
         return aiChatService.getChatModel(options).stream(prompt);
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {
         ChatMessage chatMessage = toMessage(DictConstants.AiMessageType.USER, messageInput.getContent());
-        if (StringUtils.hasText(params.getCollectionId())) {
-            List<String> context = uniAiVectorService.similaritySearch(chatMessage.getContent(), params.getCollectionId())
+        if (StringUtils.hasText(params.getAiCollectionId())) {
+            List<String> context = uniAiVectorService.similaritySearch(chatMessage.getContent(), params.getAiCollectionId())
                     .stream()
                     .map(Document::getContent)
                     .toList();

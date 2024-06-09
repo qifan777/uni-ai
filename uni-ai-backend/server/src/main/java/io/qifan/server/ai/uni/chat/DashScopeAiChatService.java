@@ -9,6 +9,7 @@ import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 public class DashScopeAiChatService implements UniAiChatService {
     private final DashScopeAiProperties dashScopeAiProperties;
     private final ObjectMapper objectMapper;
+    private final FunctionCallbackContext functionCallbackContext;
 
     @SneakyThrows
     @Override
@@ -32,6 +34,6 @@ public class DashScopeAiChatService implements UniAiChatService {
         }
         String valueAsString = objectMapper.writeValueAsString(options);
         DashScopeAiChatOptions chatOptions = objectMapper.readValue(valueAsString, DashScopeAiChatOptions.class);
-        return new DashScopeAiChatModel(new DashScopeAiApi(apiKey), chatOptions);
+        return new DashScopeAiChatModel(functionCallbackContext, new DashScopeAiApi(apiKey), chatOptions);
     }
 }

@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { AiMessageDto, AiSessionDto } from '@/apis/__generated/model/dto'
+import type { AiMessageDto, AiModelDto, AiSessionDto } from '@/apis/__generated/model/dto'
 import { api } from '@/utils/api-instance'
-import type { AiSessionCreateInput } from '@/apis/__generated/model/static'
-
+import type { AiSessionCreateInput, ChatParams } from '@/apis/__generated/model/static'
+export type ChatParamsExt = ChatParams & {
+  aiModel?: AiModelDto['AiModelRepository/COMPLEX_FETCHER_FOR_ADMIN']
+}
 export type AiSession = Pick<
   AiSessionDto['AiSessionRepository/COMPLEX_FETCHER_FOR_FRONT'],
   'id' | 'name' | 'editedTime'
@@ -34,10 +36,10 @@ export const useAiChatStore = defineStore('ai-chat', () => {
         return value.id === session.id
       })
       sessionList.value.splice(index, 1)
-      if (sessionList.value.length > 0) {
-        activeSession.value = sessionList.value[index]
+      if (index == sessionList.value.length) {
+        activeSession.value = sessionList.value[index - 1]
       } else {
-        activeSession.value = undefined
+        activeSession.value = sessionList.value[index]
       }
     })
   }

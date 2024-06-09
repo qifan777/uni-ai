@@ -87,7 +87,7 @@ const handleDelete = (ids: string[]) => {
       </el-table-column>
       <el-table-column
         label="厂家"
-        prop="aiFactoryId"
+        prop="factory"
         sortable="custom"
         show-overflow-tooltip
         width="120"

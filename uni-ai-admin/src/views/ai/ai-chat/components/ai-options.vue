@@ -7,16 +7,17 @@ import RemoteSelect from '@/components/base/form/remote-select.vue'
 import { Dictionaries } from '@/apis/__generated/model/enums/DictConstants'
 import { aiModelQueryOptions } from '@/views/ai/ai-model/store/ai-model-store'
 import { aiRoleQueryOptions } from '@/views/ai/ai-role/store/ai-role-store'
-import type { ChatParams } from '@/apis/__generated/model/static'
 import { aiCollectionQueryOptions } from '@/views/ai/ai-collection/store/ai-collection-store'
 import type { FormRules } from 'element-plus'
 import { api } from '@/utils/api-instance'
+import { aiPluginQueryOptions } from '@/views/ai/ai-plugin/store/ai-plugin-store'
+import type { ChatParamsExt } from '@/views/ai/ai-chat/store/ai-chat-store'
 
-const rules = reactive<FormRules<ChatParams>>({
+const rules = reactive<FormRules<ChatParamsExt>>({
   tag: [{ required: true, message: '请选择类型', trigger: 'change' }],
   aiModelId: [{ required: true, message: '请选择模型', trigger: 'change' }]
 })
-const model = defineModel<ChatParams>({
+const model = defineModel<ChatParamsExt>({
   default: {
     aiModelId: '',
     tag: 'AIGC',
@@ -26,20 +27,19 @@ const model = defineModel<ChatParams>({
   }
 })
 
-const aiModel = ref<AiModelDto['AiModelRepository/COMPLEX_FETCHER_FOR_ADMIN']>()
 const modelLabelProp = (row: AiModelDto['AiModelRepository/COMPLEX_FETCHER_FOR_ADMIN']) => {
   const tags = row.tagsView.map((tag) => Dictionaries.AiModelTag[tag.name].keyName).join('、')
   return `${row.name}(${Dictionaries.AiFactoryType[row.factory].keyName}-${tags})`
 }
 const handleAiModelChange = async (id: string) => {
   model.value.aiModelId = id
-  aiModel.value = await api.aiModelForAdminController.findById({ id })
+  model.value.aiModel = await api.aiModelForAdminController.findById({ id })
 }
 const handleAiModelQuery = async (query: string, id: string) => {
   const res = await aiModelQueryOptions(query, id, [model.value.tag])
 
   if (res.findIndex((item) => item.id === model.value.aiModelId) < 0 && res.length) {
-    aiModel.value = res[0]
+    model.value.aiModel = res[0]
     model.value.aiModelId = res[0].id
   }
   return res
@@ -78,7 +78,7 @@ const tags = computed(() => {
       <remote-select
         label-prop="name"
         :query-options="aiCollectionQueryOptions"
-        v-model="model.collectionId"
+        v-model="model.aiCollectionId"
       ></remote-select>
     </el-form-item>
     <el-form-item label="角色" v-if="model.tag == 'AIGC'">
@@ -88,17 +88,25 @@ const tags = computed(() => {
         v-model="model.aiRoleId"
       ></remote-select>
     </el-form-item>
-    <el-form-item prop="collectionId"> </el-form-item>
-    <div v-if="aiModel">
+    <el-form-item label="插件">
+      <remote-select
+        label-prop="description"
+        value-prop="name"
+        :query-options="aiPluginQueryOptions"
+        v-model="model.pluginNames"
+        multiple
+      ></remote-select>
+    </el-form-item>
+    <div v-if="model.aiModel">
       <chat-options
         v-if="model.tag == 'AIGC' || model.tag == 'VISION'"
-        :factory="aiModel.factory"
-        v-model="aiModel.options"
+        :factory="model.aiModel.factory"
+        v-model="model.aiModel.options"
       ></chat-options>
       <image-options
         v-if="model.tag == 'IMAGE'"
-        :factory="aiModel.factory"
-        v-model="aiModel.options"
+        :factory="model.aiModel.factory"
+        v-model="model.aiModel.options"
       ></image-options>
     </div>
   </el-form>

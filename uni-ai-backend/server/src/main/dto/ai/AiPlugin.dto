@@ -1,0 +1,22 @@
+export io.qifan.server.ai.plugin.entity.AiPlugin
+
+input AiPluginCreateInput {
+    #allScalars(AiPlugin)
+}
+input AiPluginUpdateInput {
+    #allScalars(AiPlugin)
+    id!
+}
+
+specification AiPluginSpec {
+    #allScalars
+    like/i(name)
+    like/i(description)
+    like/i(id)
+    ge(createdTime)
+    le(createdTime)
+    ge(editedTime)
+    le(editedTime)
+    id(creator)
+    valueIn(name) as Names
+}

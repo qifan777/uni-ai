@@ -2,16 +2,16 @@ package io.qifan.server.ai.message.entity.model;
 
 import io.qifan.server.dict.model.DictConstants;
 import lombok.Data;
-import org.babyfish.jimmer.sql.EnableDtoGeneration;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
-@EnableDtoGeneration
 public class ChatParams {
     DictConstants.AiModelTag tag;
-    String collectionId;
+    String aiCollectionId;
     String aiModelId;
     String aiRoleId;
+    List<String> pluginNames;
     Map<String, Object> options;
 }

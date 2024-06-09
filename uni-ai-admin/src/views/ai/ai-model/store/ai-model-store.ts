@@ -21,7 +21,7 @@ export const aiModelQueryOptions = async (keyword: string, id: string, tagNames:
 export const useAiModelStore = defineStore('aiModel', () => {
   const initQuery: AiModelSpec = {}
   const initForm: AiModelCreateInput & AiModelUpdateInput = {
-    aiFactoryId: '',
+    factory: 'DASH_SCOPE',
     id: '',
     name: '',
     tagIds: []

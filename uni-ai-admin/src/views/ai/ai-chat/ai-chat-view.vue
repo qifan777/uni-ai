@@ -11,7 +11,7 @@ import { ElIcon } from 'element-plus'
 import { api } from '@/utils/api-instance'
 import { useHomeStore } from '@/stores/home-store'
 import { SSE, type SSEvent } from 'sse.js'
-import { type AiMessage, useAiChatStore } from './store/ai-chat-store'
+import { type AiMessage, type ChatParamsExt, useAiChatStore } from './store/ai-chat-store'
 
 import { useTagStore } from '@/layout/store/tag-store'
 import type { ChatMessageRequest, ChatParams } from '@/apis/__generated/model/static'
@@ -40,12 +40,13 @@ const { handleDeleteSession, handleUpdateSession } = chatStore
 const { activeSession, sessionList, isEdit } = storeToRefs(chatStore)
 const messageListRef = ref<InstanceType<typeof HTMLDivElement>>()
 const loading = ref(true)
-const chatParams = ref<ChatParams>({
+const chatParams = ref<ChatParamsExt>({
   aiModelId: '',
   aiRoleId: '',
-  collectionId: '',
+  aiCollectionId: '',
   options: {},
-  tag: 'AIGC'
+  tag: 'AIGC',
+  pluginNames: []
 })
 provide('chatParams', chatParams)
 
@@ -115,7 +116,11 @@ const handleChatMessage = (message: AiMessage['content']) => {
     const response = JSON.parse(event.data) as ChatResponse
     const finishReason = response.result.metadata.finishReason
     if (response.result.output.content) {
-      responseMessage.value.content[0].text += response.result.output.content
+      if (chatParams.value.aiModel && chatParams.value.aiModel.factory == 'DASH_SCOPE') {
+        responseMessage.value.content[0].text = response.result.output.content
+      } else {
+        responseMessage.value.content[0].text += response.result.output.content
+      }
       nextTick(() => {
         messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
       })

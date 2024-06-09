@@ -13,6 +13,11 @@ import com.alibaba.dashscope.utils.Constants;
 import io.reactivex.Flowable;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import reactor.core.publisher.Flux;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class DashScopeAiApi {
@@ -28,10 +33,34 @@ public class DashScopeAiApi {
     }
 
     @SneakyThrows
-    public Flowable<GenerationResult> chatCompletionStream(GenerationParam generationParam) {
+    public Flux<GenerationResult> chatCompletionStream(GenerationParam generationParam) {
         Generation gen = new Generation();
-        return gen.streamCall(generationParam);
-
+        Flowable<GenerationResult> stream = gen.streamCall(generationParam);
+        AtomicBoolean isInsideTool = new AtomicBoolean(false);
+        return Flux.<GenerationResult>create(fluxSink -> {
+                    stream.subscribe(result -> {
+                        fluxSink.next(result);
+                        if (StringUtils.hasLength(result.getOutput().getFinishReason())) {
+                            fluxSink.complete();
+                        }
+                    });
+                })
+                .map(result -> {
+                    if (isToolFunctionCall(result)) {
+                        isInsideTool.set(true);
+                    }
+                    return result;
+                })
+                .windowUntil(
+                        result -> {
+                            if (isInsideTool.get() && isToolFunctionCallFinish(result)) {
+                                isInsideTool.set(false);
+                                return true;
+                            }
+                            return !isInsideTool.get();
+                        }
+                )
+                .concatMap(Flux::last);
     }
 
     @SneakyThrows
@@ -50,5 +79,15 @@ public class DashScopeAiApi {
     public TextEmbeddingResult embedding(TextEmbeddingParam embeddingParam) {
         TextEmbedding textEmbedding = new TextEmbedding();
         return textEmbedding.call(embeddingParam);
+    }
+
+    public Boolean isToolFunctionCall(GenerationResult result) {
+        return result.getOutput() != null && !CollectionUtils.isEmpty(result.getOutput().getChoices())
+                && !CollectionUtils.isEmpty(result.getOutput().getChoices().get(0).getMessage().getToolCalls());
+    }
+
+    public Boolean isToolFunctionCallFinish(GenerationResult result) {
+        String finishReason = result.getOutput().getChoices().get(0).getFinishReason();
+        return isToolFunctionCall(result) && finishReason != null && finishReason.equalsIgnoreCase("tool_calls");
     }
 }
