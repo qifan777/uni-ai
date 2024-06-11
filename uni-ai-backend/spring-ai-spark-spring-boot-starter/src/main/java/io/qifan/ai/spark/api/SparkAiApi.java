@@ -43,7 +43,7 @@ public class SparkAiApi {
     }
 
     public SparkResponse chatCompletion(SparkRequest sparkRequest) {
-        throw new BusinessException("该模型不支持非流水对话");
+        throw new BusinessException("not support stream chat completion");
     }
 
     public Flux<SparkResponse> chatCompletionStream(SparkRequest sparkRequest) {
@@ -60,7 +60,6 @@ public class SparkAiApi {
             @Override
             public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                 super.onClosed(webSocket, code, reason);
-                log.info("websocket连接关闭");
                 webSocket.close(1002, "websocket finish");
                 client.connectionPool().evictAll();
                 fluxSink.complete();
@@ -113,8 +112,8 @@ public class SparkAiApi {
         String date = format.format(new Date());
         // 拼接
         String preStr = "host: " + url.getHost() + "\n" +
-                        "date: " + date + "\n" +
-                        "GET " + url.getPath() + " HTTP/1.1";
+                "date: " + date + "\n" +
+                "GET " + url.getPath() + " HTTP/1.1";
         // System.err.println(preStr);
         // SHA256加密
         Mac mac = Mac.getInstance("hmacsha256");
