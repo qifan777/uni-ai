@@ -24,6 +24,6 @@ public class UniAliYunOSSService implements UniOSSService {
         AliYunOSSProperties aliYunOSSProperties = objectMapper.readValue(valueAsString, AliYunOSSProperties.class);
         AliYunOSSProperties merge = ModelOptionsUtils.merge(aliYunOSSProperties, properties, AliYunOSSProperties.class);
         OSSAutoConfiguration.AliYunConfig aliYunConfig = new OSSAutoConfiguration.AliYunConfig();
-        return aliYunConfig.aliYunOSSService(aliYunConfig.aliYunOSS(merge), merge);
+        return aliYunConfig.aliYunOSSService(merge);
     }
 }

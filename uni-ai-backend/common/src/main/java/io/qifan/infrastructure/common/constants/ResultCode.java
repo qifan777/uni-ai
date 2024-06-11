@@ -16,7 +16,8 @@ public enum ResultCode implements BaseEnum {
     BusinessError(10008, "业务异常"),
     ParamSetIllegal(10009, "参数设置非法"),
     TransferStatusError(10010, "当前状态不正确，请勿重复提交"),
-    NotGrant(10011, "没有操作该功能的权限，请联系管理员");
+    NotGrant(10011, "权限不足"),
+    Unauthorized(10012, "请登录");
 
     /**
      * code的取值规则，xx代表模块，xxx代表功能异常 例如：基础模块（10）的查询异常（001）

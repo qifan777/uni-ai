@@ -1,10 +1,10 @@
 package io.qifan.infrastructure.oss.aliyun;
 
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.internal.OSSHeaders;
 import com.aliyun.oss.model.*;
 import io.qifan.infrastructure.oss.service.OSSService;
-import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,11 +13,13 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@AllArgsConstructor
 @Slf4j
 public class AliYunOSSService implements OSSService {
     private final AliYunOSSProperties aliYunOSSProperties;
-    private final OSS aliYunOSS;
+
+    public AliYunOSSService(AliYunOSSProperties aliYunOSSProperties) {
+        this.aliYunOSSProperties = aliYunOSSProperties;
+    }
 
     @SneakyThrows
     @Override
@@ -43,9 +45,15 @@ public class AliYunOSSService implements OSSService {
         metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
         metadata.setObjectAcl(CannedAccessControlList.PublicRead);
         putObjectRequest.setMetadata(metadata);
-        PutObjectResult putObjectResult = aliYunOSS.putObject(putObjectRequest);
+        PutObjectResult putObjectResult = getAliYunOSS().putObject(putObjectRequest);
         return "https://" + aliYunOSSProperties.getBucketName() + "." +
                 aliYunOSSProperties.getEndpoint().replace("https://", "") +
                 "/" + objectName;
+    }
+
+    public OSS getAliYunOSS() {
+        return new OSSClientBuilder().build(aliYunOSSProperties.getEndpoint(),
+                aliYunOSSProperties.getAccessKeyId(),
+                aliYunOSSProperties.getAccessKeySecret());
     }
 }

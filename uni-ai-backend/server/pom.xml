@@ -6,7 +6,7 @@
     <parent>
         <artifactId>uni-ai</artifactId>
         <groupId>io.github.qifan777</groupId>
-        <version>0.1.2</version>
+        <version>0.1.3</version>
     </parent>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -101,20 +101,49 @@
         <dependency>
             <artifactId>spring-ai-spark-spring-boot-starter</artifactId>
             <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>spring-ai-qianfan-spring-boot-starter</artifactId>
             <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>spring-ai-dashscope-spring-boot-starter</artifactId>
             <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <artifactId>spring-ai-kimi-spring-boot-starter</artifactId>
             <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>spring-boot-starter-sms</artifactId>
+            <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>spring-boot-starter-oss</artifactId>
+            <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>generator-core</artifactId>
+            <groupId>io.github.qifan777</groupId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>generator-processor</artifactId>
+            <groupId>io.github.qifan777</groupId>
+            <scope>test</scope>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -143,27 +172,6 @@
         <dependency>
             <artifactId>mysql-connector-j</artifactId>
             <groupId>com.mysql</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <groupId>io.github.qifan777</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>spring-boot-starter-sms</artifactId>
-            <groupId>io.github.qifan777</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>spring-boot-starter-oss</artifactId>
-            <groupId>io.github.qifan777</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>generator-core</artifactId>
-            <groupId>io.github.qifan777</groupId>
-        </dependency>
-        <dependency>
-            <artifactId>generator-processor</artifactId>
-            <groupId>io.github.qifan777</groupId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <artifactId>commons-pool2</artifactId>

@@ -1,9 +1,13 @@
 package io.qifan.infrastructure.oss.tencent;
 
 import com.qcloud.cos.COSClient;
+import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.ObjectMetadata;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
+import com.qcloud.cos.region.Region;
 import io.qifan.infrastructure.oss.service.OSSService;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -17,7 +21,7 @@ import java.util.Date;
 @Service
 @AllArgsConstructor
 public class TencentOSSService implements OSSService {
-    private final COSClient cosClient;
+
     private final TencentOSSProperties properties;
 
     @SneakyThrows
@@ -40,7 +44,15 @@ public class TencentOSSService implements OSSService {
         String bucketName = properties.getBucket();
         // 指定文件上传到 COS 上的路径，即对象键。例如对象键为 folder/picture.jpg，则表示将文件 picture.jpg 上传到 folder 路径下
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, inputStream, new ObjectMetadata());
-        PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
-        return cosClient.getObjectUrl(bucketName, objectName).toString();
+        COSClient tencentOSS = getTencentOSS();
+        PutObjectResult putObjectResult = tencentOSS.putObject(putObjectRequest);
+        return tencentOSS.getObjectUrl(bucketName, objectName).toString();
+    }
+
+    public COSClient getTencentOSS() {
+        COSCredentials cred = new BasicCOSCredentials(properties.getSecretId(), properties.getSecretKey());
+        Region region = new Region(properties.getRegion());
+        ClientConfig clientConfig = new ClientConfig(region);
+        return new COSClient(cred, clientConfig);
     }
 }

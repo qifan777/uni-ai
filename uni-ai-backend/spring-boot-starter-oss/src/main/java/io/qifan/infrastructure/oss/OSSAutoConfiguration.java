@@ -1,7 +1,5 @@
 package io.qifan.infrastructure.oss;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -41,17 +39,11 @@ public class OSSAutoConfiguration {
     @EnableConfigurationProperties(AliYunOSSProperties.class)
     public static class AliYunConfig {
 
-        @Bean
-        public OSS aliYunOSS(AliYunOSSProperties aliYunOSSProperties) {
-            return new OSSClientBuilder().build(aliYunOSSProperties.getEndpoint(),
-                    aliYunOSSProperties.getAccessKeyId(),
-                    aliYunOSSProperties.getAccessKeySecret());
-        }
 
         @Bean
         @ConditionalOnMissingBean(OSSService.class)
-        public OSSService aliYunOSSService(OSS aliyunOss, AliYunOSSProperties aliYunOSSProperties) {
-            return new AliYunOSSService(aliYunOSSProperties, aliyunOss);
+        public OSSService aliYunOSSService(AliYunOSSProperties aliYunOSSProperties) {
+            return new AliYunOSSService(aliYunOSSProperties);
         }
     }
 
@@ -60,18 +52,12 @@ public class OSSAutoConfiguration {
     @EnableConfigurationProperties(TencentOSSProperties.class)
     public static class TencentConfig {
 
-        @Bean
-        public COSClient tencentOSS(TencentOSSProperties properties) {
-            COSCredentials cred = new BasicCOSCredentials(properties.getSecretId(), properties.getSecretKey());
-            Region region = new Region(properties.getRegion());
-            ClientConfig clientConfig = new ClientConfig(region);
-            return new COSClient(cred, clientConfig);
-        }
+
 
         @Bean
         @ConditionalOnMissingBean(OSSService.class)
-        public OSSService tencentOSSService(COSClient client, TencentOSSProperties properties) {
-            return new TencentOSSService(client, properties);
+        public OSSService tencentOSSService( TencentOSSProperties properties) {
+            return new TencentOSSService( properties);
         }
     }
 

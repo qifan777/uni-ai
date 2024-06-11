@@ -24,6 +24,6 @@ public class UniTencentSSService implements UniOSSService {
         TencentOSSProperties ossProperties = objectMapper.readValue(valueAsString, TencentOSSProperties.class);
         TencentOSSProperties merge = ModelOptionsUtils.merge(ossProperties, properties, TencentOSSProperties.class);
         OSSAutoConfiguration.TencentConfig tenantConfig = new OSSAutoConfiguration.TencentConfig();
-        return tenantConfig.tencentOSSService(tenantConfig.tencentOSS(merge), merge);
+        return tenantConfig.tencentOSSService(merge);
     }
 }
