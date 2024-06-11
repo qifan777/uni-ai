@@ -6,11 +6,40 @@
     <parent>
         <groupId>io.github.qifan777</groupId>
         <artifactId>uni-ai</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </parent>
 
     <artifactId>spring-ai-dashscope-spring-boot-starter</artifactId>
+    <name>spring-ai-dashscope-spring-boot-starter</name>
+    <description>spring-ai-dashscope-spring-boot-starter</description>
+    <url>https://github.com/qifan777/uni-ai.git</url>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>qifan</id>
+            <name>qifan</name>
+            <email>1507906763@qq.com</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+        </developer>
+    </developers>
+
+
+    <scm>
+        <connection>https://github.com/qifan777/uni-ai.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/qifan777/uni-ai.git
+        </developerConnection>
+        <url>https://github.com/qifan777/uni-ai</url>
+    </scm>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

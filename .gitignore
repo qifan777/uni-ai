@@ -47,3 +47,4 @@ bin/
 /.idea/
 /template/
 /log/
+.flattened-pom.xml

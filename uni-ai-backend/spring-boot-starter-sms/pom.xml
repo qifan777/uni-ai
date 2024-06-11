@@ -1,50 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.github.qifan777</groupId>
-    <artifactId>uni-ai</artifactId>
-    <version>0.1.1</version>
-  </parent>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.qifan777</groupId>
+        <artifactId>uni-ai</artifactId>
+        <version>0.1.2</version>
+    </parent>
 
-  <artifactId>spring-boot-starter-sms</artifactId>
-
-  <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-  <dependencies>
-    <dependency>
-      <groupId>io.github.qifan777</groupId>
-      <artifactId>common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <!--    短信服务依赖-->
-    <dependency>
-      <groupId>com.aliyun</groupId>
-      <artifactId>dysmsapi20170525</artifactId>
-      <version>2.0.24</version>
-    </dependency>
-    <dependency>
-      <groupId>com.aliyun</groupId>
-      <artifactId>aliyun-java-sdk-core</artifactId>
-      <version>4.5.16</version>
-    </dependency>
-  </dependencies>
+    <artifactId>spring-boot-starter-sms</artifactId>
+    <name>spring-boot-starter-sms</name>
+    <description>spring-boot-starter-sms</description>
+    <url>https://github.com/qifan777/uni-ai.git</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>qifan</id>
+            <name>qifan</name>
+            <email>1507906763@qq.com</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>https://github.com/qifan777/uni-ai.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/qifan777/uni-ai.git
+        </developerConnection>
+        <url>https://github.com/qifan777/uni-ai</url>
+    </scm>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.qifan777</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--    短信服务依赖-->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dysmsapi20170525</artifactId>
+            <version>2.0.24</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.5.16</version>
+        </dependency>
+    </dependencies>
 
 </project>

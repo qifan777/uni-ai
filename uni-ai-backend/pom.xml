@@ -6,7 +6,7 @@
 
     <groupId>io.github.qifan777</groupId>
     <artifactId>uni-ai</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -14,7 +14,32 @@
         <relativePath/>
         <version>3.2.1</version>
     </parent>
-
+    <name>uni-ai</name>
+    <description>uni-ai</description>
+    <url>https://github.com/qifan777/uni-ai.git</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>qifan</id>
+            <name>qifan</name>
+            <email>1507906763@qq.com</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>https://github.com/qifan777/uni-ai.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/qifan777/uni-ai.git
+        </developerConnection>
+        <url>https://github.com/qifan777/uni-ai</url>
+    </scm>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -27,7 +52,7 @@
         <dashscope.version>2.14.4</dashscope.version>
         <tenant-oss.version>5.6.210</tenant-oss.version>
         <aliyun-oss.version>3.17.4</aliyun-oss.version>
-
+        <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
     </properties>
     <modules>
         <module>common</module>
@@ -137,7 +162,7 @@
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-bom</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -161,12 +186,31 @@
             </releases>
         </repository>
     </repositories>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.5</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.6.0</version>
                 <executions>
                     <execution>
                         <id>flatten</id>
@@ -203,18 +247,19 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.4.0</version>
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <tokenAuth>true</tokenAuth>
+                    <excludeArtifacts>
+                        <excludeArtifact>server</excludeArtifact>
+                    </excludeArtifacts>
                 </configuration>
             </plugin>
             <!--   source源码插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -228,7 +273,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -241,7 +285,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
                 <configuration>
                     <executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
                     <keyname>qifan777</keyname>
