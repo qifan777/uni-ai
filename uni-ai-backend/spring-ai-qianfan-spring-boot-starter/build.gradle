@@ -1,7 +1,0 @@
-plugins {
-    id('spring-ai-conventions')
-}
-apply plugin: 'io.spring.dependency-management'
-dependencies {
-    implementation(libs.qian.fan)
-}

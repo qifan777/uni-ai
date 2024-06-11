@@ -15,7 +15,7 @@
 
 <img src="uni-ai-admin/src/assets/qianfan-knowledge.png" width="300"/>
 
-[知识库使用教程](https://www.jarcheng.top/blog/project/uni-ai/get-started/use.html#%E7%9F%A5%E8%AF%86%E5%BA%93)
+[知识库使用教程](https://www.jarcheng.top/blog/project/uni-ai/use/#%E7%9F%A5%E8%AF%86%E5%BA%93)
 
 ### 图片生成
 
