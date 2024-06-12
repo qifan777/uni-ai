@@ -40,7 +40,8 @@ public class DashScopeAiApi {
         return Flux.<GenerationResult>create(fluxSink -> {
                     stream.subscribe(result -> {
                         fluxSink.next(result);
-                        if (StringUtils.hasLength(result.getOutput().getFinishReason())) {
+                        String finishReason = result.getOutput().getChoices().get(0).getFinishReason();
+                        if (StringUtils.hasLength(finishReason) && !finishReason.equalsIgnoreCase("null")) {
                             fluxSink.complete();
                         }
                     });
