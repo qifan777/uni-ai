@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 @Slf4j
 public class SpringSpELService implements Function<SpringSpELService.Request, SpringSpELService.Response> {
-
     @Override
     public Response apply(Request request) {
         log.info("SpringSpELService apply request: {}", request);

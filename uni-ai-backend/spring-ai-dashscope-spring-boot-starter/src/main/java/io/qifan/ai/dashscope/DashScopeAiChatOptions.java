@@ -23,8 +23,6 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     private Float temperature;
     @JsonProperty("maxTokens")
     private Integer maxTokens;
-    @JsonProperty("topK")
-    private Integer topK;
     @JsonProperty("topP")
     private Float topP;
     @NestedConfigurationProperty
@@ -52,5 +50,27 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     @Override
     public void setFunctions(Set<String> functions) {
         this.functions = functions;
+    }
+
+    @JsonIgnore
+    @Override
+    public Integer getTopK() {
+        throw new UnsupportedOperationException("Unimplemented method 'getTopK'");
+    }
+
+    @JsonIgnore
+    public void setTopK(Integer topK) {
+        throw new UnsupportedOperationException("Unimplemented method 'setTopK'");
+    }
+
+    public static DashScopeAiChatOptions fromOptions(DashScopeAiChatOptions fromOptions) {
+        DashScopeAiChatOptions chatOptions = new DashScopeAiChatOptions()
+                .setModel(fromOptions.getModel())
+                .setTemperature(fromOptions.getTemperature())
+                .setMaxTokens(fromOptions.getMaxTokens())
+                .setTopP(fromOptions.getTopP());
+        chatOptions.setFunctions(fromOptions.getFunctions());
+        chatOptions.setFunctionCallbacks(fromOptions.getFunctionCallbacks());
+        return chatOptions;
     }
 }

@@ -49,7 +49,7 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
 
     @Override
     public ChatOptions getDefaultOptions() {
-        return null;
+        return DashScopeAiChatOptions.fromOptions(defaultOptions);
     }
 
     @Override

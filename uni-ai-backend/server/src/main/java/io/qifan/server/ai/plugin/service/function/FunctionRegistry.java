@@ -12,7 +12,7 @@ import java.util.function.Function;
 public class FunctionRegistry {
 
     @Bean
-    @Description(value = "执行符合SpringSpE语法的表达式")
+    @Description(value = "执行符合SpringSpEL语法的表达式")
     public Function<SpringSpELService.Request, SpringSpELService.Response> springSpELFunction() {
         return new SpringSpELService();
     }

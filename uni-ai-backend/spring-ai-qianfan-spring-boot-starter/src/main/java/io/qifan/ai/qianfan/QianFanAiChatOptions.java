@@ -3,6 +3,7 @@ package io.qifan.ai.qianfan;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallingOptions;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
+@Accessors(chain = true)
 public class QianFanAiChatOptions implements ChatOptions, FunctionCallingOptions {
     @JsonProperty("model")
     private String model;
@@ -21,8 +23,6 @@ public class QianFanAiChatOptions implements ChatOptions, FunctionCallingOptions
     private Float temperature;
     @JsonProperty("maxTokens")
     private Integer maxTokens;
-    @JsonProperty("topK")
-    private Integer topK;
     @JsonProperty("topP")
     private Float topP;
     @NestedConfigurationProperty
@@ -51,4 +51,27 @@ public class QianFanAiChatOptions implements ChatOptions, FunctionCallingOptions
     public void setFunctions(Set<String> functions) {
         this.functions = functions;
     }
+
+    @JsonIgnore
+    @Override
+    public Integer getTopK() {
+        throw new UnsupportedOperationException("Unimplemented method 'getTopK'");
+    }
+
+    @JsonIgnore
+    public void setTopK(Integer topK) {
+        throw new UnsupportedOperationException("Unimplemented method 'setTopK'");
+    }
+
+    public static QianFanAiChatOptions fromOptions(QianFanAiChatOptions fromOptions) {
+        QianFanAiChatOptions chatOptions = new QianFanAiChatOptions()
+                .setModel(fromOptions.getModel())
+                .setTemperature(fromOptions.getTemperature())
+                .setMaxTokens(fromOptions.getMaxTokens())
+                .setTopP(fromOptions.getTopP());
+        chatOptions.setFunctions(fromOptions.getFunctions());
+        chatOptions.setFunctionCallbacks(fromOptions.getFunctionCallbacks());
+        return chatOptions;
+    }
+
 }

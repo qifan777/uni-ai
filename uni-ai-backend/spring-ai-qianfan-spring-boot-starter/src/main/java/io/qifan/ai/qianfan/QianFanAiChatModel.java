@@ -41,7 +41,7 @@ public class QianFanAiChatModel extends AbstractFunctionCallSupport<Message, Cha
 
     @Override
     public ChatOptions getDefaultOptions() {
-        return null;
+        return QianFanAiChatOptions.fromOptions(defaultOptions);
     }
 
     @Override
