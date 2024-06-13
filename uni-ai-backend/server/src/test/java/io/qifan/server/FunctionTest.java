@@ -19,8 +19,8 @@ public class FunctionTest {
     public void functionCall() {
         Flux<String> springSpELFunction = ChatClient.create(kimiAiChatModel)
                 .prompt()
-                .user("用springSpEL算一下1+2+3+4-2/1*2-6/6-1+7/6+2+3+4-2/1*2-6/6-1+7等于多少？")
-                .functions("springSpELFunction")
+                .user("C:\\Users\\Administrator\\Desktop\\资料\\19信管1班1916411024林家成.pdf，这份简历的亮点是什么？")
+                .functions("documentAnalyzerFunction")
                 .stream()
                 .content()
                 .log();

@@ -97,9 +97,6 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
         if (StringUtils.hasText(options.getModel())) {
             builder.model(options.getModel());
         }
-        if (options.getTopK() != null) {
-            builder.topK(options.getTopK());
-        }
         if (options.getMaxTokens() != null) {
             builder.maxTokens(options.getMaxTokens());
         }

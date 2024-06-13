@@ -6,7 +6,7 @@
   <parent>
     <groupId>io.github.qifan777</groupId>
     <artifactId>uni-ai</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
   </parent>
 
   <artifactId>spring-boot-starter-security</artifactId>
