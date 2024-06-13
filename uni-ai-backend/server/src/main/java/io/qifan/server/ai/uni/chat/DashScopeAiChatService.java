@@ -13,7 +13,7 @@ import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +34,9 @@ public class DashScopeAiChatService implements UniAiChatService {
         }
         String valueAsString = objectMapper.writeValueAsString(options);
         DashScopeAiChatOptions chatOptions = objectMapper.readValue(valueAsString, DashScopeAiChatOptions.class);
+        if (options.containsKey("functions")&& options.get("functions") instanceof List functions){
+            chatOptions.setFunctions(new HashSet<>(functions));
+        }
         return new DashScopeAiChatModel(functionCallbackContext, new DashScopeAiApi(apiKey), chatOptions);
     }
 }

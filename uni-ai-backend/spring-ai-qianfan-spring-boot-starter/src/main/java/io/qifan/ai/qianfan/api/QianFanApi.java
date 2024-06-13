@@ -28,7 +28,6 @@ public class QianFanApi {
         return Flux.create(fluxSink -> {
             qianfan.chatCompletionStream(request)
                     .forEachRemaining(chatResponse -> {
-                        log.info("回复内容：{}", chatResponse.getResult());
                         fluxSink.next(chatResponse);
                         if (chatResponse.getEnd()) {
                             fluxSink.complete();

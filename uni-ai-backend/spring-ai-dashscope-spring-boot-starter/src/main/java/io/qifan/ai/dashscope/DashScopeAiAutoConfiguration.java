@@ -2,9 +2,12 @@ package io.qifan.ai.dashscope;
 
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
 import io.qifan.ai.dashscope.api.DashScopeAiImageApi;
+import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -30,8 +33,8 @@ public class DashScopeAiAutoConfiguration {
 
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Bean
-    public DashScopeAiChatModel dashScopeAiChatModel(DashScopeAiApi dashScopeAiApi, DashScopeAiProperties properties) {
-        return new DashScopeAiChatModel(dashScopeAiApi, properties.getChat());
+    public DashScopeAiChatModel dashScopeAiChatModel(FunctionCallbackContext functionCallbackContext, DashScopeAiApi dashScopeAiApi, DashScopeAiProperties properties) {
+        return new DashScopeAiChatModel(functionCallbackContext, dashScopeAiApi, properties.getChat());
     }
 
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
@@ -46,5 +49,11 @@ public class DashScopeAiAutoConfiguration {
         return new DashScopeAiImageApi(properties.getApiKey());
     }
 
-
+    @Bean
+    @ConditionalOnMissingBean
+    public FunctionCallbackContext springAiFunctionManager(ApplicationContext context) {
+        FunctionCallbackContext manager = new FunctionCallbackContext();
+        manager.setApplicationContext(context);
+        return manager;
+    }
 }

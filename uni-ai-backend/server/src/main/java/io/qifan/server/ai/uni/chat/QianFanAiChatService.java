@@ -9,9 +9,12 @@ import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,6 +22,7 @@ import java.util.Map;
 public class QianFanAiChatService implements UniAiChatService {
     private final QianFanAiProperties qianFanAiProperties;
     private final ObjectMapper objectMapper;
+    private final FunctionCallbackContext functionCallbackContext;
 
     @SneakyThrows
     @Override
@@ -34,6 +38,9 @@ public class QianFanAiChatService implements UniAiChatService {
         }
         String valueAsString = objectMapper.writeValueAsString(options);
         QianFanAiChatOptions chatOptions = objectMapper.readValue(valueAsString, QianFanAiChatOptions.class);
-        return new QianFanAiChatModel(new QianFanApi(accessKey, secretKey),chatOptions);
+        if (options.containsKey("functions") && options.get("functions") instanceof List functions) {
+            chatOptions.setFunctions(new HashSet<>(functions));
+        }
+        return new QianFanAiChatModel(functionCallbackContext, new QianFanApi(accessKey, secretKey), chatOptions);
     }
 }

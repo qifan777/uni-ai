@@ -19,11 +19,11 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.ModelOptionsUtils;
 import org.springframework.ai.model.function.AbstractFunctionCallSupport;
 import org.springframework.ai.model.function.FunctionCallbackContext;
+import org.springframework.ai.model.function.FunctionCallingOptions;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,8 +44,7 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
 
     @Override
     public ChatResponse call(Prompt prompt) {
-
-        return toResponse(dashScopeAiApi.chatCompletion(toParam(prompt)));
+        return toResponse(callWithFunctionSupport(toParam(prompt)));
     }
 
     @Override
@@ -81,29 +80,34 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
         DashScopeAiChatOptions options = new DashScopeAiChatOptions();
         if (defaultOptions != null) {
             options = ModelOptionsUtils.merge(defaultOptions, options, DashScopeAiChatOptions.class);
+            Set<String> enabledFunctions = handleFunctionCallbackConfigurations(defaultOptions, false);
+            options.setFunctions(enabledFunctions);
         }
         if (prompt.getOptions() != null) {
+            if (!(prompt.getOptions() instanceof DashScopeAiChatOptions)) {
+                throw new IllegalArgumentException("DashScopeAiChatOptions is required");
+            }
             options = ModelOptionsUtils.merge(prompt.getOptions(), options, DashScopeAiChatOptions.class);
+            Set<String> enabledFunctions = handleFunctionCallbackConfigurations((FunctionCallingOptions) prompt.getOptions(), true);
+            options.setFunctions(enabledFunctions);
         }
-        if (options != null) {
-            if (!CollectionUtils.isEmpty(options.getFunctions())) {
-                builder.tools(getFunctionTools(new HashSet<>(options.getFunctions())));
-            }
-            if (StringUtils.hasText(options.getModel())) {
-                builder.model(options.getModel());
-            }
-            if (options.getTopK() != null) {
-                builder.topK(options.getTopK());
-            }
-            if (options.getMaxTokens() != null) {
-                builder.maxTokens(options.getMaxTokens());
-            }
-            if (options.getTopP() != null) {
-                builder.topP(Double.valueOf(options.getTopP()));
-            }
-            if (options.getTemperature() != null) {
-                builder.temperature(options.getTemperature());
-            }
+        if (!CollectionUtils.isEmpty(options.getFunctions())) {
+            builder.tools(getFunctionTools(options.getFunctions()));
+        }
+        if (StringUtils.hasText(options.getModel())) {
+            builder.model(options.getModel());
+        }
+        if (options.getTopK() != null) {
+            builder.topK(options.getTopK());
+        }
+        if (options.getMaxTokens() != null) {
+            builder.maxTokens(options.getMaxTokens());
+        }
+        if (options.getTopP() != null) {
+            builder.topP(Double.valueOf(options.getTopP()));
+        }
+        if (options.getTemperature() != null) {
+            builder.temperature(options.getTemperature());
         }
         return builder.build();
     }

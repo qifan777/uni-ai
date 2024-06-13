@@ -1,4 +1,4 @@
-package io.qifan.server.ai.plugin.repository.function;
+package io.qifan.server.ai.plugin.service.function;
 
 import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.context.ApplicationContext;

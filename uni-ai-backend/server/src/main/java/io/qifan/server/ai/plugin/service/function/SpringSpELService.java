@@ -1,4 +1,4 @@
-package io.qifan.server.ai.plugin.repository.function;
+package io.qifan.server.ai.plugin.service.function;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
