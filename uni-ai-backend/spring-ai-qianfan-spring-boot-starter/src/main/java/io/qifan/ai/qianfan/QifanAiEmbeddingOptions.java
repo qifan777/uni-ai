@@ -9,5 +9,5 @@ import org.springframework.ai.embedding.EmbeddingOptions;
 @Accessors(chain = true)
 public class QifanAiEmbeddingOptions implements EmbeddingOptions {
     @JsonProperty("model")
-    String model;
+    String model="Embedding-V1";
 }

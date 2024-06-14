@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.qifan777</groupId>
         <artifactId>uni-ai</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
     </parent>
 
     <artifactId>spring-ai-dashscope-spring-boot-starter</artifactId>

@@ -6,7 +6,7 @@
     <parent>
         <artifactId>uni-ai</artifactId>
         <groupId>io.github.qifan777</groupId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
     </parent>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

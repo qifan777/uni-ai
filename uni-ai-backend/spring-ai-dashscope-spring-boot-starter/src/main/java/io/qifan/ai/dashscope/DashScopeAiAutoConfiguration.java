@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import static com.alibaba.dashscope.tokenizers.Tokenization.Models.TEXT_EMBEDDING_V1;
-
 @AutoConfiguration
 @Configuration
 @EnableConfigurationProperties(DashScopeAiProperties.class)
@@ -21,8 +19,8 @@ public class DashScopeAiAutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
     @Primary
-    public DashScopeAiEmbeddingModel dashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi) {
-        return new DashScopeAiEmbeddingModel(dashScopeAiApi, new DashScopeAiEmbeddingOptions().setModel(TEXT_EMBEDDING_V1));
+    public DashScopeAiEmbeddingModel dashScopeAiEmbeddingModel(DashScopeAiApi dashScopeAiApi, DashScopeAiProperties properties) {
+        return new DashScopeAiEmbeddingModel(dashScopeAiApi, properties.getEmbedding());
     }
 
     @ConditionalOnProperty(prefix = DashScopeAiProperties.CONFIG_PREFIX, name = "enabled", havingValue = "TRUE")
