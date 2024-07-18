@@ -1,4 +1,5 @@
 package io.qifan.server.ai.factory.controller;
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.factory.entity.AiFactory;
@@ -23,16 +24,16 @@ import java.util.List;
 @DefaultFetcherOwner(AiFactoryRepository.class)
 @SaCheckPermission("/ai-factory")
 @Transactional
-public class  AiFactoryForAdminController {
-    private final  AiFactoryRepository aiFactoryRepository;
+public class AiFactoryForAdminController {
+    private final AiFactoryRepository aiFactoryRepository;
 
     @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiFactory findById(@PathVariable String id) {
-        return aiFactoryRepository.findById(id,AiFactoryRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
+    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiFactory findById(@PathVariable String id) {
+        return aiFactoryRepository.findById(id, AiFactoryRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiFactory> query(@RequestBody QueryRequest<AiFactorySpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiFactory> query(@RequestBody QueryRequest<AiFactorySpec> queryRequest) {
         return aiFactoryRepository.findPage(queryRequest, AiFactoryRepository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 

@@ -16,29 +16,29 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- *  <p>
- *  钱包充值的可选项
+ * <p>
+ * 钱包充值的可选项
  *
- *  </p>
+ * </p>
  *
- *  @author 起凡
- *  @date 2024-04-27
+ * @author 起凡
+ * @date 2024-04-27
  */
 @GeneratedBy(
         file = "<server>/src/main/dto/wallet/WalletItem.dto"
 )
 @GenEntity
 public class WalletItemView implements View<WalletItem> {
-    public static final ViewMetadata<WalletItem, WalletItemView> METADATA = 
-        new ViewMetadata<WalletItem, WalletItemView>(
-            WalletItemFetcher.$
-                .createdTime()
-                .editedTime()
-                .name()
-                .amount()
-                .price(),
-            WalletItemView::new
-    );
+    public static final ViewMetadata<WalletItem, WalletItemView> METADATA =
+            new ViewMetadata<WalletItem, WalletItemView>(
+                    WalletItemFetcher.$
+                            .createdTime()
+                            .editedTime()
+                            .name()
+                            .amount()
+                            .price(),
+                    WalletItemView::new
+            );
 
     private String id;
 

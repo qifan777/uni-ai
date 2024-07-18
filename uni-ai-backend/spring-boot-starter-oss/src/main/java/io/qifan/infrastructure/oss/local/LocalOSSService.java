@@ -18,32 +18,32 @@ import java.util.UUID;
 @Slf4j
 public class LocalOSSService implements OSSService {
 
-  private final LocalOSSProperties localOSSProperties;
+    private final LocalOSSProperties localOSSProperties;
 
-  @SneakyThrows
-  @Override
-  public String upload(MultipartFile multipartFile) {
-    return basicUpload(multipartFile.getOriginalFilename(), multipartFile.getInputStream());
-  }
-
-  @Override
-  public String upload(String objectName, InputStream inputStream) {
-    return basicUpload(objectName, inputStream);
-  }
-
-  @SneakyThrows
-  public String basicUpload(String objectName, InputStream inputStream) {
-    byte[] bytes = inputStream.readAllBytes();
-    String fileName = UUID.randomUUID() + "_" + objectName;
-    try (FileOutputStream fileOutputStream = new FileOutputStream(
-        localOSSProperties.getPath() + "/" + fileName)
-    ) {
-      fileOutputStream.write(bytes);
-    } catch (Exception e) {
-      log.error("上传失败", e);
-      throw new BusinessException(ResultCode.Fail, "上传失败");
+    @SneakyThrows
+    @Override
+    public String upload(MultipartFile multipartFile) {
+        return basicUpload(multipartFile.getOriginalFilename(), multipartFile.getInputStream());
     }
-    return localOSSProperties.getUrl() + fileName;
-  }
+
+    @Override
+    public String upload(String objectName, InputStream inputStream) {
+        return basicUpload(objectName, inputStream);
+    }
+
+    @SneakyThrows
+    public String basicUpload(String objectName, InputStream inputStream) {
+        byte[] bytes = inputStream.readAllBytes();
+        String fileName = UUID.randomUUID() + "_" + objectName;
+        try (FileOutputStream fileOutputStream = new FileOutputStream(
+                localOSSProperties.getPath() + "/" + fileName)
+        ) {
+            fileOutputStream.write(bytes);
+        } catch (Exception e) {
+            log.error("上传失败", e);
+            throw new BusinessException(ResultCode.Fail, "上传失败");
+        }
+        return localOSSProperties.getUrl() + fileName;
+    }
 
 }

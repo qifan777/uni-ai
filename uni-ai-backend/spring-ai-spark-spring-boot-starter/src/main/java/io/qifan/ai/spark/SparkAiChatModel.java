@@ -52,10 +52,8 @@ public class SparkAiChatModel implements ChatModel {
                         return value.getHeader().getStatus().equals(2) ? "STOP" : "";
                     }
                 }));
-        ChatResponseMetadata chatResponseMetadata = new ChatResponseMetadata.DefaultChatResponseMetadata() {
-            @Override
-            public Usage getUsage() {
-                return new Usage() {
+        ChatResponseMetadata chatResponseMetadata = ChatResponseMetadata.builder()
+                .withUsage(new Usage() {
                     @Override
                     public Long getPromptTokens() {
                         return value.getPayload().getUsage().getText().getPromptTokens().longValue();
@@ -65,9 +63,8 @@ public class SparkAiChatModel implements ChatModel {
                     public Long getGenerationTokens() {
                         return value.getPayload().getUsage().getText().getCompletionTokens().longValue();
                     }
-                };
-            }
-        };
+                })
+                .build();
         return new ChatResponse(generations, chatResponseMetadata);
     }
 

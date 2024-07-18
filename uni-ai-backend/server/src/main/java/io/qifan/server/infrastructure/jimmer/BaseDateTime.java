@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public interface BaseDateTime {
 
-  LocalDateTime createdTime();
+    LocalDateTime createdTime();
 
-  LocalDateTime editedTime();
+    LocalDateTime editedTime();
 }

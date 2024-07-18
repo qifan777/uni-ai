@@ -13,12 +13,12 @@ import java.util.List;
 @Builder
 public class CreateForm extends FileModel {
 
-  private Type entityType;
-  private List<FormItem> formItems;
+    private Type entityType;
+    private List<FormItem> formItems;
 
     @Override
-  public String getFileName() {
-    return "/front/"+entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase()
-        + "-create-form.vue";
-  }
+    public String getFileName() {
+        return "/front/" + entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase()
+                + "-create-form.vue";
+    }
 }

@@ -4,10 +4,10 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(
-    prefix = "wx.pay"
+        prefix = "wx.pay"
 )
 @Data
 public class WxPayPropertiesExtension {
 
-  private String notifyUrl;
+    private String notifyUrl;
 }

@@ -1,4 +1,3 @@
-
 package io.qifan.server.wallet.root.controller;
 
 import cn.dev33.satoken.annotation.SaCheckDisable;

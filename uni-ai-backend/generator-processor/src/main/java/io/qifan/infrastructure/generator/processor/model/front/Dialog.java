@@ -11,10 +11,10 @@ import lombok.EqualsAndHashCode;
 @Builder
 public class Dialog extends FileModel {
 
-  private Type entityType;
+    private Type entityType;
 
     @Override
-  public String getFileName() {
-    return  "/front/"+ entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase() + "-dialog.vue";
-  }
+    public String getFileName() {
+        return "/front/" + entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase() + "-dialog.vue";
+    }
 }

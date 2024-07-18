@@ -13,11 +13,11 @@ import java.util.List;
 @Builder
 public class Query extends FileModel {
 
-  private Type entityType;
-  private List<QueryItem> queryItems;
+    private Type entityType;
+    private List<QueryItem> queryItems;
 
     @Override
-  public String getFileName() {
-    return "/front/"+ entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase() + "-query.vue";
-  }
+    public String getFileName() {
+        return "/front/" + entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase() + "-query.vue";
+    }
 }

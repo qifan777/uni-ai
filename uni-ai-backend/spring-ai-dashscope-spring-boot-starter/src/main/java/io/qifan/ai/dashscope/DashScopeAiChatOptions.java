@@ -34,6 +34,17 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     @JsonIgnore
     private Set<String> functions = new HashSet<>();
 
+    public static DashScopeAiChatOptions fromOptions(DashScopeAiChatOptions fromOptions) {
+        DashScopeAiChatOptions chatOptions = new DashScopeAiChatOptions()
+                .setModel(fromOptions.getModel())
+                .setTemperature(fromOptions.getTemperature())
+                .setMaxTokens(fromOptions.getMaxTokens())
+                .setTopP(fromOptions.getTopP());
+        chatOptions.setFunctions(fromOptions.getFunctions());
+        chatOptions.setFunctionCallbacks(fromOptions.getFunctionCallbacks());
+        return chatOptions;
+    }
+
     @Override
     public List<FunctionCallback> getFunctionCallbacks() {
         return this.functionCallbacks;
@@ -63,16 +74,5 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     @JsonIgnore
     public void setTopK(Integer topK) {
         throw new UnsupportedOperationException("Unimplemented method 'setTopK'");
-    }
-
-    public static DashScopeAiChatOptions fromOptions(DashScopeAiChatOptions fromOptions) {
-        DashScopeAiChatOptions chatOptions = new DashScopeAiChatOptions()
-                .setModel(fromOptions.getModel())
-                .setTemperature(fromOptions.getTemperature())
-                .setMaxTokens(fromOptions.getMaxTokens())
-                .setTopP(fromOptions.getTopP());
-        chatOptions.setFunctions(fromOptions.getFunctions());
-        chatOptions.setFunctionCallbacks(fromOptions.getFunctionCallbacks());
-        return chatOptions;
     }
 }

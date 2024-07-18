@@ -11,5 +11,5 @@ import static com.alibaba.dashscope.tokenizers.Tokenization.Models.TEXT_EMBEDDIN
 @Accessors(chain = true)
 public class DashScopeAiEmbeddingOptions implements EmbeddingOptions {
     @JsonProperty("model")
-    private String model=TEXT_EMBEDDING_V1;
+    private String model = TEXT_EMBEDDING_V1;
 }

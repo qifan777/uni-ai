@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 @AllArgsConstructor
 public class SettingRepository {
-    private final RedisTemplate<String, String> redisTemplate;
     public static final String KEY = "setting";
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
     @SneakyThrows

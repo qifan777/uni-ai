@@ -1,4 +1,3 @@
-
 package io.qifan.server.ai.message.controller;
 
 import cn.dev33.satoken.annotation.SaCheckDisable;

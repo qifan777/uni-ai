@@ -35,70 +35,70 @@ import java.util.stream.Collectors;
 @Transactional
 public class DictService {
 
-  private final DictRepository dictRepository;
-  private final Configuration configuration;
+    private final DictRepository dictRepository;
+    private final Configuration configuration;
 
-  public Dict findById(String id) {
-    return dictRepository.findById(id, DictRepository.COMPLEX_FETCHER)
-        .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "数据不存在"));
-  }
+    public Dict findById(String id) {
+        return dictRepository.findById(id, DictRepository.COMPLEX_FETCHER)
+                .orElseThrow(() -> new BusinessException(ResultCode.NotFindError, "数据不存在"));
+    }
 
-  public String save(DictInput dictInput) {
-    return dictRepository.save(dictInput).id();
-  }
+    public String save(DictInput dictInput) {
+        return dictRepository.save(dictInput).id();
+    }
 
-  public Page<Dict> query(QueryRequest<DictSpec> queryRequest) {
-    return dictRepository.findPage(queryRequest, DictRepository.COMPLEX_FETCHER);
-  }
+    public Page<Dict> query(QueryRequest<DictSpec> queryRequest) {
+        return dictRepository.findPage(queryRequest, DictRepository.COMPLEX_FETCHER);
+    }
 
-  public boolean delete(List<String> ids) {
-    dictRepository.deleteAllById(ids);
-    return true;
-  }
+    public boolean delete(List<String> ids) {
+        dictRepository.deleteAllById(ids);
+        return true;
+    }
 
-  public DictGenContext getDictGenContext() {
-    Converter<String, String> converter = CaseFormat.UPPER_UNDERSCORE.converterTo(
-        CaseFormat.UPPER_CAMEL);
-    List<Dict> all = dictRepository.findAll();
-    Map<String, List<Dict>> dictMaps = new HashMap<>();
-    all.forEach(dict -> {
-      String dictEnName = converter.convert(dict.dictEnName());
-      dictMaps.putIfAbsent(dictEnName, new ArrayList<>());
-      List<Dict> dictList = dictMaps.get(dictEnName);
-      dictList.add(dict);
-    });
-    return new DictGenContext(
-        all.stream().map(dict -> converter.convert(dict.dictEnName())).distinct()
-            .collect(Collectors.toList()),
-        dictMaps);
-  }
+    public DictGenContext getDictGenContext() {
+        Converter<String, String> converter = CaseFormat.UPPER_UNDERSCORE.converterTo(
+                CaseFormat.UPPER_CAMEL);
+        List<Dict> all = dictRepository.findAll();
+        Map<String, List<Dict>> dictMaps = new HashMap<>();
+        all.forEach(dict -> {
+            String dictEnName = converter.convert(dict.dictEnName());
+            dictMaps.putIfAbsent(dictEnName, new ArrayList<>());
+            List<Dict> dictList = dictMaps.get(dictEnName);
+            dictList.add(dict);
+        });
+        return new DictGenContext(
+                all.stream().map(dict -> converter.convert(dict.dictEnName())).distinct()
+                        .collect(Collectors.toList()),
+                dictMaps);
+    }
 
-  @SneakyThrows
-  public void generateJava() {
-    DictGenContext dictGenContext = getDictGenContext();
-    // 获取模板
-    Template template = configuration.getTemplate("dict-java.ftl");
-    // 创建输出文件
-    File outputFile = new File(
-        "uni-ai-backend/server/src/main/java/io/qifan/server/dict/model/DictConstants.java");
-    outputFile.createNewFile();
-    // 创建Writer对象
-    Writer writer = new FileWriter(outputFile, false);
-    // 渲染模板
-    template.process(dictGenContext, writer);
-    writer.flush();
-    writer.close();
-  }
+    @SneakyThrows
+    public void generateJava() {
+        DictGenContext dictGenContext = getDictGenContext();
+        // 获取模板
+        Template template = configuration.getTemplate("dict-java.ftl");
+        // 创建输出文件
+        File outputFile = new File(
+                "uni-ai-backend/server/src/main/java/io/qifan/server/dict/model/DictConstants.java");
+        outputFile.createNewFile();
+        // 创建Writer对象
+        Writer writer = new FileWriter(outputFile, false);
+        // 渲染模板
+        template.process(dictGenContext, writer);
+        writer.flush();
+        writer.close();
+    }
 
-  @SneakyThrows
-  public String generateTS() {
-    DictGenContext dictGenContext = getDictGenContext();
-    // 获取模板
-    Template template = configuration.getTemplate("dict-ts.ftl");
-    // 创建Writer对象
-    StringWriter stringWriter = new StringWriter();
-    // 渲染模板
-    template.process(dictGenContext, stringWriter);
-    return stringWriter.getBuffer().toString();
-  }
+    @SneakyThrows
+    public String generateTS() {
+        DictGenContext dictGenContext = getDictGenContext();
+        // 获取模板
+        Template template = configuration.getTemplate("dict-ts.ftl");
+        // 创建Writer对象
+        StringWriter stringWriter = new StringWriter();
+        // 渲染模板
+        template.process(dictGenContext, stringWriter);
+        return stringWriter.getBuffer().toString();
+    }
 }

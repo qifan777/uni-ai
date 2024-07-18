@@ -89,10 +89,8 @@ public class DashScopeAiVLChatModel implements ChatModel {
                 })
                 .toList();
 
-        ChatResponseMetadata chatResponseMetadata = new ChatResponseMetadata.DefaultChatResponseMetadata() {
-            @Override
-            public Usage getUsage() {
-                return new Usage() {
+        ChatResponseMetadata chatResponseMetadata = ChatResponseMetadata.builder()
+                .withUsage(new Usage() {
                     @Override
                     public Long getPromptTokens() {
                         return result.getUsage().getInputTokens().longValue();
@@ -102,9 +100,8 @@ public class DashScopeAiVLChatModel implements ChatModel {
                     public Long getGenerationTokens() {
                         return result.getUsage().getOutputTokens().longValue();
                     }
-                };
-            }
-        };
+                })
+                .build();
         return new ChatResponse(generations, chatResponseMetadata);
     }
 }

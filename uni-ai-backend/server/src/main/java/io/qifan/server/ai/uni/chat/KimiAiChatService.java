@@ -20,9 +20,9 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class KimiAiChatService implements UniAiChatService {
-    private MoonshotChatProperties moonshotChatProperties;
     private final ObjectMapper objectMapper;
     private final ResponseErrorHandler responseErrorHandler;
+    private MoonshotChatProperties moonshotChatProperties;
 
     @SneakyThrows
     @Override

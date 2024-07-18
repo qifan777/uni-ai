@@ -1,4 +1,3 @@
-
 package io.qifan.server.wallet.item.controller;
 
 import cn.dev33.satoken.annotation.SaCheckDisable;
@@ -34,10 +33,10 @@ public class WalletItemForFrontController {
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") WalletItem> query(@RequestBody QueryRequest<WalletItemSpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") WalletItem> query(@RequestBody QueryRequest<WalletItemSpec> queryRequest) {
 
-    return walletItemRepository.findPage(queryRequest, WalletItemRepository.COMPLEX_FETCHER_FOR_FRONT);
-}
+        return walletItemRepository.findPage(queryRequest, WalletItemRepository.COMPLEX_FETCHER_FOR_FRONT);
+    }
 
     @PostMapping
     public String create(@RequestBody @Validated WalletItemCreateInput walletItemCreateInput) {

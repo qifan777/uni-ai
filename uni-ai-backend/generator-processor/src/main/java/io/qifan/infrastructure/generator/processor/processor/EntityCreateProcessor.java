@@ -65,6 +65,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
                 .entityType(TypeUtils.getType(typeElement))
                 .build();
     }
+
     private ControllerForFront createControllerForUser() {
         return ControllerForFront.builder()
                 .sourcePath(sourcePath)

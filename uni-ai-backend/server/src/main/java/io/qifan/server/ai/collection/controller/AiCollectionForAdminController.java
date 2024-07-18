@@ -1,4 +1,5 @@
 package io.qifan.server.ai.collection.controller;
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.collection.entity.AiCollection;
@@ -23,16 +24,16 @@ import java.util.List;
 @DefaultFetcherOwner(AiCollectionRepository.class)
 @SaCheckPermission("/ai-collection")
 @Transactional
-public class  AiCollectionForAdminController {
-    private final  AiCollectionRepository aiCollectionRepository;
+public class AiCollectionForAdminController {
+    private final AiCollectionRepository aiCollectionRepository;
 
     @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiCollection findById(@PathVariable String id) {
-        return aiCollectionRepository.findById(id,AiCollectionRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
+    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiCollection findById(@PathVariable String id) {
+        return aiCollectionRepository.findById(id, AiCollectionRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  AiCollection> query(@RequestBody QueryRequest<AiCollectionSpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") AiCollection> query(@RequestBody QueryRequest<AiCollectionSpec> queryRequest) {
         return aiCollectionRepository.findPage(queryRequest, AiCollectionRepository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 

@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 public class BaseEntityDraftInterceptor implements DraftInterceptor<BaseEntity, BaseEntityDraft> {
 
 
-  @Override
-  public void beforeSave(@NotNull BaseEntityDraft draft, BaseEntity baseEntity) {
-    draft.applyEditor(user -> {
-      user.setId(StpUtil.getLoginIdAsString());
-    });
-    if (baseEntity == null) {
-      draft.applyCreator(user -> {
-        user.setId(StpUtil.getLoginIdAsString());
-      });
+    @Override
+    public void beforeSave(@NotNull BaseEntityDraft draft, BaseEntity baseEntity) {
+        draft.applyEditor(user -> {
+            user.setId(StpUtil.getLoginIdAsString());
+        });
+        if (baseEntity == null) {
+            draft.applyCreator(user -> {
+                user.setId(StpUtil.getLoginIdAsString());
+            });
+        }
     }
-  }
 }

@@ -1,4 +1,5 @@
 package io.qifan.server.wallet.root.controller;
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.infrastructure.model.QueryRequest;
@@ -29,18 +30,18 @@ import java.util.List;
 @DefaultFetcherOwner(WalletRepository.class)
 @SaCheckPermission("/wallet")
 @Transactional
-public class  WalletForAdminController {
-    private final  WalletRepository walletRepository;
+public class WalletForAdminController {
+    private final WalletRepository walletRepository;
     private final JSqlClient jSqlClient;
     private final WalletService walletService;
 
     @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  Wallet findById(@PathVariable String id) {
-        return walletRepository.findById(id,WalletRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
+    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") Wallet findById(@PathVariable String id) {
+        return walletRepository.findById(id, WalletRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  Wallet> query(@RequestBody QueryRequest<WalletSpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") Wallet> query(@RequestBody QueryRequest<WalletSpec> queryRequest) {
         return walletRepository.findPage(queryRequest, WalletRepository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 
@@ -59,6 +60,7 @@ public class  WalletForAdminController {
         walletRepository.deleteAllById(ids);
         return true;
     }
+
     @PostConstruct
     public void init() {
         jSqlClient.getTriggers().addEntityListener(WalletRecord.class, e -> {

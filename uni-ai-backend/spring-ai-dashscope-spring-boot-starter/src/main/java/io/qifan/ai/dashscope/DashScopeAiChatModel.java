@@ -134,10 +134,7 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
                         .withGenerationMetadata(ChatGenerationMetadata.from(choice.getFinishReason(), null)))
                 .toList();
 
-        ChatResponseMetadata chatResponseMetadata = new ChatResponseMetadata.DefaultChatResponseMetadata() {
-            @Override
-            public Usage getUsage() {
-                return new Usage() {
+        ChatResponseMetadata chatResponseMetadata = ChatResponseMetadata.builder().withUsage(new Usage() {
                     @Override
                     public Long getPromptTokens() {
                         return result.getUsage().getInputTokens().longValue();
@@ -147,9 +144,8 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
                     public Long getGenerationTokens() {
                         return result.getUsage().getOutputTokens().longValue();
                     }
-                };
-            }
-        };
+                })
+                .build();
         return new ChatResponse(generations, chatResponseMetadata);
     }
 

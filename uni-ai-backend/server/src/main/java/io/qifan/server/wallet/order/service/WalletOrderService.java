@@ -36,12 +36,11 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 @Transactional
 public class WalletOrderService {
+    private final static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
     private final WxPayService wxPayService;
     private final WalletOrderRepository walletOrderRepository;
     private final WxPayProperties wxPayProperties;
     private final UserWeChatRepository userWeChatRepository;
-
-    private final static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
     private final WalletItemRepository walletItemRepository;
     private final WalletRecordService walletRecordService;
     private final WxPayPropertiesExtension wxPayPropertiesExtension;

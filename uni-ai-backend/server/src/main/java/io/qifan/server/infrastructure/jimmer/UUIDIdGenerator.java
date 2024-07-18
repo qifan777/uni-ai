@@ -5,10 +5,10 @@ import org.babyfish.jimmer.sql.meta.UserIdGenerator;
 
 public class UUIDIdGenerator implements UserIdGenerator<String> {
 
-  public UUIDIdGenerator() {
-  }
+    public UUIDIdGenerator() {
+    }
 
-  public String generate(Class<?> entityType) {
-    return IdUtil.fastSimpleUUID();
-  }
+    public String generate(Class<?> entityType) {
+        return IdUtil.fastSimpleUUID();
+    }
 }

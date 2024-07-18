@@ -11,5 +11,6 @@ public interface UniAiVectorService {
     List<Document> similaritySearch(String query, String collectionId);
 
     VectorStore getVectorStore(String collectionId);
+
     void deleteCollection(String collectionId);
 }

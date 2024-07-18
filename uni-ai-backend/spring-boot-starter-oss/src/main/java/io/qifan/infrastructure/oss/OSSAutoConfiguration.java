@@ -53,11 +53,10 @@ public class OSSAutoConfiguration {
     public static class TencentConfig {
 
 
-
         @Bean
         @ConditionalOnMissingBean(OSSService.class)
-        public OSSService tencentOSSService( TencentOSSProperties properties) {
-            return new TencentOSSService( properties);
+        public OSSService tencentOSSService(TencentOSSProperties properties) {
+            return new TencentOSSService(properties);
         }
     }
 

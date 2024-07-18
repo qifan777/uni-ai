@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JimmerConfig {
 
-  @Bean
-  public DatabaseNamingStrategy databaseNamingStrategy() {
-    return DefaultDatabaseNamingStrategy.LOWER_CASE;
-  }
+    @Bean
+    public DatabaseNamingStrategy databaseNamingStrategy() {
+        return DefaultDatabaseNamingStrategy.LOWER_CASE;
+    }
 }

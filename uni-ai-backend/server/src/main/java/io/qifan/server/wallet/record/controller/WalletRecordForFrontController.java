@@ -1,5 +1,5 @@
-
 package io.qifan.server.wallet.record.controller;
+
 import cn.dev33.satoken.annotation.SaCheckDisable;
 import cn.dev33.satoken.stp.StpUtil;
 import io.qifan.infrastructure.common.exception.BusinessException;
@@ -34,10 +34,10 @@ public class WalletRecordForFrontController {
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") WalletRecord> query(@RequestBody QueryRequest<WalletRecordSpec> queryRequest) {
-    queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
-    return walletRecordRepository.findPage(queryRequest, WalletRecordRepository.COMPLEX_FETCHER_FOR_FRONT);
-}
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") WalletRecord> query(@RequestBody QueryRequest<WalletRecordSpec> queryRequest) {
+        queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
+        return walletRecordRepository.findPage(queryRequest, WalletRecordRepository.COMPLEX_FETCHER_FOR_FRONT);
+    }
 
     @PostMapping
     public String create(@RequestBody @Validated WalletRecordCreateInput walletRecordCreateInput) {

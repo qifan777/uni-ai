@@ -7,13 +7,13 @@ import org.babyfish.jimmer.sql.*;
 @Entity
 public interface RoleMenuRel extends BaseEntity {
 
-  @OnDissociate(DissociateAction.DELETE)
-  @ManyToOne
-  @Key
-  Role role();
+    @OnDissociate(DissociateAction.DELETE)
+    @ManyToOne
+    @Key
+    Role role();
 
-  @OnDissociate(DissociateAction.DELETE)
-  @ManyToOne
-  @Key
-  Menu menu();
+    @OnDissociate(DissociateAction.DELETE)
+    @ManyToOne
+    @Key
+    Menu menu();
 }

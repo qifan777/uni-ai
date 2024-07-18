@@ -21,26 +21,26 @@ import java.util.List;
 @DefaultFetcherOwner(MenuRepository.class)
 public class MenuController {
 
-  private final MenuService menuService;
+    private final MenuService menuService;
 
-  @GetMapping("{id}")
-  public @FetchBy(value = "COMPLEX_FETCHER") Menu findById(@PathVariable String id) {
-    return menuService.findById(id);
-  }
+    @GetMapping("{id}")
+    public @FetchBy(value = "COMPLEX_FETCHER") Menu findById(@PathVariable String id) {
+        return menuService.findById(id);
+    }
 
-  @PostMapping("query")
-  public Page<@FetchBy(value = "COMPLEX_FETCHER") Menu> query(
-      @RequestBody QueryRequest<MenuSpec> queryRequest) {
-    return menuService.query(queryRequest);
-  }
+    @PostMapping("query")
+    public Page<@FetchBy(value = "COMPLEX_FETCHER") Menu> query(
+            @RequestBody QueryRequest<MenuSpec> queryRequest) {
+        return menuService.query(queryRequest);
+    }
 
-  @PostMapping("save")
-  public String save(@RequestBody @Validated MenuInput menu) {
-    return menuService.save(menu);
-  }
+    @PostMapping("save")
+    public String save(@RequestBody @Validated MenuInput menu) {
+        return menuService.save(menu);
+    }
 
-  @PostMapping("delete")
-  public Boolean delete(@RequestBody List<String> ids) {
-    return menuService.delete(ids);
-  }
+    @PostMapping("delete")
+    public Boolean delete(@RequestBody List<String> ids) {
+        return menuService.delete(ids);
+    }
 }

@@ -15,20 +15,20 @@ import org.springframework.data.domain.Pageable;
 
 public interface MenuRepository extends JRepository<Menu, String> {
 
-  MenuTable menuTable = MenuTable.$;
-  MenuFetcher COMPLEX_FETCHER = MenuFetcher.$.allScalarFields()
-      .creator(UserFetcher.$.phone().nickname())
-      .editor(UserFetcher.$.phone().nickname());
-  MenuFetcher SIMPLE_FETCHER = MenuFetcher.$.allScalarFields();
+    MenuTable menuTable = MenuTable.$;
+    MenuFetcher COMPLEX_FETCHER = MenuFetcher.$.allScalarFields()
+            .creator(UserFetcher.$.phone().nickname())
+            .editor(UserFetcher.$.phone().nickname());
+    MenuFetcher SIMPLE_FETCHER = MenuFetcher.$.allScalarFields();
 
-  default Page<Menu> findPage(QueryRequest<MenuSpec> queryRequest, Fetcher<Menu> fetcher) {
-    MenuSpec query = queryRequest.getQuery();
-    Pageable pageable = queryRequest.toPageable();
-    return sql().createQuery(menuTable)
-        .where(query)
-        .orderBy(SpringOrders.toOrders(menuTable, pageable.getSort()))
-        .select(menuTable.fetch(fetcher))
-        .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
-            SpringPageFactory.getInstance());
-  }
+    default Page<Menu> findPage(QueryRequest<MenuSpec> queryRequest, Fetcher<Menu> fetcher) {
+        MenuSpec query = queryRequest.getQuery();
+        Pageable pageable = queryRequest.toPageable();
+        return sql().createQuery(menuTable)
+                .where(query)
+                .orderBy(SpringOrders.toOrders(menuTable, pageable.getSort()))
+                .select(menuTable.fetch(fetcher))
+                .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
+                        SpringPageFactory.getInstance());
+    }
 }

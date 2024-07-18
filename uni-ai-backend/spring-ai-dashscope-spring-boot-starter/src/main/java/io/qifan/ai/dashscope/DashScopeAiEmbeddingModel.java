@@ -2,6 +2,7 @@ package io.qifan.ai.dashscope;
 
 import com.alibaba.dashscope.embeddings.TextEmbeddingParam;
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
+import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.embedding.*;
@@ -41,7 +42,17 @@ public class DashScopeAiEmbeddingModel implements EmbeddingModel {
         List<Embedding> embeddings = textEmbeddingResult.getOutput().getEmbeddings().stream().map(e -> new Embedding(e.getEmbedding(), e.getTextIndex()))
                 .toList();
         var metadata = new EmbeddingResponseMetadata();
-        metadata.put("totalTokens", textEmbeddingResult.getUsage().getTotalTokens());
+        metadata.setUsage(new Usage() {
+            @Override
+            public Long getPromptTokens() {
+                return textEmbeddingResult.getUsage().getTotalTokens().longValue();
+            }
+
+            @Override
+            public Long getGenerationTokens() {
+                return 0L;
+            }
+        });
         return new EmbeddingResponse(embeddings, metadata);
     }
 

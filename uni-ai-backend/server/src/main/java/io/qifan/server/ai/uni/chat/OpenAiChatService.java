@@ -17,8 +17,8 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class OpenAiChatService implements UniAiChatService {
-    private OpenAiConnectionProperties openAiConnectionProperties;
     private final ObjectMapper objectMapper;
+    private OpenAiConnectionProperties openAiConnectionProperties;
 
     @SneakyThrows
     @Override

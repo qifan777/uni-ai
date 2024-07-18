@@ -21,26 +21,26 @@ import java.util.List;
 @DefaultFetcherOwner(RoleRepository.class)
 public class RoleController {
 
-  private final RoleService roleService;
+    private final RoleService roleService;
 
-  @GetMapping("{id}")
-  public @FetchBy(value = "ROLE_MENU_FETCHER") Role findById(@PathVariable String id) {
-    return roleService.findById(id);
-  }
+    @GetMapping("{id}")
+    public @FetchBy(value = "ROLE_MENU_FETCHER") Role findById(@PathVariable String id) {
+        return roleService.findById(id);
+    }
 
-  @PostMapping("query")
-  public Page<@FetchBy(value = "COMPLEX_FETCHER") Role> query(
-      @RequestBody QueryRequest<RoleSpec> queryRequest) {
-    return roleService.query(queryRequest);
-  }
+    @PostMapping("query")
+    public Page<@FetchBy(value = "COMPLEX_FETCHER") Role> query(
+            @RequestBody QueryRequest<RoleSpec> queryRequest) {
+        return roleService.query(queryRequest);
+    }
 
-  @PostMapping("save")
-  public String save(@RequestBody @Validated RoleInput role) {
-    return roleService.save(role);
-  }
+    @PostMapping("save")
+    public String save(@RequestBody @Validated RoleInput role) {
+        return roleService.save(role);
+    }
 
-  @PostMapping("delete")
-  public Boolean delete(@RequestBody List<String> ids) {
-    return roleService.delete(ids);
-  }
+    @PostMapping("delete")
+    public Boolean delete(@RequestBody List<String> ids) {
+        return roleService.delete(ids);
+    }
 }

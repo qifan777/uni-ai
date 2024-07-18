@@ -1,4 +1,5 @@
 package io.qifan.server.wallet.order.controller;
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.infrastructure.model.QueryRequest;
@@ -23,16 +24,16 @@ import java.util.List;
 @DefaultFetcherOwner(WalletOrderRepository.class)
 @SaCheckPermission("/wallet-order")
 @Transactional
-public class  WalletOrderForAdminController {
-    private final  WalletOrderRepository walletOrderRepository;
+public class WalletOrderForAdminController {
+    private final WalletOrderRepository walletOrderRepository;
 
     @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  WalletOrder findById(@PathVariable String id) {
-        return walletOrderRepository.findById(id,WalletOrderRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
+    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") WalletOrder findById(@PathVariable String id) {
+        return walletOrderRepository.findById(id, WalletOrderRepository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  WalletOrder> query(@RequestBody QueryRequest<WalletOrderSpec> queryRequest) {
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") WalletOrder> query(@RequestBody QueryRequest<WalletOrderSpec> queryRequest) {
         return walletOrderRepository.findPage(queryRequest, WalletOrderRepository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 

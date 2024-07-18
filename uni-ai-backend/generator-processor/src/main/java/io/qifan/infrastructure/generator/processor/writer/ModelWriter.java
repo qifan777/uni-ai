@@ -69,11 +69,11 @@ public class ModelWriter {
     }
 
     public void writeModel(String sourcePath, Type type, Writable model) {
-        File packageDir = Paths.get(outputPath, sourcePath, type.getPackageDir().replace("/entity","")).toFile();
+        File packageDir = Paths.get(outputPath, sourcePath, type.getPackageDir().replace("/entity", "")).toFile();
         if (!packageDir.exists()) {
             packageDir.mkdirs();
         }
-        File javaFile = Paths.get(outputPath, sourcePath, type.getPackageDir().replace("/entity",""), type.getFileName()).toFile();
+        File javaFile = Paths.get(outputPath, sourcePath, type.getPackageDir().replace("/entity", ""), type.getFileName()).toFile();
 
         writeModel(javaFile, model, false);
     }

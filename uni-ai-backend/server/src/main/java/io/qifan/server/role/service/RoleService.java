@@ -24,31 +24,31 @@ import java.util.List;
 @Transactional
 public class RoleService {
 
-  private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-  public Role findById(String id) {
-    return roleRepository.findById(id, RoleRepository.ROLE_MENU_FETCHER)
-        .orElseThrow(() -> new BusinessException(
-            ResultCode.NotFindError, "数据不存在"));
-  }
+    public Role findById(String id) {
+        return roleRepository.findById(id, RoleRepository.ROLE_MENU_FETCHER)
+                .orElseThrow(() -> new BusinessException(
+                        ResultCode.NotFindError, "数据不存在"));
+    }
 
-  public String save(RoleInput roleInput) {
-    Role role = roleInput.toEntity();
-    return roleRepository.save(RoleDraft.$.produce(role, draft -> {
-      draft.setMenus(new ArrayList<>());
-      Arrays.stream(roleInput.getMenuIds()).forEach(menuId -> {
-        draft.addIntoMenus(roleMenuRelDraft -> roleMenuRelDraft.setRole(role)
-            .applyMenu(menuDraft -> menuDraft.setId(menuId)));
-      });
-    })).id();
-  }
+    public String save(RoleInput roleInput) {
+        Role role = roleInput.toEntity();
+        return roleRepository.save(RoleDraft.$.produce(role, draft -> {
+            draft.setMenus(new ArrayList<>());
+            Arrays.stream(roleInput.getMenuIds()).forEach(menuId -> {
+                draft.addIntoMenus(roleMenuRelDraft -> roleMenuRelDraft.setRole(role)
+                        .applyMenu(menuDraft -> menuDraft.setId(menuId)));
+            });
+        })).id();
+    }
 
-  public Page<Role> query(QueryRequest<RoleSpec> queryRequest) {
-    return roleRepository.findPage(queryRequest, RoleRepository.COMPLEX_FETCHER);
-  }
+    public Page<Role> query(QueryRequest<RoleSpec> queryRequest) {
+        return roleRepository.findPage(queryRequest, RoleRepository.COMPLEX_FETCHER);
+    }
 
-  public boolean delete(List<String> ids) {
-    roleRepository.deleteAllById(ids);
-    return true;
-  }
+    public boolean delete(List<String> ids) {
+        roleRepository.deleteAllById(ids);
+        return true;
+    }
 }

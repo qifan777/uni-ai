@@ -1,5 +1,5 @@
-
 package io.qifan.server.ai.model.controller;
+
 import cn.dev33.satoken.stp.StpUtil;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.model.entity.AiModel;
@@ -32,10 +32,10 @@ public class AiModelForFrontController {
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") AiModel> query(@RequestBody QueryRequest<AiModelSpec> queryRequest) {
-    queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
-    return aiModelRepository.findPage(queryRequest, AiModelRepository.COMPLEX_FETCHER_FOR_FRONT);
-}
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") AiModel> query(@RequestBody QueryRequest<AiModelSpec> queryRequest) {
+        queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
+        return aiModelRepository.findPage(queryRequest, AiModelRepository.COMPLEX_FETCHER_FOR_FRONT);
+    }
 
     @PostMapping
     public String create(@RequestBody @Validated AiModelCreateInput aiModelCreateInput) {

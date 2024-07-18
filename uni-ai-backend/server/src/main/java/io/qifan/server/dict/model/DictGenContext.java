@@ -11,6 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class DictGenContext {
 
-  private List<String> dictTypes;
-  private Map<String, List<Dict>> dictMap;
+    private List<String> dictTypes;
+    private Map<String, List<Dict>> dictMap;
 }

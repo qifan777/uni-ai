@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class NotRepeatAspect {
 
-    private final StringRedisTemplate redisTemplate;
     public static final String USER_INVOKE = "user:invoke:";
+    private final StringRedisTemplate redisTemplate;
 
     @Pointcut("@annotation(notRepeat)")
     private void notRepeatPoints(NotRepeat notRepeat) {

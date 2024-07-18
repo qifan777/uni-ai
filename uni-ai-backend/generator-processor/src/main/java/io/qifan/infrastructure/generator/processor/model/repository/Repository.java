@@ -18,6 +18,7 @@ public class Repository extends ModelElement {
     private Type type;
     private Type entityType;
     private List<QueryItem> fields;
+
     @Override
     public Set<Type> getImportTypes() {
 

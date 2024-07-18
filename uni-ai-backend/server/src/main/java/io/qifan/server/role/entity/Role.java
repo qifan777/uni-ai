@@ -16,16 +16,16 @@ import java.util.List;
 @Entity
 public interface Role extends BaseEntity {
 
-  @GenField(value = "角色名称")
-  @Key
-  String name();
+    @GenField(value = "角色名称")
+    @Key
+    String name();
 
-  @OneToMany(mappedBy = "role")
-  List<UserRoleRel> users();
+    @OneToMany(mappedBy = "role")
+    List<UserRoleRel> users();
 
-  @OneToMany(mappedBy = "role")
-  List<RoleMenuRel> menus();
+    @OneToMany(mappedBy = "role")
+    List<RoleMenuRel> menus();
 
-  @ManyToManyView(prop = "menus")
-  List<Menu> menusView();
+    @ManyToManyView(prop = "menus")
+    List<Menu> menusView();
 }

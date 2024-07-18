@@ -1,5 +1,5 @@
-
 package io.qifan.server.ai.tag.root.controller;
+
 import cn.dev33.satoken.stp.StpUtil;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import io.qifan.server.ai.tag.root.entity.AiTag;
@@ -32,10 +32,10 @@ public class AiTagForFrontController {
     }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") AiTag> query(@RequestBody QueryRequest<AiTagSpec> queryRequest) {
-    queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
-    return aiTagRepository.findPage(queryRequest, AiTagRepository.COMPLEX_FETCHER_FOR_FRONT);
-}
+    public Page<@FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") AiTag> query(@RequestBody QueryRequest<AiTagSpec> queryRequest) {
+        queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
+        return aiTagRepository.findPage(queryRequest, AiTagRepository.COMPLEX_FETCHER_FOR_FRONT);
+    }
 
     @PostMapping
     public String create(@RequestBody @Validated AiTagCreateInput aiTagCreateInput) {

@@ -21,24 +21,24 @@ import java.util.List;
 @Transactional
 public class MenuService {
 
-  private final MenuRepository menuRepository;
+    private final MenuRepository menuRepository;
 
-  public Menu findById(String id) {
-    return menuRepository.findById(id, MenuRepository.COMPLEX_FETCHER)
-        .orElseThrow(() -> new BusinessException(
-            ResultCode.NotFindError, "数据不存在"));
-  }
+    public Menu findById(String id) {
+        return menuRepository.findById(id, MenuRepository.COMPLEX_FETCHER)
+                .orElseThrow(() -> new BusinessException(
+                        ResultCode.NotFindError, "数据不存在"));
+    }
 
-  public String save(MenuInput menuInput) {
-    return menuRepository.save(menuInput).id();
-  }
+    public String save(MenuInput menuInput) {
+        return menuRepository.save(menuInput).id();
+    }
 
-  public Page<Menu> query(QueryRequest<MenuSpec> queryRequest) {
-    return menuRepository.findPage(queryRequest, MenuRepository.COMPLEX_FETCHER);
-  }
+    public Page<Menu> query(QueryRequest<MenuSpec> queryRequest) {
+        return menuRepository.findPage(queryRequest, MenuRepository.COMPLEX_FETCHER);
+    }
 
-  public boolean delete(List<String> ids) {
-    menuRepository.deleteAllById(ids);
-    return true;
-  }
+    public boolean delete(List<String> ids) {
+        menuRepository.deleteAllById(ids);
+        return true;
+    }
 }

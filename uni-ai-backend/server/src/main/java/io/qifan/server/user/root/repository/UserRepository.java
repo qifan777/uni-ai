@@ -17,7 +17,7 @@ public interface UserRepository extends JRepository<User, String> {
 
     UserTable userTable = UserTable.$;
     UserFetcher COMPLEX_FETCHER_FOR_ADMIN = UserFetcher.$.allScalarFields();
-    UserFetcher COMPLEX_FETCHER_FOR_FRONT= UserFetcher.$.allScalarFields();
+    UserFetcher COMPLEX_FETCHER_FOR_FRONT = UserFetcher.$.allScalarFields();
     UserFetcher USER_ROLE_FETCHER = UserFetcher.$.allScalarFields().rolesView(RoleFetcher.$.name());
 
     default Page<User> findPage(QueryRequest<UserSpec> queryRequest, Fetcher<User> fetcher) {

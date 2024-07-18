@@ -1,4 +1,3 @@
-
 package io.qifan.server.user.wechat.controller;
 
 import cn.dev33.satoken.annotation.SaIgnore;

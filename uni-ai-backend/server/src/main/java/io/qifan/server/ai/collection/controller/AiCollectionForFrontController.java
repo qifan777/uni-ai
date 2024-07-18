@@ -1,4 +1,3 @@
-
 package io.qifan.server.ai.collection.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
