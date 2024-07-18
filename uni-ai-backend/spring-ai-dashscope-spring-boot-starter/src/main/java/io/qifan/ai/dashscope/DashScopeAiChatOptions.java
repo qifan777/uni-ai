@@ -25,6 +25,8 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     private Integer maxTokens;
     @JsonProperty("topP")
     private Float topP;
+    @JsonProperty("incrementalOutput")
+    private Boolean incrementalOutput;
     @NestedConfigurationProperty
     @JsonIgnore
     private List<FunctionCallback> functionCallbacks = new ArrayList<>();

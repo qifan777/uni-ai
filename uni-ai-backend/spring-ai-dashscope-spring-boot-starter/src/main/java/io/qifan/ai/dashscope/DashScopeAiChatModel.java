@@ -106,6 +106,9 @@ public class DashScopeAiChatModel extends AbstractFunctionCallSupport<Message, G
         if (options.getTemperature() != null) {
             builder.temperature(options.getTemperature());
         }
+        if (options.getIncrementalOutput() != null) {
+            builder.incrementalOutput(options.getIncrementalOutput());
+        }
         return builder.build();
     }
 
