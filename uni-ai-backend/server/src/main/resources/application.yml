@@ -10,24 +10,30 @@ spring:
         api-key: xxx
         api-secret: xxx
         appid: xxx
+        enabled: true
+        options:
+          domain: generalv3.5
+          base-url: https://spark-api.xf-yun.com/v3.5/chat
     # 阿里灵积
     dash-scope:
       api-key: xxx
+      enabled: true
+      chat:
+        model: qwen-max
+      embedding:
+        model: text-embedding-v2
     # 百度千帆
     qian-fan:
-      access-key: xxx
+      api-key: xxx
       secret-key: xxx
     # openai
     openai:
       api-key: xxx
-      base-url: xxx
-    # 智谱
+    # 智谱清言
     zhipuai:
       api-key: xxx
-      embedding:
-        enabled: false
     # kimi
-    kimi:
+    moonshot:
       api-key: xxx
   servlet:
     multipart:
