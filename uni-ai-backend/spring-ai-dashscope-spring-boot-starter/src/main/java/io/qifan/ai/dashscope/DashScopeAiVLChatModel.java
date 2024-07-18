@@ -75,7 +75,6 @@ public class DashScopeAiVLChatModel implements ChatModel {
         }
         return MultiModalConversationParam.builder()
                 .messages(modalMessages).model(options.getModel())
-                .topK(options.getTopK())
                 .maxLength(options.getMaxTokens())
                 .build();
     }
