@@ -2,10 +2,13 @@ package io.qifan.ai.spark;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.ai.chat.prompt.ChatOptions;
 
+@Accessors(chain = true)
 @Data
 public class SparkAiChatOptions implements ChatOptions {
+
     @JsonProperty("domain")
     private String domain;
     @JsonProperty("baseUrl")
@@ -20,4 +23,20 @@ public class SparkAiChatOptions implements ChatOptions {
     private Integer topK;
     @JsonProperty("topP")
     private Float topP;
+
+    public static SparkAiChatOptions fromOptions(SparkAiChatOptions fromOptions) {
+        return new SparkAiChatOptions()
+                .setModel(fromOptions.getModel())
+                .setBaseUrl(fromOptions.getBaseUrl())
+                .setDomain(fromOptions.getDomain())
+                .setTopK(fromOptions.getTopK())
+                .setTopP(fromOptions.getTopP())
+                .setTemperature(fromOptions.getTemperature())
+                .setMaxTokens(fromOptions.getMaxTokens());
+    }
+
+    @Override
+    public ChatOptions copy() {
+        return fromOptions(this);
+    }
 }

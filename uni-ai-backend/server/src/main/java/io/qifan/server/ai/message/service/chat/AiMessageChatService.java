@@ -6,7 +6,6 @@ import io.qifan.server.ai.factory.entity.AiFactory;
 import io.qifan.server.ai.factory.repository.AiFactoryRepository;
 import io.qifan.server.ai.message.entity.dto.AiMessageCreateInput;
 import io.qifan.server.ai.message.entity.dto.ChatMessageRequest;
-import io.qifan.server.ai.message.entity.model.ChatMessage;
 import io.qifan.server.ai.message.entity.model.ChatParams;
 import io.qifan.server.ai.model.entity.AiModel;
 import io.qifan.server.ai.model.entity.AiModelFetcher;
@@ -21,13 +20,15 @@ import io.qifan.server.ai.uni.vector.UniAiVectorService;
 import io.qifan.server.dict.model.DictConstants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.messages.Media;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.MessageType;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.model.Media;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -88,7 +89,7 @@ public class AiMessageChatService {
     }
 
     public Message toUserMessage(AiMessageCreateInput messageInput, ChatParams params) {
-        ChatMessage chatMessage = toMessage(DictConstants.AiMessageType.USER, messageInput.getContent());
+        Message chatMessage = toMessage(DictConstants.AiMessageType.USER, messageInput.getContent());
         if (StringUtils.hasText(params.getAiCollectionId())) {
             List<String> context = uniAiVectorService.similaritySearch(chatMessage.getContent(), params.getAiCollectionId())
                     .stream()
@@ -121,7 +122,7 @@ public class AiMessageChatService {
         return messages;
     }
 
-    public ChatMessage toMessage(DictConstants.AiMessageType type, List<Map<String, Object>> content) {
+    public Message toMessage(DictConstants.AiMessageType type, List<Map<String, Object>> content) {
         String textContent = content
                 .stream()
                 .filter(item -> StringUtils.hasText((String) item.get("text")))
@@ -139,7 +140,15 @@ public class AiMessageChatService {
                     }
                 })
                 .toList();
-        return new ChatMessage(MessageType.valueOf(type.toString()), textContent, mediaList);
+        if (type.equals(DictConstants.AiMessageType.ASSISTANT)) {
+            return new AssistantMessage(textContent);
+        }
+        if (type.equals(DictConstants.AiMessageType.USER)) {
+            return new UserMessage(textContent, mediaList);
+        }
+        if (type.equals(DictConstants.AiMessageType.SYSTEM)) {
+            return new SystemMessage(textContent);
+        }
+        throw new BusinessException("不支持的消息类型");
     }
-
 }

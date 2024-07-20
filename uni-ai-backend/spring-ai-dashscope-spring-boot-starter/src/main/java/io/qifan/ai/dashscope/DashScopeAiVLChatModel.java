@@ -6,6 +6,8 @@ import com.alibaba.dashscope.common.MultiModalMessage;
 import io.qifan.ai.dashscope.api.DashScopeAiApi;
 import io.reactivex.Flowable;
 import lombok.AllArgsConstructor;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.Usage;
@@ -59,7 +61,9 @@ public class DashScopeAiVLChatModel implements ChatModel {
                 .map(message -> {
                     List<Map<String, Object>> content = new ArrayList<>();
                     content.add(Map.of("text", message.getContent()));
-                    content.addAll(message.getMedia().stream().map(media -> Map.of("image", media.getData())).toList());
+                    if (message instanceof UserMessage userMessage) {
+                        content.addAll(userMessage.getMedia().stream().map(media -> Map.of("image", media.getData())).toList());
+                    }
                     MultiModalMessage build = MultiModalMessage.builder().role(message.getMessageType().getValue())
                             .content(content)
                             .build();
@@ -84,8 +88,8 @@ public class DashScopeAiVLChatModel implements ChatModel {
                 .getChoices()
                 .stream()
                 .map(choice -> {
-                    return new Generation((String) choice.getMessage().getContent().get(0).get("text"))
-                            .withGenerationMetadata(ChatGenerationMetadata.from(choice.getFinishReason(), null));
+                    return new Generation(new AssistantMessage((String) choice.getMessage().getContent().get(0).get("text")),
+                            ChatGenerationMetadata.from(choice.getFinishReason(), null));
                 })
                 .toList();
 

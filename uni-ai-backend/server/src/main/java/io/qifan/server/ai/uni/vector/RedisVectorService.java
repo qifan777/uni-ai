@@ -77,12 +77,11 @@ public class RedisVectorService implements UniAiVectorService {
         Map<String, Object> options = aiFactory.options();
         options.putAll(aiCollection.embeddingModel().options());
         EmbeddingModel embeddingModel = uniAiEmbeddingService.getEmbeddingModel(options);
-        return new RedisVectorStore(getConfig(aiCollection.collectionName()), embeddingModel, true);
+        return new RedisVectorStore(getConfig(aiCollection.collectionName()), embeddingModel, getJedisPooled(), true);
     }
 
     public RedisVectorStore.RedisVectorStoreConfig getConfig(String collectionName) {
         return RedisVectorStore.RedisVectorStoreConfig.builder()
-                .withURI(getUri())
                 .withIndexName(collectionName)
                 .build();
     }

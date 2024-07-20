@@ -71,6 +71,11 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
         throw new UnsupportedOperationException("Unimplemented method 'getTopK'");
     }
 
+    @Override
+    public ChatOptions copy() {
+        return fromOptions(this);
+    }
+
     @JsonIgnore
     public void setTopK(Integer topK) {
         throw new UnsupportedOperationException("Unimplemented method 'setTopK'");
