@@ -15,9 +15,13 @@
                 >
                 </datetime-picker>
                 <#break>
-            <#case 7>
+            <#case 6>
                  <remote-select label-prop="name" :query-options="${getAssociationType().getUncapitalizeTypeName()}QueryOptions" v-model="query.${getProp()}"></remote-select>
                 <#break>
+            <#case 7>
+                <#break >
+            <#case 8>
+                <#break >
             <#default>
                 <el-input v-model.trim="query.${getProp()}"></el-input>
         </#switch>

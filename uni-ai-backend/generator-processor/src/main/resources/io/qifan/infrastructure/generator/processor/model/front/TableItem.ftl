@@ -10,11 +10,9 @@
                     <el-avatar :src="row.${getProp()}" alt=""></el-avatar>
                     <#break>
                 <#case 6>
-                  {{ row.${getProp().replaceAll("Id","")}.nickname }}({{ row.${getProp().replaceAll("Id","")}.phone }})
-                    <#break>
-                <#case 7>
                     {{row.${getProp().replaceAll("Id","")}.name}}
                     <#break>
+
                 <#default>
                     {{row.${getProp()}}}
             </#switch>

@@ -6,6 +6,8 @@
     import type { ${entityType.typeName}Input } from '@/apis/__generated/model/static'
     import RemoteSelect from '@/components/base/form/remote-select.vue'
     import ImageUpload from '@/components/image/image-upload.vue'
+    import KeyValueInput from '@/components/key-value/key-value-input.vue'
+    import ValueInput from '@/components/key-value/value-input.vue'
     import { assertFormValidate } from '@/utils/common'
     import { api } from '@/utils/api-instance'
     import { useFormHelper } from '@/components/base/form/form-helper'

@@ -41,7 +41,6 @@ public interface Wallet extends BaseEntity {
     /**
      * 用户id
      */
-    @GenField(value = "用户", order = 2, type = ItemType.USER_SELECT)
     @IdView
     String userId();
 

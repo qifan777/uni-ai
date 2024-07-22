@@ -27,7 +27,9 @@ public class FieldUtils {
                 GenDictField.class,
                 GenImageField.class,
                 GenNumberField.class,
-                GenAssociationField.class);
+                GenAssociationField.class,
+                GenValueField.class,
+                GenKeyValueField.class);
         List<Method> methods = classList.stream().flatMap(annotationClass -> {
                     return ReflectionUtils.getAllMethods(typeElement,
                                     ReflectionUtilsPredicates.withAnnotation(annotationClass))
@@ -90,6 +92,20 @@ public class FieldUtils {
                         .setOrder(annotation.order())
                         .setAssociationType(TypeUtils.getType(method.getReturnType()))
                         .setItemType(ItemType.ASSOCIATION_SELECT);
+            }
+            if (method.isAnnotationPresent(GenValueField.class)) {
+                GenValueField annotation = method.getAnnotation(GenValueField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.VALUE_INPUT);
+            }
+            if (method.isAnnotationPresent(GenKeyValueField.class)) {
+                GenKeyValueField annotation = method.getAnnotation(GenKeyValueField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.KEY_VALUE_INPUT);
             }
             if (!StringUtils.hasText(itemField.getProp())) {
                 itemField.setProp(method.getName());

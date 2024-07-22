@@ -26,14 +26,13 @@
                 ></el-date-picker>
                 <#break>
             <#case 6>
-                <remote-select
-                        v-model="${ext.prefix}.${getProp()}"
-                        :label-prop="userLabelProp"
-                        :query-options="userQueryOptions"
-                ></remote-select>
+                <remote-select label-prop="name" :query-options="${getAssociationType().getUncapitalizeTypeName()}QueryOptions" v-model="${ext.prefix}.${getProp()}"></remote-select>
                 <#break>
             <#case 7>
-                <remote-select label-prop="name" :query-options="${getAssociationType().getUncapitalizeTypeName()}QueryOptions" v-model="${ext.prefix}.${getProp()}"></remote-select>
+                <value-input v-model="${ext.prefix}.${getProp()}"></value-input>
+                <#break>
+            <#case 8>
+                <key-value-input v-model="${ext.prefix}.${getProp()}"></key-value-input>
                 <#break>
             <#default >
                 <el-input v-model="${ext.prefix}.${getProp()}"></el-input>

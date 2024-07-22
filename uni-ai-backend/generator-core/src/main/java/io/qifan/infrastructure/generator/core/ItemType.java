@@ -10,8 +10,9 @@ public enum ItemType {
     INPUT_NUMBER(3, "数字输入框"),
     PICTURE(4, "图片"),
     DATETIME(5, "日期"),
-    USER_SELECT(6, "用户选择"),
-    ASSOCIATION_SELECT(7, "关系选择"),
+    ASSOCIATION_SELECT(6, "关系选择"),
+    VALUE_INPUT(7, "值列表"),
+    KEY_VALUE_INPUT(8, "键值对"),
     NONE(-1, "不生成");
 
     private final Integer code;
