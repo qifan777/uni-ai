@@ -10,14 +10,12 @@ import lombok.EqualsAndHashCode;
 @Data
 @Builder
 public class Store extends FileModel {
-
-    Query query;
     private Type entityType;
 
     @Override
     public String getFileName() {
 
-        return "/front/" + entityType.toFrontNameCase() + "/store/" + entityType.toFrontNameCase()
-                + "-store.ts";
+        return "/front/" + entityType.toFrontNameCase() + "/" + entityType.toFrontNameCase()
+               + ".ts";
     }
 }

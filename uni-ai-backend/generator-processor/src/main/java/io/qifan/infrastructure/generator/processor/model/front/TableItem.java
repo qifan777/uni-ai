@@ -12,10 +12,13 @@ public class TableItem extends ItemField {
     }
 
     public TableItem(ItemField itemField) {
-        super(itemField.getEntityType(), itemField.getLabel(),
-                itemField.getBind(),
+        super(itemField.getEntityType(),
+                itemField.getAssociationType(),
+                itemField.getLabel(),
+                itemField.getProp(),
                 itemField.getFieldName(),
                 itemField.getDictEnName(),
-                itemField.getItemType(), itemField.getNullable());
+                itemField.getItemType(),
+                itemField.getNullable());
     }
 }

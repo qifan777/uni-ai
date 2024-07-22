@@ -24,7 +24,6 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
         ModelWriter modelWriter = new ModelWriter(processorContext.outputPath());
         Entity entity = Entity.builder()
                 .type(TypeUtils.getType(typeElement))
-                .fields(FieldUtils.getFields(typeElement))
                 .dto(createDto())
                 .repository(createRepository())
                 .service(createService())
@@ -33,18 +32,14 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
                 .query(query())
                 .store(store())
                 .table(table())
+                .details(details())
                 .view(view())
-                .dialog(dialog())
-                .updateForm(updateForm())
-                .createForm(createForm())
                 .build();
         modelWriter.writeModel(entity.getStore(), false);
         modelWriter.writeModel(entity.getQuery(), false);
-        modelWriter.writeModel(entity.getDialog(), false);
         modelWriter.writeModel(entity.getView(), false);
-        modelWriter.writeModel(entity.getCreateForm(), false);
         modelWriter.writeModel(entity.getTable(), false);
-        modelWriter.writeModel(entity.getUpdateForm(), false);
+        modelWriter.writeModel(entity.getDetails(), false);
         ControllerForAdmin controllerForAdmin = entity.getControllerForAdmin();
         ControllerForFront controllerForFront = entity.getControllerForFront();
         Service service = entity.getService();
@@ -91,7 +86,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
                 .type(TypeUtils.getType(typeElement, "repository", "Repository"))
                 .entityType(TypeUtils.getType(typeElement))
                 .fields(FieldUtils.getItemFields(typeElement).stream().map(itemField -> {
-                    itemField.setBind(itemField.getBind());
+                    itemField.setProp(itemField.getProp());
                     return new QueryItem(itemField);
                 }).toList())
                 .build();
@@ -105,7 +100,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
                         "",
                         ""))
                 .entityType(TypeUtils.getType(typeElement))
-                .fields(FieldUtils.getFields(typeElement))
+                .fields(FieldUtils.getItemFields(typeElement))
                 .build();
     }
 
@@ -114,7 +109,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
 
         return Query.builder().entityType(TypeUtils.getType(typeElement))
                 .queryItems(FieldUtils.getItemFields(typeElement).stream().map(itemField -> {
-                    itemField.setBind(itemField.getBind());
+                    itemField.setProp(itemField.getProp());
                     return new QueryItem(itemField);
                 }).toList())
                 .build();
@@ -122,7 +117,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
 
     public Store store() {
 
-        return Store.builder().entityType(TypeUtils.getType(typeElement)).query(query()).build();
+        return Store.builder().entityType(TypeUtils.getType(typeElement)).build();
     }
 
     public Table table() {
@@ -130,38 +125,23 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
         return Table.builder()
                 .entityType(TypeUtils.getType(typeElement))
                 .tableItems(FieldUtils.getItemFields(typeElement).stream().map(itemField -> {
-                    itemField.setBind(itemField.getBind());
+                    itemField.setProp(itemField.getProp());
                     return new TableItem(itemField);
                 }).toList())
                 .build();
     }
 
-    public CreateForm createForm() {
+    public Details details() {
 
-        return CreateForm.builder()
+        return Details.builder()
                 .entityType(TypeUtils.getType(typeElement))
                 .formItems(FieldUtils.getItemFields(typeElement).stream().map(itemField -> {
-                    itemField.setBind(itemField.getBind());
+                    itemField.setProp(itemField.getProp());
                     return new FormItem(itemField);
                 }).toList())
                 .build();
     }
 
-    public UpdateForm updateForm() {
-
-        return UpdateForm.builder()
-                .entityType(TypeUtils.getType(typeElement))
-                .formItems(FieldUtils.getItemFields(typeElement).stream().map(itemField -> {
-                    itemField.setBind(itemField.getBind());
-                    return new FormItem(itemField);
-                }).toList())
-                .build();
-    }
-
-    public Dialog dialog() {
-
-        return Dialog.builder().entityType(TypeUtils.getType(typeElement)).build();
-    }
 
     public View view() {
 

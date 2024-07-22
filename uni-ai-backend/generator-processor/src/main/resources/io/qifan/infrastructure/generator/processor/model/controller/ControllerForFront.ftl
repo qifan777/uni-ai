@@ -25,18 +25,15 @@ public class ${entityType.typeName}ForFrontController {
     return ${uncapitalizeTypeName}Repository.findPage(queryRequest, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT);
 }
 
-    @PostMapping
-    public String create(@RequestBody @Validated ${entityType.typeName}CreateInput ${uncapitalizeTypeName}CreateInput) {
-        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}CreateInput).id();
-    }
-
-    @PutMapping
-    public String update(@RequestBody @Validated ${entityType.typeName}UpdateInput ${uncapitalizeTypeName}UpdateInput) {
-        ${entityType.typeName} ${uncapitalizeTypeName} = ${uncapitalizeTypeName}Repository.findById(${uncapitalizeTypeName}UpdateInput.getId(), ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT).orElseThrow(() -> new BusinessException("数据不存在"));
-        if (!${uncapitalizeTypeName}.creator().id().equals(StpUtil.getLoginIdAsString())) {
-            throw new BusinessException("只能修改自己的数据");
+    @PostMapping("save")
+    public String save(@RequestBody @Validated ${entityType.typeName}Input ${uncapitalizeTypeName}Input) {
+        if (StringUtils.hasText(${uncapitalizeTypeName}Input.getId())) {
+            ${entityType.typeName} ${uncapitalizeTypeName} = ${uncapitalizeTypeName}Repository.findById(${uncapitalizeTypeName}Input.getId(), ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT).orElseThrow(() -> new BusinessException("数据不存在"));
+            if (!${uncapitalizeTypeName}.creator().id().equals(StpUtil.getLoginIdAsString())) {
+                throw new BusinessException("只能修改自己的数据");
+            }
         }
-        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}UpdateInput).id();
+        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}Input.toEntity()).id();
     }
 
     @DeleteMapping

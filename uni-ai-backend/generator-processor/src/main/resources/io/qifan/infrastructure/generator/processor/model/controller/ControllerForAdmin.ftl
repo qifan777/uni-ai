@@ -24,14 +24,9 @@ public class  ${entityType.typeName}ForAdminController {
         return ${uncapitalizeTypeName}Repository.findPage(queryRequest, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 
-    @PostMapping
-    public String create(@RequestBody @Validated  ${entityType.typeName}CreateInput ${uncapitalizeTypeName}Input) {
-        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}Input).id();
-    }
-
-    @PutMapping
-    public String update(@RequestBody @Validated  ${entityType.typeName}UpdateInput ${uncapitalizeTypeName}Input) {
-        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}Input).id();
+    @PostMapping("save")
+    public String save(@RequestBody @Validated ${entityType.typeName}Input ${uncapitalizeTypeName}Input) {
+        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}Input.toEntity()).id();
     }
 
     @DeleteMapping

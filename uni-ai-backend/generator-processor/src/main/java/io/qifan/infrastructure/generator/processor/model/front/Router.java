@@ -6,15 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-public class Dialog extends FileModel {
-
-    private Type entityType;
+public class Router extends FileModel {
+    List<Type> entityList;
 
     @Override
     public String getFileName() {
-        return "/front/" + entityType.toFrontNameCase() + "/components/" + entityType.toFrontNameCase() + "-dialog.vue";
+        return "/front/router.ts";
     }
 }

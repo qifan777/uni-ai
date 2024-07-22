@@ -1,51 +1,103 @@
 package io.qifan.infrastructure.generator.processor.utils;
 
 
-import io.qifan.infrastructure.generator.core.GenField;
-import io.qifan.infrastructure.generator.core.ItemType;
-import io.qifan.infrastructure.generator.processor.model.common.Field;
-import io.qifan.infrastructure.generator.processor.model.common.Type;
+import io.qifan.infrastructure.generator.core.*;
 import io.qifan.infrastructure.generator.processor.model.front.ItemField;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.ReflectionUtils;
 import org.reflections.util.ReflectionUtilsPredicates;
+import org.springframework.util.StringUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Slf4j
 public class FieldUtils {
 
     public static List<ItemField> getItemFields(Class<?> typeElement) {
-        List<Method> methods = ReflectionUtils.getAllMethods(typeElement,
-                        ReflectionUtilsPredicates.withAnnotation(GenField.class))
-                .stream().sorted(Comparator.comparingInt(o -> o.getAnnotation(GenField.class).order()))
+        List<Class<? extends Annotation>> classList = List.of(
+                GenTextField.class,
+                GenTextAreaField.class,
+                GenDateTimeField.class,
+                GenDictField.class,
+                GenImageField.class,
+                GenNumberField.class,
+                GenAssociationField.class);
+        List<Method> methods = classList.stream().flatMap(annotationClass -> {
+                    return ReflectionUtils.getAllMethods(typeElement,
+                                    ReflectionUtilsPredicates.withAnnotation(annotationClass))
+                            .stream();
+                })
                 .toList();
         List<ItemField> itemFields = new ArrayList<>();
         methods.forEach(method -> {
-            GenField annotation = method.getAnnotation(GenField.class);
-            itemFields.add(getItemField(annotation, method, typeElement));
+            ItemField itemField = new ItemField()
+                    .setEntityType(TypeUtils.getType(typeElement))
+                    .setFieldName(method.getName())
+                    .setNullable(isNullable(method));
+            if (method.isAnnotationPresent(GenTextField.class)) {
+                GenTextField annotation = method.getAnnotation(GenTextField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.INPUT_TEXT);
+            }
+            if (method.isAnnotationPresent(GenTextAreaField.class)) {
+                GenTextAreaField annotation = method.getAnnotation(GenTextAreaField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.INPUT_TEXT_AREA);
+            }
+            if (method.isAnnotationPresent(GenDateTimeField.class)) {
+                GenDateTimeField annotation = method.getAnnotation(GenDateTimeField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.DATETIME);
+            }
+            if (method.isAnnotationPresent(GenDictField.class)) {
+                GenDictField annotation = method.getAnnotation(GenDictField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setDictEnName(annotation.dictEnName())
+                        .setItemType(ItemType.SELECTABLE);
+            }
+            if (method.isAnnotationPresent(GenImageField.class)) {
+                GenImageField annotation = method.getAnnotation(GenImageField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.PICTURE);
+            }
+            if (method.isAnnotationPresent(GenNumberField.class)) {
+                GenNumberField annotation = method.getAnnotation(GenNumberField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.INPUT_NUMBER);
+            }
+            if (method.isAnnotationPresent(GenAssociationField.class)) {
+                GenAssociationField annotation = method.getAnnotation(GenAssociationField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setAssociationType(TypeUtils.getType(method.getReturnType()))
+                        .setItemType(ItemType.ASSOCIATION_SELECT);
+            }
+            if (!StringUtils.hasText(itemField.getProp())) {
+                itemField.setProp(method.getName());
+            }
+            itemFields.add(itemField);
         });
+        itemFields.sort(Comparator.comparingInt(ItemField::getOrder));
         return itemFields;
-    }
-
-    public static ItemType itemType(Method method) {
-        Class<?> returnType = method.getReturnType();
-        if (returnType.equals(String.class)) {
-            return ItemType.INPUT_TEXT;
-        } else if (returnType.equals(Integer.class) ||
-                returnType.equals(Long.class) || returnType.getTypeName().equals("int")) {
-            return ItemType.INPUT_NUMBER;
-        } else if (returnType.equals(Date.class) || returnType.equals(LocalDateTime.class)
-                || returnType.equals(LocalDate.class) || returnType.equals(LocalTime.class)) {
-            return ItemType.DATETIME;
-        }
-        return ItemType.INPUT_NUMBER;
     }
 
     public static Boolean isNullable(Method method) {
@@ -62,52 +114,7 @@ public class FieldUtils {
             return true;
         }
         return returnType.equals(Integer.class) || returnType.equals(Long.class) ||
-                returnType.equals(Boolean.class) || returnType.equals(Double.class)
-                || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
-    }
-
-    public static ItemField getItemField(GenField genItem, Method field,
-                                         Class<?> typeElement) {
-        return new ItemField()
-                .setEntityType(TypeUtils.getType(typeElement))
-                .setLabel(genItem.value())
-                .setBind(field.getName())
-                .setFieldName(field.getName())
-                .setDictEnName(String.valueOf(genItem.dictEnName()))
-                .setItemType(genItem.type().equals(ItemType.AUTO) ? itemType(field) : genItem.type())
-                .setNullable(isNullable(field));
-    }
-
-    public static List<Field> getFields(Class<?> typeElement) {
-        Set<Method> fields = ReflectionUtils.getAllMethods(typeElement);
-        return fields.stream()
-                .map(variableElement -> {
-                    String typePath = variableElement.getGenericReturnType().getTypeName();
-                    Type type = TypeUtils.getType(typePath);
-                    Optional<GenField> genFieldOptional =
-                            Optional.ofNullable(variableElement.getAnnotation(GenField.class));
-
-                    if (isParameterType(typePath)) {
-                        type = TypeUtils.getParameterType(typePath);
-                    }
-                    return Field.builder()
-                            .type(type)
-                            .description(genFieldOptional.map(GenField::value).orElse(""))
-                            .fieldName(variableElement.getName())
-                            .itemField(genFieldOptional.map(
-                                            genField -> getItemField(genField, variableElement, typeElement))
-                                    .orElse(new ItemField()
-                                            .setNullable(isNullable(variableElement))
-                                            .setItemType(itemType(variableElement))
-                                            .setFieldName(variableElement.getName())
-                                            .setBind(variableElement.getName())
-                                            .setEntityType(TypeUtils.getType(typeElement))))
-                            .build();
-                }).toList();
-    }
-
-
-    public static boolean isParameterType(String typePath) {
-        return typePath.contains("<");
+               returnType.equals(Boolean.class) || returnType.equals(Double.class)
+               || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
     }
 }

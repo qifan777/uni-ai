@@ -12,8 +12,9 @@ public class FormItem extends ItemField {
 
     public FormItem(ItemField itemField) {
         super(itemField.getEntityType(),
+                itemField.getAssociationType(),
                 itemField.getLabel(),
-                itemField.getBind(),
+                itemField.getProp(),
                 itemField.getFieldName(),
                 itemField.getDictEnName(),
                 itemField.getItemType(),

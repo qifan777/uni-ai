@@ -1,7 +1,6 @@
 package io.qifan.infrastructure.generator.processor.model;
 
 
-import io.qifan.infrastructure.generator.processor.model.common.Field;
 import io.qifan.infrastructure.generator.processor.model.common.ModelElement;
 import io.qifan.infrastructure.generator.processor.model.common.Type;
 import io.qifan.infrastructure.generator.processor.model.controller.ControllerForAdmin;
@@ -14,7 +13,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -23,7 +21,6 @@ import java.util.Set;
 public class Entity extends ModelElement {
 
     private Type type;
-    private List<Field> fields;
     private ControllerForAdmin controllerForAdmin;
     private ControllerForFront controllerForFront;
     private Dto dto;
@@ -33,9 +30,7 @@ public class Entity extends ModelElement {
     private Query query;
     private Store store;
     private Table table;
-    private Dialog dialog;
-    private UpdateForm updateForm;
-    private CreateForm createForm;
+    private Details details;
 
     @Override
     public Set<Type> getImportTypes() {

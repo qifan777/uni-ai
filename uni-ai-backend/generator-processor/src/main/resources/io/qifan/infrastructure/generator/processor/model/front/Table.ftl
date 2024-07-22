@@ -3,38 +3,47 @@
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
 <script lang="ts" setup>
-    import {onMounted} from 'vue'
-    import {storeToRefs} from 'pinia'
-    import {assertSuccess} from '@/utils/common'
-    import {api} from '@/utils/api-instance'
-    import {ElMessageBox} from 'element-plus'
-    import type {Scope} from '@/typings'
-    import {use${entityType.typeName}Store} from '../store/${entityType.toFrontNameCase()}-store'
+    import { inject, onMounted } from 'vue'
+    import { assertSuccess } from '@/utils/common'
+    import { api } from '@/utils/api-instance'
+    import { ElMessageBox } from 'element-plus'
+    import type { Scope } from '@/typings'
     import type { ${entityType.typeName}Dto } from '@/apis/__generated/model/dto'
-    import ${'{ Delete, Edit, Plus }'} from '@element-plus/icons-vue'
-    import ${'DictColumn'} from '@/components/dict/dict-column.vue'
-    import { ${'DictConstants'} } from '@/apis/__generated/model/enums/DictConstants'
+    import { Delete, Edit, Plus } from '@element-plus/icons-vue'
+    import { useTableHelper } from '@/components/base/table/table-helper'
+    import { useTagStore } from '@/layout/store/tag-store'
+    const tagStore = useTagStore()
     type ${entityType.typeName}Scope = Scope<${entityType.typeName}Dto['${entityType.typeName}Repository/COMPLEX_FETCHER_FOR_ADMIN']>
-    const ${uncapitalizeTypeName}Store = use${entityType.typeName}Store()
+    const ${uncapitalizeTypeName}TableHelper = inject(
+        '${uncapitalizeTypeName}TableHelper',
+        useTableHelper(api.${uncapitalizeTypeName}ForAdminController.query, api.${uncapitalizeTypeName}ForAdminController, {})
+    )
     const {
         loadTableData,
-        reloadTableData,
-        openDialog,
         handleSortChange,
         handleSelectChange,
-        getTableSelectedRows
-    } = ${uncapitalizeTypeName}Store
-    const {pageData, loading, queryRequest, table, updateForm, createForm} = storeToRefs(${uncapitalizeTypeName}Store)
+        getTableSelectedRows,
+        reloadTableData,
+        pageData,
+        loading,
+        queryRequest,
+        table
+    } = ${uncapitalizeTypeName}TableHelper
     onMounted(() => {
         reloadTableData()
     })
     const handleEdit = (row: { id: string }) => {
-        openDialog('UPDATE')
-        updateForm.value.id = row.id
+        tagStore.openTag({
+            path: '/${entityType.toFrontNameCase()}-details',
+            query: {
+                id: row.id
+            }
+        })
     }
     const handleCreate = () => {
-        openDialog('CREATE')
-        createForm.value = {...${uncapitalizeTypeName}Store.initForm}
+        tagStore.openTag({
+            path: '/${entityType.toFrontNameCase()}-details'
+        })
     }
     const handleSingleDelete = (row: { id: string }) => {
         handleDelete([row.id])
@@ -52,7 +61,7 @@
             cancelButtonText: '取消',
             type: 'warning'
         }).then(() => {
-            api.${uncapitalizeTypeName}ForAdminController.delete({body: ids}).then((res) => {
+            api.${uncapitalizeTypeName}ForAdminController.delete({ body: ids }).then((res) => {
                 assertSuccess(res).then(() => reloadTableData())
             })
         })

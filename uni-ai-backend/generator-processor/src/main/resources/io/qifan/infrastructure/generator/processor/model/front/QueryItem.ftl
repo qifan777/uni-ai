@@ -3,30 +3,23 @@
     <el-form-item label="${getLabel()}">
         <#switch getItemType().code>
             <#case 0>
-                <dict-select :dict-id="DictConstants.${getDictEnName()}" v-model="query.${getBind()}"></dict-select>
+                <dict-select :dict-id="DictConstants.${getDictEnName()}" v-model="query.${getProp()}"></dict-select>
                 <#break>
             <#case 3>
-                <el-input-number v-model="query.${getBind()}" controls-position="right"></el-input-number>
+                <el-input-number v-model="query.${getProp()}" controls-position="right"></el-input-number>
                 <#break>
             <#case 5>
                 <datetime-picker
-                    v-model:min-date-time="query.min${getBind()?cap_first}"
-                    v-model:max-date-time="query.max${getBind()?cap_first}"
+                    v-model:min-date-time="query.min${getProp()?cap_first}"
+                    v-model:max-date-time="query.max${getProp()?cap_first}"
                 >
                 </datetime-picker>
                 <#break>
-            <#case 6>
-                <remote-select
-                        v-model="query.${getBind()}"
-                        :label-prop="userLabelProp"
-                        :query-options="userQueryOptions"
-                ></remote-select>
-                <#break>
             <#case 7>
-                 <remote-select label-prop="name" :query-options="${getBind().replaceAll("Id","")}QueryOptions" v-model="query.${getBind()}"></remote-select>
+                 <remote-select label-prop="name" :query-options="${getAssociationType().getUncapitalizeTypeName()}QueryOptions" v-model="query.${getProp()}"></remote-select>
                 <#break>
             <#default>
-                <el-input v-model="query.${getBind()}"></el-input>
+                <el-input v-model.trim="query.${getProp()}"></el-input>
         </#switch>
     </el-form-item>
 </#if>

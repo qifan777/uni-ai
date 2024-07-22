@@ -12,8 +12,10 @@ public class QueryItem extends ItemField {
     }
 
     public QueryItem(ItemField itemField) {
-        super(itemField.getEntityType(), itemField.getLabel(),
-                itemField.getBind(),
+        super(itemField.getEntityType(),
+                itemField.getAssociationType(),
+                itemField.getLabel(),
+                itemField.getProp(),
                 itemField.getFieldName(),
                 itemField.getDictEnName(),
                 itemField.getItemType(),

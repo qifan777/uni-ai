@@ -1,13 +1,8 @@
 package io.qifan.infrastructure.generator.processor.model.common;
 
 
-import java.util.Set;
+import io.qifan.infrastructure.generator.processor.writer.FreeMarkerWritable;
 
-public abstract class FileModel extends ModelElement {
+public abstract class FileModel extends FreeMarkerWritable {
     public abstract String getFileName();
-
-    @Override
-    public Set<Type> getImportTypes() {
-        return null;
-    }
 }

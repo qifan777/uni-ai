@@ -10,7 +10,7 @@ import org.springframework.util.StringUtils;
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
 public interface ${type.typeName} extends JRepository<${entityType.typeName}, String> {
-    ${entityType.typeName}Table ${uncapitalizeTypeName}Table = ${entityType.typeName}Table.$;
+    ${entityType.typeName}Table t = ${entityType.typeName}Table.$;
     ${entityType.typeName}Fetcher COMPLEX_FETCHER_FOR_ADMIN = ${entityType.typeName}Fetcher.$.allScalarFields()
         .creator(UserFetcher.$.phone().nickname())
         .editor(UserFetcher.$.phone().nickname());
@@ -20,10 +20,10 @@ public interface ${type.typeName} extends JRepository<${entityType.typeName}, St
       Fetcher<${entityType.typeName}> fetcher) {
     ${entityType.typeName}Spec query = queryRequest.getQuery();
     Pageable pageable = queryRequest.toPageable();
-    return sql().createQuery(${uncapitalizeTypeName}Table)
+    return sql().createQuery(t)
         .where(query)
-        .orderBy(SpringOrders.toOrders(${uncapitalizeTypeName}Table, pageable.getSort()))
-        .select(${uncapitalizeTypeName}Table.fetch(fetcher))
+        .orderBy(SpringOrders.toOrders(t, pageable.getSort()))
+        .select(t.fetch(fetcher))
         .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
             SpringPageFactory.getInstance());
   }

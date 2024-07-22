@@ -4,6 +4,7 @@ import io.qifan.infrastructure.generator.core.GenEntity;
 import io.qifan.infrastructure.generator.processor.processor.DefaultModelElementProcessorContext;
 import io.qifan.infrastructure.generator.processor.processor.EntityCreateProcessor;
 import io.qifan.infrastructure.generator.processor.processor.ModelElementProcessor;
+import io.qifan.infrastructure.generator.processor.processor.RouterCreateProcessor;
 import org.reflections.Reflections;
 
 import java.util.Set;
@@ -26,6 +27,7 @@ public class QiFanGenerator {
         Set<Class<?>> annotatedEntities =
                 reflections.get(TypesAnnotated.with(GenEntity.class).asClass())
                         .stream().filter(Class::isInterface).collect(Collectors.toSet());
+        new RouterCreateProcessor().porocess(annotatedEntities, outputPath);
         processEntityElements(annotatedEntities, outputPath);
     }
 
