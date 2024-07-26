@@ -14,6 +14,7 @@
                     <#break>
                 <#case 9>
                     <el-switch v-model="row.${getProp()}" disabled></el-switch>
+                    <#break>
                 <#default>
                     {{row.${getProp()}}}
             </#switch>

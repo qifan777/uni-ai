@@ -36,6 +36,7 @@
                 <#break>
             <#case 9>
                 <el-switch v-model="${ext.prefix}.${getProp()}"></el-switch>
+                <#break>
             <#default >
                 <el-input v-model="${ext.prefix}.${getProp()}"></el-input>
         </#switch>

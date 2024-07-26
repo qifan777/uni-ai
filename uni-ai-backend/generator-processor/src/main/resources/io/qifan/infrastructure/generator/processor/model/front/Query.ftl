@@ -3,7 +3,7 @@
 <script lang="ts" setup>
   import RemoteSelect from '@/components/base/form/remote-select.vue'
   import type { ${entityType.typeName}Spec } from '@/apis/__generated/model/static'
-  const emit = defineEmits<{ search: [value: ${entityType.typeName}Spec]; rest: [] }>()
+  const emit = defineEmits<{ search: [value: ${entityType.typeName}Spec]; reset: [] }>()
   const query = defineModel<${entityType.typeName}Spec>('query', { required: true })
 </script>
 <template>
@@ -17,7 +17,7 @@
           <el-button type="primary" size="small" @click="() => emit('search', query)">
             查询
           </el-button>
-          <el-button type="warning" size="small" @click="() => emit('rest')"> 重置</el-button>
+          <el-button type="warning" size="small" @click="() => emit('reset')"> 重置</el-button>
         </div>
       </el-form-item>
     </el-form>
