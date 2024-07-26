@@ -6,7 +6,7 @@ input ${type.typeName}Input {
     id
 <#list getFields() as field>
     <#switch field.itemType.code>
-        <#case 7>
+        <#case 6>
     id(${field.fieldName})
     </#switch>
 </#list>
@@ -26,7 +26,7 @@ specification ${type.typeName}Spec {
     ge(${field.fieldName})
     le(${field.fieldName})
         <#break>
-    <#case 7>
+    <#case 6>
     id(${field.fieldName})
         <#break>
     </#switch>
