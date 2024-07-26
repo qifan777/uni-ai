@@ -13,6 +13,7 @@ public enum ItemType {
     ASSOCIATION_SELECT(6, "关系选择"),
     VALUE_INPUT(7, "值列表"),
     KEY_VALUE_INPUT(8, "键值对"),
+    BOOLEAN(9, "布尔值"),
     NONE(-1, "不生成");
 
     private final Integer code;

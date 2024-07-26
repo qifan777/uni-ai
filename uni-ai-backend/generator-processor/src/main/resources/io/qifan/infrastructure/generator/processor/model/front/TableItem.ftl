@@ -12,7 +12,8 @@
                 <#case 6>
                     {{row.${getProp().replaceAll("Id","")}.name}}
                     <#break>
-
+                <#case 9>
+                    <el-switch v-model="row.${getProp()}" disabled></el-switch>
                 <#default>
                     {{row.${getProp()}}}
             </#switch>

@@ -29,7 +29,8 @@ public class FieldUtils {
                 GenNumberField.class,
                 GenAssociationField.class,
                 GenValueField.class,
-                GenKeyValueField.class);
+                GenKeyValueField.class,
+                GenBooleanField.class);
         List<Method> methods = classList.stream().flatMap(annotationClass -> {
                     return ReflectionUtils.getAllMethods(typeElement,
                                     ReflectionUtilsPredicates.withAnnotation(annotationClass))
@@ -107,6 +108,13 @@ public class FieldUtils {
                         .setOrder(annotation.order())
                         .setItemType(ItemType.KEY_VALUE_INPUT);
             }
+            if (method.isAnnotationPresent(GenBooleanField.class)) {
+                GenBooleanField annotation = method.getAnnotation(GenBooleanField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.BOOLEAN);
+            }
             if (!StringUtils.hasText(itemField.getProp())) {
                 itemField.setProp(method.getName());
             }
@@ -130,7 +138,7 @@ public class FieldUtils {
             return true;
         }
         return returnType.equals(Integer.class) || returnType.equals(Long.class) ||
-               returnType.equals(Boolean.class) || returnType.equals(Double.class)
-               || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
+                returnType.equals(Boolean.class) || returnType.equals(Double.class)
+                || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
     }
 }

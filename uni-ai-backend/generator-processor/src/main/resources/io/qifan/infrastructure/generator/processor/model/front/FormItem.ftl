@@ -34,6 +34,8 @@
             <#case 8>
                 <key-value-input v-model="${ext.prefix}.${getProp()}"></key-value-input>
                 <#break>
+            <#case 9>
+                <el-switch v-model="${ext.prefix}.${getProp()}"></el-switch>
             <#default >
                 <el-input v-model="${ext.prefix}.${getProp()}"></el-input>
         </#switch>
