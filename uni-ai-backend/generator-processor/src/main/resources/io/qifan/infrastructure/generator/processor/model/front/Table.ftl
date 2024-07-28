@@ -12,6 +12,8 @@
     import { Delete, Edit, Plus } from '@element-plus/icons-vue'
     import { useTableHelper } from '@/components/base/table/table-helper'
     import { useTagStore } from '@/layout/store/tag-store'
+    import DictColumn from '@/components/dict/dict-column.vue'
+    import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
     const tagStore = useTagStore()
     type ${entityType.typeName}Scope = Scope<${entityType.typeName}Dto['${entityType.typeName}Repository/COMPLEX_FETCHER_FOR_ADMIN']>
     const ${uncapitalizeTypeName}TableHelper = inject(

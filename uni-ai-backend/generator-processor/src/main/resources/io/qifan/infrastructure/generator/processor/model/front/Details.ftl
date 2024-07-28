@@ -8,6 +8,8 @@
     import ImageUpload from '@/components/image/image-upload.vue'
     import KeyValueInput from '@/components/key-value/key-value-input.vue'
     import ValueInput from '@/components/key-value/value-input.vue'
+    import DictColumn from '@/components/dict/dict-column.vue'
+    import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
     import { assertFormValidate } from '@/utils/common'
     import { api } from '@/utils/api-instance'
     import { useFormHelper } from '@/components/base/form/form-helper'

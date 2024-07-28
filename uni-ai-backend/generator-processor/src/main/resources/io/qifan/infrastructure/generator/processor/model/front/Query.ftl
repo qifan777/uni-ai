@@ -3,6 +3,8 @@
 <script lang="ts" setup>
   import RemoteSelect from '@/components/base/form/remote-select.vue'
   import type { ${entityType.typeName}Spec } from '@/apis/__generated/model/static'
+  import DictColumn from '@/components/dict/dict-column.vue'
+  import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
   const emit = defineEmits<{ search: [value: ${entityType.typeName}Spec]; reset: [] }>()
   const query = defineModel<${entityType.typeName}Spec>('query', { required: true })
 </script>
