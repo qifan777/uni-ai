@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.ai.chat.prompt.ChatOptions;
 
+import java.util.List;
+
 @Accessors(chain = true)
 @Data
 public class SparkAiChatOptions implements ChatOptions {
@@ -33,6 +35,21 @@ public class SparkAiChatOptions implements ChatOptions {
                 .setTopP(fromOptions.getTopP())
                 .setTemperature(fromOptions.getTemperature())
                 .setMaxTokens(fromOptions.getMaxTokens());
+    }
+
+    @Override
+    public Float getFrequencyPenalty() {
+        return 0f;
+    }
+
+    @Override
+    public Float getPresencePenalty() {
+        return 0f;
+    }
+
+    @Override
+    public List<String> getStopSequences() {
+        return List.of();
     }
 
     @Override

@@ -65,6 +65,21 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
         this.functions = functions;
     }
 
+    @Override
+    public Float getFrequencyPenalty() {
+        return 0f;
+    }
+
+    @Override
+    public Float getPresencePenalty() {
+        return 0f;
+    }
+
+    @Override
+    public List<String> getStopSequences() {
+        return List.of();
+    }
+
     @JsonIgnore
     @Override
     public Integer getTopK() {
