@@ -12,4 +12,9 @@ import static com.alibaba.dashscope.tokenizers.Tokenization.Models.TEXT_EMBEDDIN
 public class DashScopeAiEmbeddingOptions implements EmbeddingOptions {
     @JsonProperty("model")
     private String model = TEXT_EMBEDDING_V1;
+
+    @Override
+    public Integer getDimensions() {
+        return 1536;
+    }
 }

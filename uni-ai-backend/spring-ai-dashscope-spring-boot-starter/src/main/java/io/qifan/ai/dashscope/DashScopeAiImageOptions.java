@@ -19,4 +19,9 @@ public class DashScopeAiImageOptions implements ImageOptions {
     public String getResponseFormat() {
         return "";
     }
+
+    @Override
+    public String getStyle() {
+        return "";
+    }
 }
