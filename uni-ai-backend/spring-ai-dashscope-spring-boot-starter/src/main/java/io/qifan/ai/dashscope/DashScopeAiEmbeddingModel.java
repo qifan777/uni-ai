@@ -39,7 +39,13 @@ public class DashScopeAiEmbeddingModel implements EmbeddingModel {
         var embeddingParam = TextEmbeddingParam.builder().model(options.getModel())
                 .texts(request.getInstructions()).build();
         var textEmbeddingResult = dashScopeAiApi.embedding(embeddingParam);
-        List<Embedding> embeddings = textEmbeddingResult.getOutput().getEmbeddings().stream().map(e -> new Embedding(e.getEmbedding(), e.getTextIndex()))
+        List<Embedding> embeddings = textEmbeddingResult.getOutput().getEmbeddings().stream().map(e -> {
+                    float[] floats = new float[e.getEmbedding().size()];
+                    for (int i = 0; i < e.getEmbedding().size(); i++) {
+                        floats[i] = e.getEmbedding().get(i).floatValue();
+                    }
+                    return new Embedding(floats, e.getTextIndex());
+                })
                 .toList();
         var metadata = new EmbeddingResponseMetadata();
         metadata.setUsage(new Usage() {
@@ -57,7 +63,7 @@ public class DashScopeAiEmbeddingModel implements EmbeddingModel {
     }
 
     @Override
-    public List<Double> embed(Document document) {
+    public float[] embed(Document document) {
         return this.embed(document.getFormattedContent(this.metadataMode));
     }
 

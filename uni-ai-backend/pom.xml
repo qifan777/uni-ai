@@ -6,7 +6,7 @@
 
     <groupId>io.github.qifan777</groupId>
     <artifactId>uni-ai</artifactId>
-    <version>0.1.8</version>
+    <version>0.1.9</version>
     <packaging>pom</packaging>
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
