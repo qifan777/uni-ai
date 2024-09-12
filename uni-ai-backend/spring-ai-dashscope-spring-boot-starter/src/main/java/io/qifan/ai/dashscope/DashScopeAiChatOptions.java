@@ -20,11 +20,11 @@ public class DashScopeAiChatOptions implements ChatOptions, FunctionCallingOptio
     @JsonProperty("model")
     private String model;
     @JsonProperty("temperature")
-    private Float temperature;
+    private Float temperature = 1f;
     @JsonProperty("maxTokens")
-    private Integer maxTokens;
+    private Integer maxTokens = 2000;
     @JsonProperty("topP")
-    private Float topP;
+    private Float topP = 0.75F;
     @JsonProperty("incrementalOutput")
     private Boolean incrementalOutput;
     @NestedConfigurationProperty

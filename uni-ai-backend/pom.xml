@@ -6,7 +6,7 @@
 
     <groupId>io.github.qifan777</groupId>
     <artifactId>uni-ai</artifactId>
-    <version>0.1.9</version>
+    <version>0.1.10</version>
     <packaging>pom</packaging>
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -48,7 +48,7 @@
         <wechat.version>4.6.0</wechat.version>
         <jimmer.version>0.8.130</jimmer.version>
         <hutool.version>5.8.25</hutool.version>
-        <dashscope.version>2.15.0</dashscope.version>
+        <dashscope.version>2.16.3</dashscope.version>
         <tenant-oss.version>5.6.210</tenant-oss.version>
         <aliyun-oss.version>3.17.4</aliyun-oss.version>
         <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
@@ -235,23 +235,23 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-gpg-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>-->
-<!--                    <keyname>qifan777</keyname>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>sign-artifacts</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>sign</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</executable>
+                    <keyname>qifan777</keyname>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

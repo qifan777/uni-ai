@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.ai.autoconfigure.moonshot.MoonshotChatProperties;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.model.function.FunctionCallbackContext;
 import org.springframework.ai.moonshot.MoonshotChatModel;
 import org.springframework.ai.moonshot.MoonshotChatOptions;
 import org.springframework.ai.moonshot.api.MoonshotApi;
@@ -23,6 +24,7 @@ public class KimiAiChatService implements UniAiChatService {
     private final ObjectMapper objectMapper;
     private final ResponseErrorHandler responseErrorHandler;
     private MoonshotChatProperties moonshotChatProperties;
+    private final FunctionCallbackContext functionCallbackContext;
 
     @SneakyThrows
     @Override
@@ -37,6 +39,6 @@ public class KimiAiChatService implements UniAiChatService {
         String valueAsString = objectMapper.writeValueAsString(options);
         MoonshotChatOptions chatOptions = objectMapper.readValue(valueAsString, MoonshotChatOptions.class);
         MoonshotApi api = new MoonshotApi("https://api.moonshot.cn", apiKey, RestClient.builder(), responseErrorHandler);
-        return new MoonshotChatModel(api, chatOptions, RetryTemplate.defaultInstance());
+        return new MoonshotChatModel(api, chatOptions, functionCallbackContext, RetryTemplate.defaultInstance());
     }
 }
