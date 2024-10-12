@@ -9,7 +9,7 @@ spring:
       api-key: xxx
       chat:
         options:
-          model: qwen-max
+          model: qwen-plus
       embedding:
         options:
           model: text-embedding-v2

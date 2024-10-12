@@ -31,7 +31,7 @@ services:
     volumes:
       - redis-data:/data
   uni-ai:
-    image: qifan7/uni-ai:0.1.10
+    image: qifan7/uni-ai:0.1.11
     container_name: uni-ai
     environment:
       spring.profiles.active: prod

@@ -1,5 +1,6 @@
 package io.qifan.server.ai.uni.embedding;
 
+import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeConnectionProperties;
 import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeEmbeddingProperties;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.embedding.DashScopeEmbeddingModel;
@@ -16,13 +17,13 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class DashScopeAiEmbeddingService implements UniAiEmbeddingService {
-    DashScopeEmbeddingProperties dashScopeEmbeddingProperties;
+    private final DashScopeConnectionProperties connectionProperties;
 
     @Override
     public EmbeddingModel getEmbeddingModel(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
         if (!StringUtils.hasText(apiKey)) {
-            apiKey = dashScopeEmbeddingProperties.getApiKey();
+            apiKey = connectionProperties.getApiKey();
         }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");

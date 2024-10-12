@@ -1,6 +1,6 @@
 package io.qifan.server.ai.uni.image;
 
-import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeImageProperties;
+import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeConnectionProperties;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeImageApi;
 import com.alibaba.cloud.ai.dashscope.image.DashScopeImageModel;
 import com.alibaba.cloud.ai.dashscope.image.DashScopeImageOptions;
@@ -19,14 +19,14 @@ import java.util.Map;
 @AllArgsConstructor
 public class DashScopeAiImageService implements UniAiImageService {
     private final ObjectMapper objectMapper;
-    private final DashScopeImageProperties dashScopeImageProperties;
+    private final DashScopeConnectionProperties connectionProperties;
 
     @SneakyThrows
     @Override
     public ImageModel getImageMode(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
         if (!StringUtils.hasText(apiKey)) {
-            apiKey = dashScopeImageProperties.getApiKey();
+            apiKey = connectionProperties.getApiKey();
         }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");

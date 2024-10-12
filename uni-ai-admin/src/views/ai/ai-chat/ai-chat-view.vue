@@ -116,11 +116,7 @@ const handleChatMessage = (message: AiMessage['content']) => {
     const response = JSON.parse(event.data) as ChatResponse
     const finishReason = response.result.metadata.finishReason
     if (response.result.output.content) {
-      if (chatParams.value.aiModel && chatParams.value.aiModel.factory == 'DASH_SCOPE') {
-        responseMessage.value.content[0].text = response.result.output.content
-      } else {
-        responseMessage.value.content[0].text += response.result.output.content
-      }
+      responseMessage.value.content[0].text += response.result.output.content
       nextTick(() => {
         messageListRef.value?.scrollTo(0, messageListRef.value.scrollHeight)
       })

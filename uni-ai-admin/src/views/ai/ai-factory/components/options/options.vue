@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { AiFactoryType } from '@/apis/__generated/model/enums'
-import SparkOptions from './spark-options.vue'
 import DashScopeOptions from './dash-scope-options.vue'
 import OpenAiOptions from './open-ai-options.vue'
 import QianFanOptions from './qian-fan-options.vue'
@@ -12,8 +11,6 @@ const props = defineProps<{ factory: AiFactoryType }>()
 const model = defineModel<any>({ default: {} })
 const optionsComponent = computed(() => {
   switch (props.factory) {
-    case 'SPARK':
-      return SparkOptions
     case 'DASH_SCOPE':
       return DashScopeOptions
     case 'OPEN_AI':

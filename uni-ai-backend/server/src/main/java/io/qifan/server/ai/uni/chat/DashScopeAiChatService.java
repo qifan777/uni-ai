@@ -1,6 +1,6 @@
 package io.qifan.server.ai.uni.chat;
 
-import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeChatProperties;
+import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeConnectionProperties;
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class DashScopeAiChatService implements UniAiChatService {
-    private final DashScopeChatProperties dashScopeChatProperties;
+    private final DashScopeConnectionProperties connectionProperties;
     private final ObjectMapper objectMapper;
     private final FunctionCallbackContext functionCallbackContext;
 
@@ -30,7 +30,7 @@ public class DashScopeAiChatService implements UniAiChatService {
     public ChatModel getChatModel(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
         if (!StringUtils.hasText(apiKey)) {
-            apiKey = dashScopeChatProperties.getApiKey();
+            apiKey = connectionProperties.getApiKey();
         }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");
