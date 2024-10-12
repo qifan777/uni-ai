@@ -112,14 +112,9 @@
             <artifactId>spring-ai-qianfan-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <artifactId>spring-ai-spark-spring-boot-starter</artifactId>
-            <groupId>io.github.qifan777</groupId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <artifactId>spring-ai-dashscope-spring-boot-starter</artifactId>
-            <groupId>io.github.qifan777</groupId>
-            <version>${project.version}</version>
+            <groupId>com.alibaba.cloud.ai</groupId>
+            <artifactId>spring-ai-alibaba-starter</artifactId>
+            <version>${spring-ai.version}</version>
         </dependency>
         <dependency>
             <artifactId>spring-boot-starter-security</artifactId>

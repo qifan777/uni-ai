@@ -1,11 +1,12 @@
 package io.qifan.server.ai.uni.embedding;
 
-import io.qifan.ai.dashscope.DashScopeAiEmbeddingModel;
-import io.qifan.ai.dashscope.DashScopeAiEmbeddingOptions;
-import io.qifan.ai.dashscope.DashScopeAiProperties;
-import io.qifan.ai.dashscope.api.DashScopeAiApi;
+import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeEmbeddingProperties;
+import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import com.alibaba.cloud.ai.dashscope.embedding.DashScopeEmbeddingModel;
+import com.alibaba.cloud.ai.dashscope.embedding.DashScopeEmbeddingOptions;
 import io.qifan.infrastructure.common.exception.BusinessException;
 import lombok.AllArgsConstructor;
+import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -15,13 +16,13 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class DashScopeAiEmbeddingService implements UniAiEmbeddingService {
-    DashScopeAiProperties dashScopeAiProperties;
+    DashScopeEmbeddingProperties dashScopeEmbeddingProperties;
 
     @Override
     public EmbeddingModel getEmbeddingModel(Map<String, Object> options) {
         String apiKey = (String) options.get("apiKey");
         if (!StringUtils.hasText(apiKey)) {
-            apiKey = dashScopeAiProperties.getApiKey();
+            apiKey = dashScopeEmbeddingProperties.getApiKey();
         }
         if (!StringUtils.hasText(apiKey)) {
             throw new BusinessException("apiKey不能为空");
@@ -31,7 +32,6 @@ public class DashScopeAiEmbeddingService implements UniAiEmbeddingService {
             throw new BusinessException("model不能为空");
         }
 
-        return new DashScopeAiEmbeddingModel(new DashScopeAiApi(apiKey), new DashScopeAiEmbeddingOptions()
-                .setModel(model));
+        return new DashScopeEmbeddingModel(new DashScopeApi(apiKey), MetadataMode.EMBED, new DashScopeEmbeddingOptions.Builder().withModel(model).build());
     }
 }

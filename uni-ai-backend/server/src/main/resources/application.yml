@@ -4,24 +4,15 @@ spring:
   profiles:
     active: dev,private
   ai:
-    # 讯飞星火
-    spark:
-      chat:
-        api-key: xxx
-        api-secret: xxx
-        appid: xxx
-        enabled: true
-        options:
-          domain: generalv3.5
-          base-url: https://spark-api.xf-yun.com/v3.5/chat
     # 阿里灵积
     dash-scope:
       api-key: xxx
-      enabled: true
       chat:
-        model: qwen-max
+        options:
+          model: qwen-max
       embedding:
-        model: text-embedding-v2
+        options:
+          model: text-embedding-v2
     # 百度千帆
     qian-fan:
       api-key: xxx
