@@ -42,7 +42,7 @@ public class TencentOSSService implements OSSService {
     @SneakyThrows
     @Override
     public Boolean delete(String url) {
-        String objectName = new URL(url).getPath();
+        String objectName = new URL(url).getPath().substring(1);
         getTencentOSS().deleteObject(properties.getBucket(), objectName);
         return true;
     }
