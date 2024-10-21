@@ -31,6 +31,11 @@ public class LocalOSSService implements OSSService {
         return basicUpload(objectName, inputStream);
     }
 
+    @Override
+    public Boolean delete(String objectName) {
+        return null;
+    }
+
     @SneakyThrows
     public String basicUpload(String objectName, InputStream inputStream) {
         byte[] bytes = inputStream.readAllBytes();

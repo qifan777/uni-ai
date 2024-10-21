@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,6 +38,14 @@ public class AliYunOSSService implements OSSService {
         return basicUpload(objectName, inputStream);
     }
 
+    @SneakyThrows
+    @Override
+    public Boolean delete(String url) {
+        String objectName = new URL(url).getPath();
+        getAliYunOSS().deleteObject(aliYunOSSProperties.getBucketName(), objectName);
+        return true;
+    }
+
     public String basicUpload(String objectName, InputStream inputStream) {
         PutObjectRequest putObjectRequest = new PutObjectRequest(aliYunOSSProperties.getBucketName(),
                 objectName,
@@ -47,8 +56,8 @@ public class AliYunOSSService implements OSSService {
         putObjectRequest.setMetadata(metadata);
         PutObjectResult putObjectResult = getAliYunOSS().putObject(putObjectRequest);
         return "https://" + aliYunOSSProperties.getBucketName() + "." +
-                aliYunOSSProperties.getEndpoint().replace("https://", "") +
-                "/" + objectName;
+               aliYunOSSProperties.getEndpoint().replace("https://", "") +
+               "/" + objectName;
     }
 
     public OSS getAliYunOSS() {

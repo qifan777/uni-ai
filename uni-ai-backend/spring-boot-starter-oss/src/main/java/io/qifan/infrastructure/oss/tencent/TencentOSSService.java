@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,6 +37,14 @@ public class TencentOSSService implements OSSService {
     @Override
     public String upload(String objectName, InputStream inputStream) {
         return basicUpload(objectName, inputStream);
+    }
+
+    @SneakyThrows
+    @Override
+    public Boolean delete(String url) {
+        String objectName = new URL(url).getPath();
+        getTencentOSS().deleteObject(properties.getBucket(), objectName);
+        return true;
     }
 
     public String basicUpload(String objectName, InputStream inputStream) {
