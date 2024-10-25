@@ -27,9 +27,9 @@ specification ${type.typeName}Spec {
     le(${field.fieldName})
         <#break>
     <#case 6>
-    id(${field.fieldName})
+    associatedIdEq(${field.fieldName})
         <#break>
     </#switch>
     </#list>
-    id(creator)
+    associatedIdEq(creator)
 }

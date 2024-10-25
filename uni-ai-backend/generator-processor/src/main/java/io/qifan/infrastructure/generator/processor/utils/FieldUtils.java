@@ -30,7 +30,8 @@ public class FieldUtils {
                 GenAssociationField.class,
                 GenValueField.class,
                 GenKeyValueField.class,
-                GenBooleanField.class);
+                GenBooleanField.class,
+                GenFileField.class);
         List<Method> methods = classList.stream().flatMap(annotationClass -> {
                     return ReflectionUtils.getAllMethods(typeElement,
                                     ReflectionUtilsPredicates.withAnnotation(annotationClass))
@@ -114,6 +115,13 @@ public class FieldUtils {
                         .setProp(annotation.prop())
                         .setOrder(annotation.order())
                         .setItemType(ItemType.BOOLEAN);
+            }
+            if (method.isAnnotationPresent(GenFileField.class)) {
+                GenFileField annotation = method.getAnnotation(GenFileField.class);
+                itemField.setLabel(annotation.label())
+                        .setProp(annotation.prop())
+                        .setOrder(annotation.order())
+                        .setItemType(ItemType.FILE);
             }
             if (!StringUtils.hasText(itemField.getProp())) {
                 itemField.setProp(method.getName());

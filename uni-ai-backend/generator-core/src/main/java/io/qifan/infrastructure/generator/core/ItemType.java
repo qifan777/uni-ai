@@ -14,6 +14,7 @@ public enum ItemType {
     VALUE_INPUT(7, "值列表"),
     KEY_VALUE_INPUT(8, "键值对"),
     BOOLEAN(9, "布尔值"),
+    FILE(10, "文件"),
     NONE(-1, "不生成");
 
     private final Integer code;

@@ -24,9 +24,17 @@ public class  ${entityType.typeName}ForAdminController {
         return ${uncapitalizeTypeName}Repository.findPage(queryRequest, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN);
     }
 
+    public String insert(${entityType.typeName}Input input) {
+        return ${uncapitalizeTypeName}Repository.insert(input.toEntity()).id();
+    }
+
+    public String update(${entityType.typeName}Input input) {
+        return ${uncapitalizeTypeName}Repository.update(input.toEntity()).id();
+    }
+
     @PostMapping("save")
-    public String save(@RequestBody @Validated ${entityType.typeName}Input ${uncapitalizeTypeName}Input) {
-        return ${uncapitalizeTypeName}Repository.save(${uncapitalizeTypeName}Input.toEntity()).id();
+    public String save(@RequestBody @Validated ${entityType.typeName}Input input) {
+        return StringUtils.hasText(input.getId()) ? update(input) : insert(input);
     }
 
     @DeleteMapping

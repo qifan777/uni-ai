@@ -25,6 +25,8 @@
             <#case 9>
                 <el-switch v-model="query.${getProp()}"></el-switch>
                 <#break>
+            <#case 10>
+                <#break >
             <#default>
                 <el-input v-model.trim="query.${getProp()}"></el-input>
         </#switch>

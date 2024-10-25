@@ -37,6 +37,9 @@
             <#case 9>
                 <el-switch v-model="${ext.prefix}.${getProp()}"></el-switch>
                 <#break>
+            <#case 10>
+                <file-upload v-model="${ext.prefix}.${getProp()}"></file-upload>
+                <#break>
             <#default >
                 <el-input v-model="${ext.prefix}.${getProp()}"></el-input>
         </#switch>
