@@ -48,7 +48,7 @@ public class OSSAutoConfiguration {
     }
 
     @AutoConfiguration
-    @ConditionalOnProperty(prefix = "oss", name = "provider", havingValue = "TENANT")
+    @ConditionalOnProperty(prefix = "oss", name = "provider", havingValue = "TENCENT")
     @EnableConfigurationProperties(TencentOSSProperties.class)
     public static class TencentConfig {
 
