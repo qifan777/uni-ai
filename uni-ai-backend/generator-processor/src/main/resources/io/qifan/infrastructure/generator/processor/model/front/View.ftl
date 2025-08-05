@@ -10,8 +10,8 @@
     import { useQueryHelper } from '@/components/base/query/query-helper'
     const initQuery: ${entityType.typeName}Spec = {}
     const tableHelper = useTableHelper(
-        api.${uncapitalizeTypeName}ForAdminController.query,
-        api.${uncapitalizeTypeName}ForAdminController,
+        api.${uncapitalizeTypeName}Controller.query,
+        api.${uncapitalizeTypeName}Controller,
         initQuery
     )
     const { query, restQuery } = useQueryHelper<${entityType.typeName}Spec>(initQuery)

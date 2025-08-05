@@ -3,6 +3,7 @@ package io.qifan.infrastructure.generator.processor.utils;
 
 import io.qifan.infrastructure.generator.core.*;
 import io.qifan.infrastructure.generator.processor.model.front.ItemField;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.extern.slf4j.Slf4j;
@@ -142,11 +143,11 @@ public class FieldUtils {
                 NotNull.class)) {
             return false;
         }
-        if (method.isAnnotationPresent(Null.class)) {
+        if (method.isAnnotationPresent(Null.class) || method.isAnnotationPresent(Nullable.class)) {
             return true;
         }
         return returnType.equals(Integer.class) || returnType.equals(Long.class) ||
-                returnType.equals(Boolean.class) || returnType.equals(Double.class)
-                || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
+               returnType.equals(Boolean.class) || returnType.equals(Double.class)
+               || returnType.equals(Float.class) || returnType.equals(Short.class) || returnType.equals(Byte.class) || returnType.equals(Character.class);
     }
 }

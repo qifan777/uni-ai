@@ -28,7 +28,7 @@
     const handleConfirm = () => {
         formRef.value?.validate(
             assertFormValidate(() =>
-                api.${uncapitalizeTypeName}ForAdminController.save({ body: form.value }).then(async (res) => {
+                api.${uncapitalizeTypeName}Controller.save({ body: form.value }).then(async (res) => {
                     form.value.id = res
                     ElMessage.success('操作成功')
                 })
@@ -37,7 +37,7 @@
     }
     onActivated(() => {
         if (props.id) {
-            api.${uncapitalizeTypeName}ForAdminController.findById({ id: props.id }).then((res) => {
+            api.${uncapitalizeTypeName}Controller.findById({ id: props.id }).then((res) => {
                 form.value = res
             })
         } else {

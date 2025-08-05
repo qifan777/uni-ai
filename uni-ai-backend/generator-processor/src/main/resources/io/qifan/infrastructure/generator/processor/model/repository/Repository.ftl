@@ -11,11 +11,9 @@ import org.springframework.util.StringUtils;
 
 public interface ${type.typeName} extends JRepository<${entityType.typeName}, String> {
     ${entityType.typeName}Table t = ${entityType.typeName}Table.$;
-    ${entityType.typeName}Fetcher COMPLEX_FETCHER_FOR_ADMIN = ${entityType.typeName}Fetcher.$.allScalarFields()
-        .creator(UserFetcher.$.phone().nickname())
-        .editor(UserFetcher.$.phone().nickname());
-    ${entityType.typeName}Fetcher COMPLEX_FETCHER_FOR_FRONT = ${entityType.typeName}Fetcher.$.allScalarFields()
-            .creator(true);
+    ${entityType.typeName}Fetcher COMPLEX_FETCHER = ${entityType.typeName}Fetcher.$.allScalarFields()
+        .creator(UserFetcher.$.userName())
+        .editor(UserFetcher.$.userName());
   default Page<${entityType.typeName}> findPage(QueryRequest<${entityType.typeName}Spec> queryRequest,
       Fetcher<${entityType.typeName}> fetcher) {
     ${entityType.typeName}Spec query = queryRequest.getQuery();

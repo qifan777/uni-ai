@@ -1,4 +1,5 @@
 # UNI-AI（AI聚合）
+mvn deploy:deploy-file -Dmaven.test.skip=true -Dfile=generator-processor/target/generator-processor-0.1.12-newland.jar -DgroupId=io.github.qifan777 -DartifactId=generator-processor -Dversion=0.1.12-newland -Dpackaging=jar -DrepositoryId=bd-releases -Durl=http://10.1.4.161:8085/repository/bd-releases/
 
 ## 项目内容
 

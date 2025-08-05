@@ -2,8 +2,7 @@ package io.qifan.infrastructure.generator.processor.processor;
 
 
 import io.qifan.infrastructure.generator.processor.model.Entity;
-import io.qifan.infrastructure.generator.processor.model.controller.ControllerForAdmin;
-import io.qifan.infrastructure.generator.processor.model.controller.ControllerForFront;
+import io.qifan.infrastructure.generator.processor.model.controller.Controller;
 import io.qifan.infrastructure.generator.processor.model.dto.Dto;
 import io.qifan.infrastructure.generator.processor.model.front.*;
 import io.qifan.infrastructure.generator.processor.model.repository.Repository;
@@ -27,8 +26,7 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
                 .dto(createDto())
                 .repository(createRepository())
                 .service(createService())
-                .controllerForAdmin(createControllerForAdmin())
-                .controllerForFront(createControllerForUser())
+                .controller(createController())
                 .query(query())
                 .store(store())
                 .table(table())
@@ -40,31 +38,21 @@ public class EntityCreateProcessor implements ModelElementProcessor<Void, Entity
         modelWriter.writeModel(entity.getView(), false);
         modelWriter.writeModel(entity.getTable(), false);
         modelWriter.writeModel(entity.getDetails(), false);
-        ControllerForAdmin controllerForAdmin = entity.getControllerForAdmin();
-        ControllerForFront controllerForFront = entity.getControllerForFront();
+        Controller controller = entity.getController();
         Service service = entity.getService();
         Repository repository = entity.getRepository();
-        modelWriter.writeModel(controllerForAdmin.getSourcePath(), controllerForAdmin.getType(), controllerForAdmin);
-        modelWriter.writeModel(controllerForFront.getSourcePath(), controllerForFront.getType(), controllerForFront);
+        modelWriter.writeModel(controller.getSourcePath(), controller.getType(), controller);
         modelWriter.writeModel(service.getSourcePath(), service.getType(), service);
         modelWriter.writeModel(repository.getSourcePath(), repository.getType(), repository);
         modelWriter.writeModel(entity.getDto(), false);
-
         return entity;
     }
 
-    private ControllerForAdmin createControllerForAdmin() {
-        return ControllerForAdmin.builder()
-                .sourcePath(sourcePath)
-                .type(TypeUtils.getType(typeElement, "controller", "ForAdminController"))
-                .entityType(TypeUtils.getType(typeElement))
-                .build();
-    }
 
-    private ControllerForFront createControllerForUser() {
-        return ControllerForFront.builder()
+    private Controller createController() {
+        return Controller.builder()
                 .sourcePath(sourcePath)
-                .type(TypeUtils.getType(typeElement, "controller", "ForFrontController"))
+                .type(TypeUtils.getType(typeElement, "controller", "Controller"))
                 .entityType(TypeUtils.getType(typeElement))
                 .build();
     }

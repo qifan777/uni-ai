@@ -3,8 +3,7 @@ package io.qifan.infrastructure.generator.processor.model;
 
 import io.qifan.infrastructure.generator.processor.model.common.ModelElement;
 import io.qifan.infrastructure.generator.processor.model.common.Type;
-import io.qifan.infrastructure.generator.processor.model.controller.ControllerForAdmin;
-import io.qifan.infrastructure.generator.processor.model.controller.ControllerForFront;
+import io.qifan.infrastructure.generator.processor.model.controller.Controller;
 import io.qifan.infrastructure.generator.processor.model.dto.Dto;
 import io.qifan.infrastructure.generator.processor.model.front.*;
 import io.qifan.infrastructure.generator.processor.model.repository.Repository;
@@ -21,8 +20,7 @@ import java.util.Set;
 public class Entity extends ModelElement {
 
     private Type type;
-    private ControllerForAdmin controllerForAdmin;
-    private ControllerForFront controllerForFront;
+    private Controller controller;
     private Dto dto;
     private Repository repository;
     private Service service;

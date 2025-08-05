@@ -4,6 +4,6 @@
 import { api } from '@/utils/api-instance'
 export const ${uncapitalizeTypeName}QueryOptions = async (keyword: string, id: string) => {
   return (
-          await api.${uncapitalizeTypeName}ForAdminController.query({ body: { query: { name: keyword, id } } })
+          await api.${uncapitalizeTypeName}Controller.query({ body: { query: { name: keyword, id } } })
   ).content
 }

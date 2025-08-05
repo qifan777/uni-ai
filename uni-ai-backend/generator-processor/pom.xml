@@ -8,7 +8,7 @@
         <artifactId>uni-ai</artifactId>
         <version>0.1.12</version>
     </parent>
-
+    <version>0.1.12-newland</version>
     <artifactId>generator-processor</artifactId>
     <name>generator-processor</name>
     <description>generator-processor</description>
@@ -47,13 +47,17 @@
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.qifan777</groupId>
             <artifactId>generator-core</artifactId>
-            <version>${project.version}</version>
+            <version>0.1.12</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

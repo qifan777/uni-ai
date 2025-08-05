@@ -29,7 +29,7 @@ public class  ${entityType.typeName}ForAdminController {
     }
 
     public String update(${entityType.typeName}Input input) {
-        return ${uncapitalizeTypeName}Repository.update(input.toEntity()).id();
+        return ${uncapitalizeTypeName}Repository.save(input.toEntity()).id();
     }
 
     @PostMapping("save")

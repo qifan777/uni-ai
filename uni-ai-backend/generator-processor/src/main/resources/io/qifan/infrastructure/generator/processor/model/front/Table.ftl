@@ -4,21 +4,22 @@
 
 <script lang="ts" setup>
     import { inject, onMounted } from 'vue'
-    import { assertSuccess } from '@/utils/common'
     import { api } from '@/utils/api-instance'
-    import { ElMessageBox } from 'element-plus'
-    import type { Scope } from '@/typings'
+    import { ElMessageBox, ElMessage } from 'element-plus'
+    import type { Scope } from '@/types'
     import type { ${entityType.typeName}Dto } from '@/apis/__generated/model/dto'
     import { Delete, Edit, Plus } from '@element-plus/icons-vue'
     import { useTableHelper } from '@/components/base/table/table-helper'
-    import { useTagStore } from '@/layout/store/tag-store'
     import DictColumn from '@/components/dict/dict-column.vue'
     import { DictConstants } from '@/apis/__generated/model/enums/DictConstants'
-    const tagStore = useTagStore()
-    type ${entityType.typeName}Scope = Scope<${entityType.typeName}Dto['${entityType.typeName}Repository/COMPLEX_FETCHER_FOR_ADMIN']>
+    import router from '@/router'
+    import { userLabelProp } from '@/store/user.ts'
+
+
+    type ${entityType.typeName}Scope = Scope<${entityType.typeName}Dto['${entityType.typeName}Repository/COMPLEX_FETCHER']>
     const ${uncapitalizeTypeName}TableHelper = inject(
         '${uncapitalizeTypeName}TableHelper',
-        useTableHelper(api.${uncapitalizeTypeName}ForAdminController.query, api.${uncapitalizeTypeName}ForAdminController, {})
+        useTableHelper(api.${uncapitalizeTypeName}Controller.query, api.${uncapitalizeTypeName}Controller, {})
     )
     const {
         loadTableData,
@@ -35,7 +36,7 @@
         reloadTableData()
     })
     const handleEdit = (row: { id: string }) => {
-        tagStore.openTag({
+        router.push({
             path: '/${entityType.toFrontNameCase()}-details',
             query: {
                 id: row.id
@@ -43,7 +44,7 @@
         })
     }
     const handleCreate = () => {
-        tagStore.openTag({
+        router.push({
             path: '/${entityType.toFrontNameCase()}-details'
         })
     }
@@ -63,8 +64,9 @@
             cancelButtonText: '取消',
             type: 'warning'
         }).then(() => {
-            api.${uncapitalizeTypeName}ForAdminController.delete({ body: ids }).then((res) => {
-                assertSuccess(res).then(() => reloadTableData())
+            api.${uncapitalizeTypeName}Controller.delete({ body: ids }).then((res) => {
+                reloadTableData();
+                ElMessage.success('操作成功')
             })
         })
     }
@@ -107,14 +109,14 @@
                     {{ row.editedTime }}
                 </template>
             </el-table-column>
-            <el-table-column label="创建人" prop="creator.phone" sortable="custom" show-overflow-tooltip width="150">
+            <el-table-column label="创建人" prop="creator.id" sortable="custom" show-overflow-tooltip width="150">
                 <template v-slot:default="{ row }: ${entityType.typeName}Scope">
-                    {{ row.creator.nickname }}({{ row.creator.phone }})
+                    userLabelProp(row.creator)
                 </template>
             </el-table-column>
-            <el-table-column label="更新人" prop="editor.phone" sortable="custom" show-overflow-tooltip width="150">
+            <el-table-column label="更新人" prop="editor.id" sortable="custom" show-overflow-tooltip width="150">
                 <template v-slot:default="{ row }: ${entityType.typeName}Scope">
-                    {{ row.editor.nickname }}({{ row.editor.phone }})
+                    userLabelProp(row.editor)
                 </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" >
