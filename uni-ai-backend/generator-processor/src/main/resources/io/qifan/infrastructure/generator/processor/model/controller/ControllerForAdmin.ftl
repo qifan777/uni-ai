@@ -5,41 +5,33 @@ import ${importType.getTypePath()};
 </#list>
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
-@RestController
 @RequestMapping("admin/${entityType.toFrontNameCase()}")
-@AllArgsConstructor
-@DefaultFetcherOwner(${entityType.typeName}Repository.class)
-@SaCheckPermission("/${entityType.toFrontNameCase()}")
+@RestController
 @Transactional
-public class  ${entityType.typeName}ForAdminController {
-    private final  ${entityType.typeName}Repository ${uncapitalizeTypeName}Repository;
-
-    @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  ${entityType.typeName} findById(@PathVariable String id) {
-        return ${uncapitalizeTypeName}Repository.findById(id,${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN).orElseThrow(() -> new BusinessException("数据不存在"));
-    }
+@DefaultFetcherOwner(${entityType.typeName}Repository::class)
+@SaCheckPermission("/${entityType.toFrontNameCase()}")
+open class ${entityType.typeName}ForAdminController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
+    @GetMapping
+    fun findById(@RequestParam id: String): @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") ${entityType.typeName} =
+        ${uncapitalizeTypeName}Repository.findById(id)
+            .orElseThrow { BusinessException("信息不存在") }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN")  ${entityType.typeName}> query(@RequestBody QueryRequest< ${entityType.typeName}Spec> queryRequest) {
-        return ${uncapitalizeTypeName}Repository.findPage(queryRequest, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN);
-    }
-
-    public String insert(${entityType.typeName}Input input) {
-        return ${uncapitalizeTypeName}Repository.insert(input.toEntity()).id();
-    }
-
-    public String update(${entityType.typeName}Input input) {
-        return ${uncapitalizeTypeName}Repository.update(input.toEntity()).id();
+    fun query(@RequestBody queryRequest: QueryRequest<${entityType.typeName}Spec>): Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") ${entityType.typeName}> {
+        return ${uncapitalizeTypeName}Repository.findPage(
+            queryRequest.toPageable(),
+            queryRequest.query,
+            ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN
+        )
     }
 
     @PostMapping("save")
-    public String save(@RequestBody @Validated ${entityType.typeName}Input input) {
-        return StringUtils.hasText(input.getId()) ? update(input) : insert(input);
+    fun save(@RequestBody input: ${entityType.typeName}Input): String {
+        return ${uncapitalizeTypeName}Repository.save(input).id;
     }
 
-    @DeleteMapping
-    public Boolean delete(@RequestBody List<String> ids) {
-        ${uncapitalizeTypeName}Repository.deleteAllById(ids);
-        return true;
+    @PostMapping("delete")
+    fun delete(@RequestBody ids: List<String>) {
+        ${uncapitalizeTypeName}Repository.deleteByIds(ids)
     }
 }

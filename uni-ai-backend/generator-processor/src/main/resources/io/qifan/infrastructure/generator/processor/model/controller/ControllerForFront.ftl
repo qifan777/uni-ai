@@ -6,49 +6,42 @@ import ${importType.getTypePath()};
 </#list>
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
+@RequestMapping("/front/${entityType.toFrontNameCase()}")
 @RestController
-@RequestMapping("front/${entityType.toFrontNameCase()}")
-@AllArgsConstructor
-@DefaultFetcherOwner(${entityType.typeName}Repository.class)
 @Transactional
-public class ${entityType.typeName}ForFrontController {
-    private final ${entityType.typeName}Repository ${uncapitalizeTypeName}Repository;
-
-    @GetMapping("{id}")
-    public @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") ${entityType.typeName} findById(@PathVariable String id) {
-        return ${uncapitalizeTypeName}Repository.findById(id, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT).orElseThrow(() -> new BusinessException("数据不存在"));
-    }
+@DefaultFetcherOwner(${entityType.typeName}Repository::class)
+open class ${entityType.typeName}ForFrontController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
+    @GetMapping
+    fun findById(@RequestParam id: String): @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") ${entityType.typeName} =
+        ${uncapitalizeTypeName}Repository.findById(id)
+            .orElseThrow { BusinessException("信息不存在") }
 
     @PostMapping("query")
-    public Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") ${entityType.typeName}> query(@RequestBody QueryRequest<${entityType.typeName}Spec> queryRequest) {
-        queryRequest.getQuery().setCreatorId(StpUtil.getLoginIdAsString());
-        return ${uncapitalizeTypeName}Repository.findPage(queryRequest, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT);
-    }
-    public String insert(${entityType.typeName}Input input) {
-        return ${uncapitalizeTypeName}Repository.insert(input.toEntity()).id();
-    }
+    fun query(@RequestBody queryRequest: QueryRequest<${entityType.typeName}Spec>): Page< @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") ${entityType.typeName}> {
+    val copy = queryRequest.query.copy(creatorId = StpUtil.getLoginIdAsString())
 
-    public String update(${entityType.typeName}Input input) {
-        ${entityType.typeName} ${uncapitalizeTypeName} = ${uncapitalizeTypeName}Repository.findById(input.getId(), ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT).orElseThrow(() -> new BusinessException("数据不存在"));
-        if (!${uncapitalizeTypeName}.creator().id().equals(StpUtil.getLoginIdAsString())) {
-            throw new BusinessException("只能修改自己的数据");
-        }
-        return ${uncapitalizeTypeName}Repository.update(input.toEntity()).id();
-    }
+    return ${uncapitalizeTypeName}Repository.findPage(queryRequest.toPageable(), copy, ${entityType.typeName}Fetchers.COMPLEX_FETCHER_FOR_FRONT)
+}
 
     @PostMapping("save")
-    public String save(@RequestBody @Validated ${entityType.typeName}Input input) {
-        return StringUtils.hasText(input.getId()) ? update(input) : insert(input);
+    fun save(@RequestBody input: ${entityType.typeName}Input): String {
+        if (input.id != null) {
+            val ${uncapitalizeTypeName} = ${uncapitalizeTypeName}Repository.findById(input.id, ${entityType.typeName}Fetchers.COMPLEX_FETCHER_FOR_FRONT).orElseThrow()
+            if (${uncapitalizeTypeName}.creator.id != StpUtil.getLoginIdAsString()) {
+                throw BusinessException("您没有权限修改此信息")
+            }
+        }
+        return ${uncapitalizeTypeName}Repository.save(input).id;
     }
 
-    @DeleteMapping
-    public Boolean delete(@RequestBody List<String> ids) {
-        ${uncapitalizeTypeName}Repository.findByIds(ids, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT).forEach(${uncapitalizeTypeName} -> {
-            if (!${uncapitalizeTypeName}.creator().id().equals(StpUtil.getLoginIdAsString())) {
-                throw new BusinessException("只能删除自己的数据");
+    @PostMapping("delete")
+    fun delete(@RequestBody ids: List<String>) {
+        for (id in ids) {
+            val ${uncapitalizeTypeName} = ${uncapitalizeTypeName}Repository.findById(id, ${entityType.typeName}Fetchers.COMPLEX_FETCHER_FOR_FRONT).orElseThrow()
+            if (${uncapitalizeTypeName}.creator.id != StpUtil.getLoginIdAsString()) {
+                throw BusinessException("您没有权限删除此信息")
             }
-        });
-        ${uncapitalizeTypeName}Repository.deleteAllById(ids);
-        return true;
+        }
+        ${uncapitalizeTypeName}Repository.deleteByIds(ids)
     }
 }

@@ -23,7 +23,7 @@ public class Type extends ModelElement {
     }
 
     public String getFileName() {
-        return typeName + ".java";
+        return typeName + ".kt";
     }
 
     public String toFrontNameCase() {

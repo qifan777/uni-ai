@@ -3,28 +3,43 @@ package ${type.packagePath};
 
 <#list importTypes as importType>
 import ${importType.getTypePath()};
+import ${importType.getPackagePath()+'.by'};
 </#list>
+import org.babyfish.jimmer.spring.repository.orderBy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
+
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
-public interface ${type.typeName} extends JRepository<${entityType.typeName}, String> {
-    ${entityType.typeName}Table t = ${entityType.typeName}Table.$;
-    ${entityType.typeName}Fetcher COMPLEX_FETCHER_FOR_ADMIN = ${entityType.typeName}Fetcher.$.allScalarFields()
-        .creator(UserFetcher.$.phone().nickname())
-        .editor(UserFetcher.$.phone().nickname());
-    ${entityType.typeName}Fetcher COMPLEX_FETCHER_FOR_FRONT = ${entityType.typeName}Fetcher.$.allScalarFields()
-            .creator(true);
-  default Page<${entityType.typeName}> findPage(QueryRequest<${entityType.typeName}Spec> queryRequest,
-      Fetcher<${entityType.typeName}> fetcher) {
-    ${entityType.typeName}Spec query = queryRequest.getQuery();
-    Pageable pageable = queryRequest.toPageable();
-    return sql().createQuery(t)
-        .where(query)
-        .orderBy(SpringOrders.toOrders(t, pageable.getSort()))
-        .select(t.fetch(fetcher))
-        .fetchPage(queryRequest.getPageNum() - 1, queryRequest.getPageSize(),
-            SpringPageFactory.getInstance());
-  }
+interface ${entityType.typeName}Repository : KRepository<${entityType.typeName}, String> {
+    companion object {
+        val COMPLEX_FETCHER_FOR_FRONT = newFetcher(${entityType.typeName}::class).by {
+            allScalarFields()
+            creator()
+        }
+        val COMPLEX_FETCHER_FOR_ADMIN = newFetcher(${entityType.typeName}::class).by {
+            allScalarFields()
+            creator {
+                phone()
+                nickname()
+            }
+            editor {
+                phone()
+                nickname()
+            }
+        }
+    }
+
+    fun findPage(page: Pageable, query: ${entityType.typeName}Spec, fetcher: Fetcher<${entityType.typeName}>): Page<${entityType.typeName}> {
+        return sql.createQuery(${entityType.typeName}::class) {
+            where(query)
+            orderBy(page.sort)
+            select(table.fetch(fetcher))
+        }.fetchPage(
+            page.pageNumber - 1,
+            page.pageSize,
+            pageFactory = SpringPageFactory.getInstance()
+        )
+    }
 }
