@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
-@Transactional
 @Service
-open class NoticeService {
+class ${entityType.typeName}Service {
 }

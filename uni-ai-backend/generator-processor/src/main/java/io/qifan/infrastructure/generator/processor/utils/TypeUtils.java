@@ -34,6 +34,7 @@ public class TypeUtils {
     public static Type getType(Class<?> entityType, String packageName, String suffix) {
         String typeName = entityType.getSimpleName() + suffix;
         String packagePath = entityType.getTypeName()
+                .replace(".entity", "")
                 .replace(entityType.getSimpleName(), "") + packageName;
         return Type.builder()
                 .typeName(typeName)

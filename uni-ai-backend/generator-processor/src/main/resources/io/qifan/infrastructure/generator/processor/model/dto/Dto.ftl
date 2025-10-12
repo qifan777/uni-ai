@@ -7,7 +7,7 @@ input ${type.typeName}Input {
 <#list getFields() as field>
     <#switch field.itemType.code>
         <#case 6>
-    id(${field.fieldName})
+    id(${field.prop})
     </#switch>
 </#list>
 }
@@ -17,17 +17,17 @@ specification ${type.typeName}Spec {
     <#list getFields() as field>
     <#switch field.itemType.code>
     <#case 1>
-    like/i(${field.fieldName})
+    like/i(${field.prop})
     <#break>
     <#case 2>
-    like/i(${field.fieldName})
+    like/i(${field.prop})
     <#break>
     <#case 5>
-    ge(${field.fieldName})
-    le(${field.fieldName})
+    ge(${field.prop})
+    le(${field.prop})
         <#break>
     <#case 6>
-    associatedIdEq(${field.fieldName})
+    associatedIdEq(${field.prop})
         <#break>
     </#switch>
     </#list>

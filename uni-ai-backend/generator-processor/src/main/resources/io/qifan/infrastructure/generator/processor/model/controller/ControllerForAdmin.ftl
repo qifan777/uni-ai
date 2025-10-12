@@ -7,10 +7,9 @@ import ${importType.getTypePath()};
 
 @RequestMapping("admin/${entityType.toFrontNameCase()}")
 @RestController
-@Transactional
 @DefaultFetcherOwner(${entityType.typeName}Repository::class)
 @SaCheckPermission("/${entityType.toFrontNameCase()}")
-open class ${entityType.typeName}ForAdminController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
+class ${entityType.typeName}ForAdminController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
     @GetMapping
     fun findById(@RequestParam id: String): @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") ${entityType.typeName} =
         ${uncapitalizeTypeName}Repository.findById(id)
