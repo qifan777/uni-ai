@@ -37,7 +37,7 @@ interface ${entityType.typeName}Repository : KRepository<${entityType.typeName},
             orderBy(page.sort)
             select(table.fetch(fetcher))
         }.fetchPage(
-            page.pageNumber - 1,
+            page.pageNumber,
             page.pageSize,
             pageFactory = SpringPageFactory.getInstance()
         )
