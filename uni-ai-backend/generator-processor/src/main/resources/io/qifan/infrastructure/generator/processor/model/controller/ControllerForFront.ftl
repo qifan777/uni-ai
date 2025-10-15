@@ -4,6 +4,7 @@ package ${type.packagePath};
 <#list importTypes as importType>
 import ${importType.getTypePath()};
 </#list>
+import org.springframework.data.domain.Page
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
 @RequestMapping("/front/${entityType.toFrontNameCase()}")
@@ -12,7 +13,7 @@ import ${importType.getTypePath()};
 class ${entityType.typeName}ForFrontController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
     @GetMapping
     fun findById(@RequestParam id: String): @FetchBy(value = "COMPLEX_FETCHER_FOR_FRONT") ${entityType.typeName} =
-        ${uncapitalizeTypeName}Repository.findById(id)
+        ${uncapitalizeTypeName}Repository.findById(id, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_FRONT)
             .orElseThrow { BusinessException("信息不存在") }
 
     @PostMapping("query")

@@ -3,6 +3,7 @@ package ${type.packagePath};
 <#list importTypes as importType>
 import ${importType.getTypePath()};
 </#list>
+import org.springframework.data.domain.Page
 <#assign uncapitalizeTypeName = entityType.getUncapitalizeTypeName()>
 
 @RequestMapping("admin/${entityType.toFrontNameCase()}")
@@ -12,7 +13,7 @@ import ${importType.getTypePath()};
 class ${entityType.typeName}ForAdminController(private val ${uncapitalizeTypeName}Repository: ${entityType.typeName}Repository) {
     @GetMapping
     fun findById(@RequestParam id: String): @FetchBy(value = "COMPLEX_FETCHER_FOR_ADMIN") ${entityType.typeName} =
-        ${uncapitalizeTypeName}Repository.findById(id)
+        ${uncapitalizeTypeName}Repository.findById(id, ${entityType.typeName}Repository.COMPLEX_FETCHER_FOR_ADMIN)
             .orElseThrow { BusinessException("信息不存在") }
 
     @PostMapping("query")
